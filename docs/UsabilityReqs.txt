@@ -1,0 +1,11 @@
+The system must allow a visually impaired user, having visual acuity better than 20/40, to read a text message on the system with the same ease that a non-visually-impaired user reads a text message.
+
+The system must allow for a user to verbally (“hands-free”) send a text message of 20 words in one minute or less.
+
+The system must not include a color scheme which would inhibit a colorblind user.
+
+The system must allow for text to be displayed in text sizes from 10pt through 24pt.
+
+The system must not include buttons smaller than 75 pixels by 75 pixels.
+
+The system must allow for the user to verbally command it to read a text message, send a text message, defer a received message for later reading, and read entered text.
