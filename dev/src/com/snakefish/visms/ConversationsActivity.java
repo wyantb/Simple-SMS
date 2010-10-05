@@ -7,6 +7,10 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int COMPOSE_POSITION = Menu.FIRST;
 	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
 	
+	public ConversationsActivity() {
+		super(R.xml.conv_speech);
+	}
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {

@@ -14,11 +14,11 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int text1=0x7f050000;
-        public static final int text_b1=0x7f050002;
-        public static final int text_b2=0x7f050003;
-        public static final int text_bot=0x7f050004;
-        public static final int text_top=0x7f050001;
+        public static final int text1=0x7f060000;
+        public static final int text_b1=0x7f060002;
+        public static final int text_b2=0x7f060003;
+        public static final int text_bot=0x7f060004;
+        public static final int text_top=0x7f060001;
     }
     public static final class layout {
         public static final int convo_list=0x7f030000;
@@ -26,12 +26,16 @@ public final class R {
         public static final int text_view=0x7f030002;
     }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int compose=0x7f040003;
-        public static final int new_convo=0x7f040000;
-        public static final int not_ready=0x7f040006;
-        public static final int read_short=0x7f040004;
-        public static final int send_short=0x7f040005;
-        public static final int settings=0x7f040002;
+        public static final int app_name=0x7f050001;
+        public static final int compose=0x7f050003;
+        public static final int new_convo=0x7f050000;
+        public static final int not_ready=0x7f050006;
+        public static final int read_short=0x7f050004;
+        public static final int send_short=0x7f050005;
+        public static final int settings=0x7f050002;
+    }
+    public static final class xml {
+        public static final int conv_speech=0x7f040000;
+        public static final int text_speech=0x7f040001;
     }
 }

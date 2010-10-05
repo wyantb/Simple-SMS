@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class TextActivity extends SMSActivity {
 
 	public TextActivity() {
-		super();
+		super(R.xml.text_speech);
 	}
 	
 	private TextView textTop = null;
