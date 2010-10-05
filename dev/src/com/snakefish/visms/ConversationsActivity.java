@@ -1,10 +1,9 @@
 package com.snakefish.visms;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.Menu;
 
-public class ConversationsActivity extends ListActivity {
+public class ConversationsActivity extends SMSListActivity {
 	public static final int COMPOSE_POSITION = Menu.FIRST;
 	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
 	

@@ -1,6 +1,5 @@
 package com.snakefish.visms;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,8 +7,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class TextActivity extends Activity {
+public class TextActivity extends SMSActivity {
 
+	public TextActivity() {
+		super();
+	}
+	
 	private TextView textTop = null;
 	private EditText textBot = null;
 	private Button butLeft = null;
@@ -64,11 +67,13 @@ public class TextActivity extends Activity {
 					"ffffffffffffffffffffffffffffffffffff" +
 					"ffffffffffffffffffffffffffffffffffff" +
 					"ffffffffffffffffffffffffffffffff");
+			
+			speak("Hello");
 		}
     	
     }
     
-    private class RightButtonClickListener implements OnClickListener {
+    private class RightButtonClickListener implements OnClickListener{
 
     	/**
     	 * Do not fill in this method any more!
