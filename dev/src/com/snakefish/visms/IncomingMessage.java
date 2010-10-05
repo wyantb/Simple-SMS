@@ -19,19 +19,27 @@ public class IncomingMessage extends Activity {
 	public static final int COMPOSE_POSITION = Menu.FIRST;
 	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
 	/** The button used for viewing the message */
-	Button btnRead;
+	protected Button btnRead;
 	/** The button used to ignore messages */
-	Button btnIgnore;
+	protected Button btnIgnore;
 	/** Used to get the name of the contact */
-    public String name = new String();
-	
+	protected String name = new String();
+	/** Used to determine orientation of the phone */
+    protected boolean landscape = false;
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.main);        
- 
+        //Sets the correct layout
+        if(landscape == false){
+        	//Portrait view
+        	setContentView(R.layout.incoming_message);        
+        }else{
+        	//Landscape view
+        	setContentView(R.layout.incoming_message_landscape);
+        }
         //Sets btnRead and btnIgnore to the button on the android xml
         btnRead = (Button) findViewById(R.id.btnRead);
         btnIgnore = (Button) findViewById(R.id.btnIgnore);        
@@ -42,5 +50,23 @@ public class IncomingMessage extends Activity {
         menu.add(0, COMPOSE_POSITION, 0, R.string.compose);
         menu.add(0, Menu.FIRST, 0, R.string.settings);
         return result;
+    }
+    
+    /**
+     * Sets the name string
+     * 
+     * @param name - the name of the person texting 
+     */
+    public void setName(String name){
+    	this.name = name;
+    }
+    
+    /**
+     * Sets the view the android is in
+     * 
+     * @param landscape - If it is landscape view or not
+     */
+    public void setView(boolean landscape){
+    	this.landscape = landscape;
     }
 }
