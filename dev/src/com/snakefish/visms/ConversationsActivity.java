@@ -1,6 +1,5 @@
 package com.snakefish.visms;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,14 +12,17 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
-public class ConversationsActivity extends ListActivity {
+public class ConversationsActivity extends SMSListActivity {
 	public static final int COMPOSE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
 	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
-	
 	private SmsDbAdapter mDbHelper;
+	
+	public ConversationsActivity() {
+		super(R.xml.conv_speech);
+	}
 
 	/** Called when the activity is first created. */
 	@Override

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<item name="intro" type="string">Message screen</item>
+	<item name="tutorial" type="string">This is the message screen.  You can see a view of your conversation and type with a physical keyboard here.  Speak 'command list' to get a list of all available voice commands.</item>
+	<item name="list" type="string">Command keywords available are as follows: list, read, send, and message</item>
+</resources>
