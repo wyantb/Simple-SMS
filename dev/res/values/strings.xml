@@ -7,4 +7,5 @@
 	<string name="read_short">Read</string>
 	<string name="send_short">Send</string>
 	<string name="not_ready">DEFAULT</string>
+	<string name="no_msgs">No Messages</string>
 </resources>

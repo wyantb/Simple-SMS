@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
+	android:orientation="vertical" android:layout_width="fill_parent"
+	android:layout_height="fill_parent">
 
 	
-	<TextView android:id="@+id/btnCompose" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="20sp" android:padding="16dp" android:text="@string/new_convo" /><ListView android:id="@android:id/list" 
-		android:layout_width="wrap_content" 
+	<TextView android:id="@+id/btnCompose" 
+		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
-		>
-		
+		android:clickable="true"
+		android:textSize="20sp" 
+		android:padding="16dp" 
+		android:text="@string/new_convo" 
+		/>
 	
-</ListView>
+	<ListView android:id="@android:id/list" 
+		android:layout_width="fill_parent" 
+		android:layout_height="fill_parent"
+		>	
+	</ListView>
+	
+	<TextView android:id="@+id/empty"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/no_msgs"
+		/>
+		
 
 </LinearLayout>
