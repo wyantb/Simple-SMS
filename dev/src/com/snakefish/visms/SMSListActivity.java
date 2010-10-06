@@ -1,6 +1,9 @@
 package com.snakefish.visms;
 
+import java.util.List;
+
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class SMSListActivity extends ListActivity implements SMSBase {
@@ -14,11 +17,31 @@ public class SMSListActivity extends ListActivity implements SMSBase {
 		this.xmlResId = xmlResId;
 	}
 	
+	// --- UNUSED COMMANDS ---
+	public void processVoice(List<String> command) {}
+	public void processVoice(String altMatched) {}
+    
+    @Override
+    public boolean onSearchRequested() {
+    	if (delegate != null) {
+    		return delegate.onSearchRequested();
+    	}
+    	
+    	return false;
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (delegate != null) {
+    		delegate.onActivityResult(requestCode, resultCode, data);
+    	}
+    }
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		delegate = new SMSDelegate(this, xmlResId);
+		delegate = new SMSDelegate(this, this, xmlResId);
 	}
 	
 	public void onInit(int arg0) {

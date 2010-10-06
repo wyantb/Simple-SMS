@@ -1,5 +1,8 @@
 package com.snakefish.visms;
 
+import java.util.List;
+import java.util.Scanner;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -36,6 +39,26 @@ public class TextActivity extends SMSActivity {
         
         butLeft.setOnClickListener(new LeftButtonClickListener());
         butRight.setOnClickListener(new RightButtonClickListener());
+    }
+    
+    @Override
+    public void processVoice(List<String> command) {
+    	textTop.setText("Received from voice: " + command);
+    	
+    	/*Scanner commandParser = new Scanner(command);
+    	
+    	if (commandParser.next().equals("command")) {
+    		String commandPart = commandParser.next();
+    		
+    		if (commandPart.equals("read")) {
+    			speak(textBot.getText().toString());
+    		}
+    	}*/
+    }
+    
+    @Override
+    public void processVoice(String command) {
+    	textBot.setText("Received from voice: " + command);
     }
     
     private class LeftButtonClickListener implements OnClickListener {

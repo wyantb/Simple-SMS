@@ -1,6 +1,9 @@
 package com.snakefish.visms;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 public class SMSActivity extends Activity implements SMSBase {
@@ -14,11 +17,35 @@ public class SMSActivity extends Activity implements SMSBase {
 		this.xmlResId = xmlResId;
 	}
 	
+	// --- UNUSED COMMANDS ---
+	public void processVoice(List<String> command) {}
+	public void processVoice(String altMatched) {}
+    
+	/**
+	 * Something of a subversion: if they click search, we accept voice input.
+	 */
+    @Override
+    public boolean onSearchRequested() {
+    	if (delegate != null) {
+    		return delegate.onSearchRequested();
+    	}
+    	
+    	return false;
+    }
+    
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    	if (delegate != null) {
+    		delegate.onActivityResult(requestCode, resultCode, data);
+    	}
+    }
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		delegate = new SMSDelegate(this, xmlResId);
+		delegate = new SMSDelegate(this, this, xmlResId);
+		
 	}
 	
 	public void onInit(int arg0) {
