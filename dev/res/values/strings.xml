@@ -8,4 +8,6 @@
 	<string name="send_short">Send</string>
 	<string name="not_ready">DEFAULT</string>
 	<string name="no_msgs">No Messages</string>
+	<string name="open">Open</string>
+	<string name ="delete">Delete</string>
 </resources>

@@ -146,6 +146,21 @@ public class SmsDbAdapter {
 
         return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
+    
+    /**
+     * Find the id of the thread to which a particular message belongs, given
+     * the message id.
+     * @param rowId the id of the message in question
+     * @return the id of the thread to which that message belongs; -1 means
+     * 		the thread could not be found
+     */
+    
+    public long findThreadId(long rowId) {
+    	long threadId = -1;
+    	mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_THREADID}, 
+    			KEY_ROWID + "=" + rowId, null, null, null, null, null);
+    	return threadId;
+    }
 
     /**
      * Return a Cursor over the list of all messages in the database
