@@ -1,8 +1,10 @@
 package com.snakefish.visms;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class ConversationsActivity extends ListActivity {
 	public static final int COMPOSE_POSITION = Menu.FIRST;
@@ -22,4 +24,22 @@ public class ConversationsActivity extends ListActivity {
         menu.add(0, Menu.FIRST, 0, R.string.settings);
         return result;
     }
+    
+    /**
+     * Fires when an item in the options menu is selected.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case Menu.FIRST: //Options
+           Intent options = new Intent();
+           options.setClassName("com.snakefish.visms", "com.snakefish.visms.OptionsList");
+           startActivity(options);
+           return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
 }
