@@ -83,6 +83,23 @@ public class ConversationsActivity extends ListActivity {
 		return super.onContextItemSelected(item);
 	}
 
+/**
+     * Fires when an item in the options menu is selected.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case Menu.FIRST: //Options
+           Intent options = new Intent();
+           options.setClassName("com.snakefish.visms", "com.snakefish.visms.OptionsList");
+           startActivity(options);
+           return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 	private void getInbox() {
 		Cursor c = mDbHelper.fetchAllMsgs();
 		startManagingCursor(c);
