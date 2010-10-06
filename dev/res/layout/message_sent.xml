@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginBottom = "5sp"
+    >
+
+<TextView android:id="@+id/newText" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:textSize="60sp"
+    android:layout_marginLeft ="30sp" 
+    android:text = "MESSAGE"
+    >
+</TextView>
+
+<ImageView android:id = "@+id/textPic"
+
+>
+</ImageView>
+
+<TextView android:id="@+id/messageFrom" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" 
+	android:layout_height="wrap_content" 
+    android:padding="16dp"
+    android:textSize="60sp"
+    android:layout_marginLeft ="75sp" 
+    android:text = "SENT"
+    >
+</TextView>
+</LinearLayout><!-- END -->
