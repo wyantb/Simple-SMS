@@ -27,6 +27,13 @@ public class IncomingMessage extends Activity {
 	/** Used to determine orientation of the phone */
     protected boolean landscape = false;
     
+    /**
+     * Creates a new incoming message
+     */
+    IncomingMessage(String name){
+    	this.name = name;
+    }
+    
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
@@ -50,6 +57,11 @@ public class IncomingMessage extends Activity {
         menu.add(0, COMPOSE_POSITION, 0, R.string.compose);
         menu.add(0, Menu.FIRST, 0, R.string.settings);
         return result;
+    }
+    
+    @Override
+    public void onPause(){
+    	super.onPause();
     }
     
     /**
