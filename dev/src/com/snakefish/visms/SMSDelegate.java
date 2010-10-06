@@ -81,6 +81,15 @@ public class SMSDelegate implements SMSBase {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			String altMatched = data.getDataString();
 			
+			String alt2 = data.getStringExtra(RecognizerIntent.EXTRA_RESULTS);
+			
+			if (altMatched != null) {
+				speak(altMatched);
+			}
+			if (alt2 != null) {
+				speak(alt2);
+			}
+			
 			smsCallback.processVoice(matched);
 			smsCallback.processVoice(altMatched);
 		}
