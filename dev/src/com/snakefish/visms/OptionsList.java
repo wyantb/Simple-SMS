@@ -1,6 +1,5 @@
 package com.snakefish.visms;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -10,10 +9,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+public class OptionsList extends SMSListActivity {
 
-public class OptionsList extends ListActivity {
+    public OptionsList() {
+		super(R.xml.options_speech);
+	}
 
-    static final String[] OPTIONS = {"Headphones", "Text Size +", "Text Size -", "Color Scheme"};
+	static final String[] OPTIONS = {"Headphones", "Text Size +", "Text Size -", "Color Scheme"};
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,11 @@ public class OptionsList extends ListActivity {
         }
       });
     }
+
+	public void processVoice(String command) {
+		// TODO Auto-generated method stub
+		
+	}
     
  
     
