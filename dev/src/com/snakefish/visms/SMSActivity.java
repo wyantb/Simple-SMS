@@ -43,7 +43,7 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
 		super.onCreate(savedInstanceState);
 		
 		delegate = new SMSDelegate(this, this, xmlResId);
-		
+		delegate.onCreate(savedInstanceState);
 	}
 	
 	public void onInit(int arg0) {
@@ -56,6 +56,15 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
 		if (delegate != null) {
 			delegate.speak(text);
 		}
+	}
+	
+	@Override
+	public void onStart() {
+		if (delegate != null) {
+			delegate.onStart();
+		}
+		
+		super.onStart();
 	}
 	
 	@Override

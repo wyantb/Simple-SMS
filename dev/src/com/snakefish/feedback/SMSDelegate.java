@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 
@@ -57,7 +58,7 @@ public class SMSDelegate implements SMSBase {
 	
 	public void onInit(int arg0) {
 		
-		/*synchronized (queuedMessages) {
+		synchronized (queuedMessages) {
 			for (Iterator<String> msgItr = queuedMessages.iterator();
 				msgItr.hasNext(); ) {
 				
@@ -67,7 +68,7 @@ public class SMSDelegate implements SMSBase {
 					msgItr.remove();
 				}
 			}
-		}*/
+		}
 		
 	}
 
@@ -93,14 +94,18 @@ public class SMSDelegate implements SMSBase {
 		}
 	}
 
+	public void onCreate(Bundle savedInstanceState) {
+		if (isHidden) {
+			queueMesssageOnInit(speechPack.getIntro());
+			
+			isHidden = false;
+		}
+	}
+	
+	public void onStart() {
+	}
 	
 	public void onResume() {
-		/*if (isHidden) {
-			queueMesssageOnInit(speechPack.getIntro());
-			onInit(0);
-		}
-		
-		isHidden = false;*/
 	}
 	
 	public void onPause() {
@@ -109,7 +114,7 @@ public class SMSDelegate implements SMSBase {
 	public void onStop() {
 		tts.stop();
 		
-		//isHidden = true;
+		isHidden = true;
 	}
 	
 	public void onDestroy() {

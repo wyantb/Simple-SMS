@@ -24,6 +24,7 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		super.onCreate(savedInstanceState);
 		
 		delegate = new SMSDelegate(this, this, xmlResId);
+		delegate.onCreate(savedInstanceState);
 	}
     
     @Override
@@ -52,6 +53,15 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		if (delegate != null) {
 			delegate.speak(text);
 		}
+	}
+	
+	@Override
+	public void onStart() {
+		if (delegate != null) {
+			delegate.onStart();
+		}
+		
+		super.onStart();
 	}
 	
 	@Override
