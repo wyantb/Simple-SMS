@@ -1,6 +1,4 @@
-package com.snakefish.visms;
-
-import java.util.List;
+package com.snakefish.feedback;
 
 import android.content.Intent;
 import android.speech.tts.TextToSpeech;
@@ -12,8 +10,10 @@ public interface SMSBase extends TextToSpeech.OnInitListener {
 	public boolean onSearchRequested();
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
-
-	public void processVoice(List<String> command);
-	public void processVoice(String altMatched);
+	
+	public void onResume();
+	public void onPause();
+	public void onStop();
+	public void onDestroy();
 	
 }

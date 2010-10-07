@@ -23,6 +23,10 @@ public class ConversationsActivity extends SMSListActivity {
 	public ConversationsActivity() {
 		super(R.xml.conv_speech);
 	}
+	
+	public void processVoice(String command) {
+		// TODO
+	}
 
 	/** Called when the activity is first created. */
 	@Override

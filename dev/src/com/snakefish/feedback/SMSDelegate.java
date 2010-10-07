@@ -1,12 +1,10 @@
-package com.snakefish.visms;
+package com.snakefish.feedback;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-import com.snakefish.feedback.SMSFeedback;
-import com.snakefish.feedback.SpeechPack;
-import com.snakefish.feedback.VoiceFeedback;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -19,14 +17,14 @@ public class SMSDelegate implements SMSBase {
 
 	private static final int VOICE_REQUEST_CODE = 1234112;
 	
-	private List<SMSFeedback> toPlay;
 	private TextToSpeech tts;
-	private boolean isReady = false;
 	private SpeechPack speechPack;
 	private Activity callback;
-	private SMSBase smsCallback;
+	private SMSDelegateCallback smsCallback;
+	private List<String> queuedMessages;
+	private boolean isHidden;
 	
-	public SMSDelegate(SMSBase callback, Activity context, int xmlResId) {
+	public SMSDelegate(SMSDelegateCallback callback, Activity context, int xmlResId) {
 		this.tts = new TextToSpeech(context, this);
 		this.smsCallback = callback;
 		this.callback = context;
@@ -34,7 +32,11 @@ public class SMSDelegate implements SMSBase {
 		speechPack = new SpeechPack(context, xmlResId);
 		
 		tts.setLanguage(Locale.US);
-		toPlay = new LinkedList<SMSFeedback>();
+		tts.setSpeechRate(4);
+		tts.speak("", TextToSpeech.QUEUE_FLUSH, null);
+		
+		queuedMessages = new ArrayList<String>();
+		isHidden = true;
 	}
 	
 	public boolean onSearchRequested() {
@@ -54,26 +56,23 @@ public class SMSDelegate implements SMSBase {
 	}
 	
 	public void onInit(int arg0) {
-		isReady = true;
 		
-		String tut = speechPack.getIntro();
+		/*synchronized (queuedMessages) {
+			for (Iterator<String> msgItr = queuedMessages.iterator();
+				msgItr.hasNext(); ) {
+				
+				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_FLUSH, null);
+				
+				if (result == TextToSpeech.SUCCESS) {
+					msgItr.remove();
+				}
+			}
+		}*/
 		
-		if (tut != null) {
-			tts.speak(tut, TextToSpeech.QUEUE_FLUSH, null);
-		}
-		
-		for (SMSFeedback fb : toPlay) {
-			fb.play();
-		}
 	}
 
 	public void speak(String text) {
-		if (isReady) {
-			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
-		}
-		else {
-			toPlay.add(new VoiceFeedback(tts, text));
-		}
+		tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -90,14 +89,36 @@ public class SMSDelegate implements SMSBase {
 				speak(alt2);
 			}
 			
-			smsCallback.processVoice(matched);
-			smsCallback.processVoice(altMatched);
+			smsCallback.processVoice(matched.get(0));
 		}
 	}
 
-	public void processVoice(List<String> command) {}
-	public void processVoice(String altMatched) {}
 	
+	public void onResume() {
+		/*if (isHidden) {
+			queueMesssageOnInit(speechPack.getIntro());
+			onInit(0);
+		}
+		
+		isHidden = false;*/
+	}
 	
-
+	public void onPause() {
+	}
+	
+	public void onStop() {
+		tts.stop();
+		
+		//isHidden = true;
+	}
+	
+	public void onDestroy() {
+		tts.shutdown();
+	}
+	
+	private void queueMesssageOnInit(String message) {
+		synchronized (queuedMessages) {
+			queuedMessages.add(message);
+		}
+	}
 }

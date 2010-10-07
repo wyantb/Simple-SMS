@@ -1,12 +1,14 @@
 package com.snakefish.visms;
 
-import java.util.List;
+import com.snakefish.feedback.SMSBase;
+import com.snakefish.feedback.SMSDelegate;
+import com.snakefish.feedback.SMSDelegateCallback;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class SMSListActivity extends ListActivity implements SMSBase {
+public abstract class SMSListActivity extends ListActivity implements SMSBase, SMSDelegateCallback  {
 
 	private SMSBase delegate;
 	private int xmlResId;
@@ -17,9 +19,12 @@ public class SMSListActivity extends ListActivity implements SMSBase {
 		this.xmlResId = xmlResId;
 	}
 	
-	// --- UNUSED COMMANDS ---
-	public void processVoice(List<String> command) {}
-	public void processVoice(String altMatched) {}
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		delegate = new SMSDelegate(this, this, xmlResId);
+	}
     
     @Override
     public boolean onSearchRequested() {
@@ -37,13 +42,6 @@ public class SMSListActivity extends ListActivity implements SMSBase {
     	}
     }
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		delegate = new SMSDelegate(this, this, xmlResId);
-	}
-	
 	public void onInit(int arg0) {
 		if (delegate != null) {
 			delegate.onInit(arg0);
@@ -54,6 +52,42 @@ public class SMSListActivity extends ListActivity implements SMSBase {
 		if (delegate != null) {
 			delegate.speak(text);
 		}
+	}
+	
+	@Override
+	public void onResume() {
+		if (delegate != null) {
+			delegate.onResume();
+		}
+
+		super.onResume();
+	}
+	
+	@Override
+	public void onPause() {
+		if (delegate != null) {
+			delegate.onPause();
+		}
+		
+		super.onPause();
+	}
+	
+	@Override
+	public void onStop() {
+		if (delegate != null) {
+			delegate.onStop();
+		}
+		
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		if (delegate != null) {
+			delegate.onDestroy();
+		}
+		
+		super.onDestroy();
 	}
 
 }

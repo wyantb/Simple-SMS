@@ -1,11 +1,8 @@
 package com.snakefish.visms;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.widget.Button;
-
-import java.awt.*;
 
 /**
  * This class deals with the GUI used for an 
@@ -14,7 +11,7 @@ import java.awt.*;
  * @author Team Snakefish
  *
  */
-public class IncomingMessage extends Activity {
+public class IncomingMessage extends SMSActivity {
 	/**Used to positon buttons */
 	public static final int COMPOSE_POSITION = Menu.FIRST;
 	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
@@ -31,7 +28,13 @@ public class IncomingMessage extends Activity {
      * Creates a new incoming message
      */
     IncomingMessage(String name){
+    	super (R.xml.newtext_speech);
+    	
     	this.name = name;
+    }
+    
+    public void processVoice(String command) {
+    	
     }
     
     /** Called when the activity is first created. */

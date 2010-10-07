@@ -1,9 +1,15 @@
 package com.snakefish.visms;
 
 import java.util.List;
-import java.util.Scanner;
 
+import android.app.Activity;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -12,6 +18,8 @@ import android.widget.TextView;
 
 public class TextActivity extends SMSActivity {
 
+	public static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
+	
 	public TextActivity() {
 		super(R.xml.text_speech);
 	}
@@ -39,26 +47,60 @@ public class TextActivity extends SMSActivity {
         
         butLeft.setOnClickListener(new LeftButtonClickListener());
         butRight.setOnClickListener(new RightButtonClickListener());
+        
+        registerReceiver(new SMSBroadcastReceiver(), new IntentFilter(ACTION_SMS_SENT));
     }
     
-    @Override
-    public void processVoice(List<String> command) {
-    	textTop.setText("Received from voice: " + command);
-    	
-    	/*Scanner commandParser = new Scanner(command);
-    	
-    	if (commandParser.next().equals("command")) {
-    		String commandPart = commandParser.next();
-    		
-    		if (commandPart.equals("read")) {
-    			speak(textBot.getText().toString());
-    		}
-    	}*/
-    }
-    
-    @Override
     public void processVoice(String command) {
     	textBot.setText("Received from voice: " + command);
+    }
+    
+    protected void sendMessage() {
+    	SmsManager sms = SmsManager.getDefault();
+    	
+    	List<String> messages = sms.divideMessage(textBot.getText().toString());
+    	String recipient = "";  // TODO insert address here
+    	
+    	try {
+    		for (String message : messages) {
+    			sms.sendTextMessage(recipient, null, message, 
+    					PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+    		}
+    	}
+    	catch (Exception e) {
+    		speak("Made a booboo, message almost brought down app.");
+    	}
+    }
+    
+    private class SMSBroadcastReceiver extends BroadcastReceiver {
+    	
+    	@Override
+    	public void onReceive(Context context, Intent intent) {
+
+            String message = null;
+            
+            switch (getResultCode()) {
+            case Activity.RESULT_OK:
+                message = "Message sent!";
+                break;
+            case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                message = "Error.";
+                break;
+            case SmsManager.RESULT_ERROR_NO_SERVICE:
+                message = "Error: No service.";
+                break;
+            case SmsManager.RESULT_ERROR_NULL_PDU:
+                message = "Error: Null PDU.";
+                break;
+            case SmsManager.RESULT_ERROR_RADIO_OFF:
+                message = "Error: Radio off.";
+                break;
+            }
+
+            textTop.setText(message);
+            speak(message);
+
+    	}
     }
     
     private class LeftButtonClickListener implements OnClickListener {
@@ -72,26 +114,7 @@ public class TextActivity extends SMSActivity {
 		}
 		
 		public void doWork() {
-			// TODO actual work
-			textTop.setText("READ MORE! fffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffffffff" +
-					"ffffffffffffffffffffffffffffffff");
-			
-			speak("Hello");
+			speak(textBot.getText().toString());
 		}
     	
     }
@@ -109,6 +132,7 @@ public class TextActivity extends SMSActivity {
 		public void doWork() {
 			// TODO actual work
 			textBot.setText("SEND MORE!");
+			sendMessage();
 		}
     	
     }
