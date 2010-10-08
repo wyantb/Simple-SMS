@@ -62,7 +62,7 @@ public class SMSDelegate implements SMSBase {
 			for (Iterator<String> msgItr = queuedMessages.iterator();
 				msgItr.hasNext(); ) {
 				
-				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_FLUSH, null);
+				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_ADD, null);
 				
 				if (result == TextToSpeech.SUCCESS) {
 					msgItr.remove();
@@ -73,27 +73,29 @@ public class SMSDelegate implements SMSBase {
 	}
 
 	public void speak(String text) {
-		tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+		tts.speak(text, TextToSpeech.QUEUE_ADD, null);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == VOICE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			String altMatched = data.getDataString();
-			
-			String alt2 = data.getStringExtra(RecognizerIntent.EXTRA_RESULTS);
-			
-			if (altMatched != null) {
-				speak(altMatched);
-			}
-			if (alt2 != null) {
-				speak(alt2);
-			}
 			
 			smsCallback.processVoice(matched.get(0));
 		}
 	}
 
+	public Object onRetainNonConfigurationInstance() {
+		isHidden = false;
+		
+		return isHidden;
+	}
+	
+	public void setHidden(Object o) {
+		if (o != null && o instanceof Boolean) {
+			isHidden = (Boolean)o;
+		}
+	}
+	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isHidden) {
 			queueMesssageOnInit(speechPack.getIntro());
@@ -103,6 +105,10 @@ public class SMSDelegate implements SMSBase {
 	}
 	
 	public void onStart() {
+	}
+	
+	public void onRestart() {
+		isHidden = true;
 	}
 	
 	public void onResume() {

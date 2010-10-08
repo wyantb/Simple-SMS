@@ -18,12 +18,18 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		
 		this.xmlResId = xmlResId;
 	}
-	
+
+    public void setHidden(Object o) {
+    	if (delegate != null) {
+    		delegate.setHidden(o);
+    	}
+    }
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		delegate = new SMSDelegate(this, this, xmlResId);
+		delegate.setHidden(getLastNonConfigurationInstance());
 		delegate.onCreate(savedInstanceState);
 	}
     
@@ -62,6 +68,15 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		}
 		
 		super.onStart();
+	}
+	
+	@Override
+	public void onRestart() {
+		if (delegate != null) {
+			delegate.onRestart();
+		}
+		
+		super.onRestart();
 	}
 	
 	@Override

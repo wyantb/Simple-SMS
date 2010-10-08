@@ -37,12 +37,19 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
     		delegate.onActivityResult(requestCode, resultCode, data);
     	}
     }
+    
+    public void setHidden(Object o) {
+    	if (delegate != null) {
+    		delegate.setHidden(o);
+    	}
+    }
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
 		delegate = new SMSDelegate(this, this, xmlResId);
+		delegate.setHidden(getLastNonConfigurationInstance());
 		delegate.onCreate(savedInstanceState);
 	}
 	
@@ -59,12 +66,26 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
 	}
 	
 	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return delegate.onRetainNonConfigurationInstance();
+	}
+	
+	@Override
 	public void onStart() {
 		if (delegate != null) {
 			delegate.onStart();
 		}
 		
 		super.onStart();
+	}
+	
+	@Override
+	public void onRestart() {
+		if (delegate != null) {
+			delegate.onRestart();
+		}
+		
+		super.onRestart();
 	}
 	
 	@Override
