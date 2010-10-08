@@ -36,7 +36,16 @@ public class ConversationsActivity extends SMSListActivity {
 		
 		mDbHelper = new SmsDbAdapter(this);
 		mDbHelper.open();
-		getInbox();
+		
+		// **TESTING DATABASE, REMOVE WHEN DONE
+		// Adding dummy conversations to db
+		mDbHelper.deleteInbox();
+		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456244, "Yo what's up?");
+		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456844, "R u thar?");
+		mDbHelper.addMsg(2, "1-203-733-8028", 3, 1286551147, "Are you done yet?");
+		// ** TESTING DATABASE, REMOVE WHEN DONE
+		
+		fillInbox();
 		registerForContextMenu(getListView());
 	}
 
@@ -106,7 +115,7 @@ public class ConversationsActivity extends SMSListActivity {
         }
     }
 
-	private void getInbox() {
+	private void fillInbox() {
 		Cursor c = mDbHelper.fetchAllMsgs();
 		startManagingCursor(c);
 		
