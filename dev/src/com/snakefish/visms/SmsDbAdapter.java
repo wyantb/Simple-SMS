@@ -42,6 +42,7 @@ public class SmsDbAdapter {
     public static final String KEY_PERSON = "person";
     public static final String KEY_DATE = "date";
     public static final String KEY_BODY = "body";
+    public static final String ORDER_CHRON = "date DESC";
     
     private static final String TAG = "SmsDbAdapter";
     private DatabaseHelper mDbHelper;
@@ -173,6 +174,14 @@ public class SmsDbAdapter {
                 KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, null, null, null,
                 null, null);
     }
+    
+    public Cursor fetchAllThreads() {
+    	Cursor c = mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_THREADID,
+                KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, null, null, null,
+                null, null);
+    	
+    	return c;
+    }
 
     /**
      * Return a Cursor positioned at the message that matches the given rowId
@@ -192,6 +201,16 @@ public class SmsDbAdapter {
         }
         return mCursor;
 
+    }
+    
+    /**
+     * This is a utility method that wipes the entire inbox. Use with caution:
+     * This action cannot be undone.
+     * @return the number of rows deleted; zero means unsuccessful
+     */
+    public int deleteInbox() {
+    	return mDb.delete(DATABASE_TABLE, null, null);
+    	
     }
 
 }
