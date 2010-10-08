@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+      
+  <TextView
+      android:id="@+id/text_top"
+      android:text="@string/read_short"
+      android:visibility="invisible"
+      android:layout_width="0sp"
+      android:layout_height="0sp"
+      android:maxHeight="0sp"
+      android:maxWidth="0sp"
+        />
+      
+  <Button
+      android:id="@+id/text_b1"
+      android:text="@string/read_short"
+      android:textSize="18sp"
+      android:layout_weight="5"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+        />
+
+  <EditText
+      android:id="@+id/text_bot"
+      android:hint="Enter text here"
+      android:textColor="#000000"
+      android:background="#FFFFFF"
+      android:textSize="24sp"
+      android:layout_weight="2"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+        />
+      
+  <Button
+      android:id="@+id/text_b2"
+      android:text="@string/send_short"
+      android:textSize="18sp"
+      android:layout_weight="5"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+        />
+
+</LinearLayout>

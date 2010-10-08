@@ -9,6 +9,8 @@
       android:text="@string/not_ready"
       android:textColor="#000000"
       android:background="#FFFFFF"
+      android:padding="16dp"
+      android:textSize="36sp"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="8"/>
@@ -23,6 +25,8 @@
       <Button
           android:id="@+id/text_b1"
           android:text="@string/read_short"
+          android:padding="16dp"
+          android:textSize="36sp"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:layout_weight="1"
@@ -35,6 +39,8 @@
       <Button
           android:id="@+id/text_b2"
           android:text="@string/send_short"
+          android:padding="16dp"
+          android:textSize="36sp"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:layout_weight="1"
@@ -48,9 +54,11 @@
 
   <EditText
       android:id="@+id/text_bot"
-      android:text="@string/not_ready"
+      android:hint="Enter text here"
       android:textColor="#000000"
       android:background="#FFFFFF"
+      android:padding="16dp"
+      android:textSize="36sp"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="5"/>

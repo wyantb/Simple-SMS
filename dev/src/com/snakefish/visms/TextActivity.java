@@ -28,11 +28,13 @@ public class TextActivity extends SMSActivity {
 	private EditText textBot = null;
 	private Button butLeft = null;
 	private Button butRight = null;
+	private SMSBroadcastReceiver smsReceiver;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         setContentView(R.layout.text_view);
         
         textTop = (TextView)findViewById(R.id.text_top);
@@ -40,7 +42,7 @@ public class TextActivity extends SMSActivity {
         butLeft = (Button)findViewById(R.id.text_b1);
         butRight = (Button)findViewById(R.id.text_b2);
 
-        assert(textTop != null);
+        //assert(textTop != null);
         assert(textBot != null);
         assert(butLeft != null);
         assert(butRight != null);
@@ -48,7 +50,15 @@ public class TextActivity extends SMSActivity {
         butLeft.setOnClickListener(new LeftButtonClickListener());
         butRight.setOnClickListener(new RightButtonClickListener());
         
-        registerReceiver(new SMSBroadcastReceiver(), new IntentFilter(ACTION_SMS_SENT));
+        smsReceiver = new SMSBroadcastReceiver();
+        registerReceiver(smsReceiver, new IntentFilter(ACTION_SMS_SENT));
+    }
+    
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	
+    	this.unregisterReceiver(smsReceiver);
     }
     
     public void processVoice(String command) {
