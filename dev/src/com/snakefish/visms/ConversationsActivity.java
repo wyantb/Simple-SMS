@@ -73,7 +73,9 @@ public class ConversationsActivity extends SMSListActivity {
 			// Start activity to compose a new message
 			return true;
 		case SETTINGS_ID:
-			// Start activity to edit options
+			Intent settings = new Intent();
+			settings.setClassName("com.snakefish.visms", "com.snakefish.visms.OptionsList");
+			startActivity(settings);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
