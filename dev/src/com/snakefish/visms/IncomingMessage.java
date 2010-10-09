@@ -5,6 +5,7 @@ import com.snakefish.feedback.SpeechType;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -95,7 +96,12 @@ public class IncomingMessage extends SMSActivity {
         //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
         btnIgnore.setOnClickListener(new IgnoreListener());
-    }    
+    } 
+    
+    /**
+     * The pop up menu that allows the user to adjust
+     * the setting of the application
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
@@ -103,6 +109,25 @@ public class IncomingMessage extends SMSActivity {
         return result;
     }
     
+    /**
+     * Sets up the options button
+     */
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case SETTINGS_POSITION:
+			Intent options = new Intent();
+			options.setClassName("com.snakefish.visms",
+					"com.snakefish.visms.OptionsList");
+			startActivity(options);
+			return true;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}
+
+    /**
+     * Pauses incoming message
+     */
     @Override
     public void onPause(){
     	super.onPause();
