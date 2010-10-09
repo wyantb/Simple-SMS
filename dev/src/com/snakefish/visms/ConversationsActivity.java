@@ -13,6 +13,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ConversationsActivity extends SMSListActivity {
+	/** The user who you are communicating with */
+	public static final String CONVERSATION_CONTACT = "com.snakefish.CONTACT";
+	
 	public static final int COMPOSE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
