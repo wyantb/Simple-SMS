@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * This class deals with the GUI used for an 
@@ -25,18 +26,46 @@ public class IncomingMessage extends SMSActivity {
 	protected String name = new String();
 	/** Used to determine orientation of the phone */
     protected boolean landscape = false;
+    /** The text view that is the contact information */
+    protected TextView messageFrom = null; 
     
     /**
      * Creates a new incoming message
      */
     IncomingMessage(String name){
     	super (R.xml.newtext_speech);
-    	
+    	//Sets the contact name to the name of the person
+    	// sending the message.
     	this.name = name;
+    	//Sets the xml text to the same name
+    	messageFrom.setText(name, TextView.BufferType.NORMAL);
     }
     
+    /**
+     * This method will process the voice command and turn it into 
+     * a command for the application
+     */
     public void processVoice(String command) {
+    	/** These commands may be updated at a later time */
     	
+    	//If the command mimics the read button
+    	if(command == "read" || command == "view"){
+			//The bundle used for the new textActivity view
+			Bundle textBundle = new Bundle();
+			//Makes a new TextActivity
+			TextActivity viewText = new TextActivity();
+			//Creates the TextActivity
+			viewText.onCreate(textBundle);
+			//This beep will be turned into an earcon in a later version
+			speak("BEEP");
+    	}
+    	
+    	//If the command mimics the ignore button
+    	if(command == "ignore"){
+    		//Calls the onFinish method
+    		onFinish();
+    	}
+    		
     }
     
     /** Called when the activity is first created. */
@@ -55,6 +84,9 @@ public class IncomingMessage extends SMSActivity {
         //Sets btnRead and btnIgnore to the button on the android xml
         btnRead = (Button) findViewById(R.id.btnRead);
         btnIgnore = (Button) findViewById(R.id.btnIgnore);   
+        
+        //Sets the messageFrom text view
+        messageFrom = (TextView) findViewById(R.id.messageFrom);
         
         //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
@@ -110,6 +142,10 @@ public class IncomingMessage extends SMSActivity {
     	super.onStop();
     }
     
+    /**
+     * The destroy method for the 
+     * class.
+     */
     public void onDestroy(){
     	super.onDestroy();
     }
@@ -134,10 +170,14 @@ public class IncomingMessage extends SMSActivity {
 		 * Switches to the next screen
 		 */
 		public void doWork(){
+			//The bundle used for the new textActivity view
+			Bundle textBundle = new Bundle();
 			//Makes a new TextActivity
 			TextActivity viewText = new TextActivity();
 			//Creates the TextActivity
-			viewText.onCreate(null);
+			viewText.onCreate(textBundle);
+			//This beep will be turned into an earcon in a later version
+			speak("BEEP");
 		}
     }
     
