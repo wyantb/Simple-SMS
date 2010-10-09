@@ -1,0 +1,63 @@
+1.1.1
+
+...
+
+1.1.2
+
+GUI class, ConversationsActivity.  This view is responsible for two things.  First, from this menu you can compose a new message to someone not in the history.  Second, the user can select from among the old conversations that he has had, and be taken to the view for that conversation, from which he can send a new message in the conversation.
+
+1.1.3
+
+GUI Class, IncomingMessage.  This view is a basic view, shown when the user receives a text message on their phone.  From here, the user can choose to reply to the message or ignore it.
+
+1.1.4
+
+GUI Class, OptionsList.  This view is our main screen for viewing the options for this program.  Currently it follows a simple model, which every option being in large text and the view is scrollable for more options.  Some options, upon being selected, will pop up a widget to change it.  Other options, such as headphones required for speaking personal messages, will not pop up a widget but will simply change upon clicking them.  Current options: Headphones (required), Text Size +, Text Size -, Color Scheme
+
+1.1.5
+
+GUI Class, TextActivity. This view is specifically tailored to entering replies.  It is entered primarily after coming from ConversationsActivity.  In this view, the outgoing message can be dictated by the user and read by the system.  Most importantly, messages are sent from this screen. 
+
+1.1.6
+
+Core Class, SmsDbAdapter.  This class is responsible for interfacing with our history of conversations.  It deals with SQLiteDatabase connection issues, and provides access to the messages contained within.  It also has functions for modifying the data in the table, such as deletes and adds.
+
+1.1.7
+
+Core Interface, SMSBase.   This interface describes common methods that all of our activities will have access to.  Mostly, they consist of STT and TTS helpers, although it would eventually extend to earcon/tacton support.  It is intended for implementors of this interface (SMSActivity, SMSListActivity) to pass along all method calls to SMSDelegate.
+
+1.1.8
+
+Core Class, SMSActivity/SMSListActivity.  In order to support the functions of SMSDelegate for each view in our program, it was decided that we would extend from each unique Activity type that our program uses.  Currently, these are only Activity and ListActivity.  Specifically, our unique subclasses delegate work to an instance of SMSDelegate, which allows us to have lots of common code for TTS and STT processing.
+
+1.1.9
+
+Core Class, SMSDelegate.  This class does the heavy lifting work for STT and TTS processing.  It is intended for this class to be the endpoint of all speak(...) commands, so we can process user options in one central place.  It distinguishes message types by using SpeechType.java.  Further, upon issuing speech commands, this class also parses the important command data out of their statement (such as 'snakefish read').  Lastly, this class deals with many lifecycle events of Activity in order to do the common work of speaking intro text and dealing with resources.
+
+1.1.10
+
+Core Interface, SMSDelegateCallback.  This interface will describe methods that individual Activities in our application will need to implement.  Currently, it only exists so that SMSDelegate can call back into the activity once it is done processing STT input.
+
+1.1.11
+
+Core Class, SpeechPack.  This class is responsible for parsing our TTS data contained in XML files.  It exposes them through simple get() methods which return Strings.
+
+1.1.12
+
+Core Enum, SpeechType.  This enum allows us to distinguish between several types of messages, for example a 'tutorial' message is different from a 'personal' message, which contains the contents of user messages.
+
+1.1.13
+
+Core Enum, CommandAction.  When our individual Activities are given String data to deal with, they already have command requests stripped out of the command.  The commands spoken by the user are then represented by a List<CommandAction>, for example if the user spoke "snakefish read", the list would then have one item, the CommandAction.READ.  The string to process would be empty.
+
+1.2
+
+This program has four primary interfaces to the outside world.
+
+The first interface is our connection to the SMS system on the Android.  As we are a SMS program for the Android, it's a given that we will interface with the SMS systems available.  The integration here has two parts: first, that we can send messages to other phones, second, that we can receive messages from other phones.
+
+The second interface is our connection to the existing SMS inbox on the user's phone.  On first start of our program, we will attempt to load all existing history into the user's phone.  We load that history into our own inbox for later use.  We do this for two reasons: first, that the API to obtain messages is not public, and subject to change.  Second, that we expect that this program will entirely replace a user's SMS application, thus this oppurtunity is available to us.
+
+The third interface is our connection to Google's Speech-to-text technology.  Since it's approximately impossible for us to do this ourselves, we need to have a connection to Google's services (only available on Android 2.2+) in order to support STT features.  This means that STT will only work with a data connection, since the voice data must be sent to Google for processing.
+
+Our last interface is to the Text-to-speech technology on the Android.  By default we have some messages stating where you are in the program flow, there are help messages if the user asks, and we can read back the messages that they have dictated with the above technology, or have typed.  Earcons/tactons may be eventual options to replace some of the TTS messages, but for now we are focusing on the TTS.

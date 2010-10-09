@@ -2,6 +2,7 @@ package com.snakefish.feedback;
 
 public enum CommandAction {
 
+	REPLY("reply"),
 	READ("read"),
 	SEND("send"),
 	IGNORE("ignore"),
