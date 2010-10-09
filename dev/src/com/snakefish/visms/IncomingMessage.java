@@ -1,5 +1,6 @@
 package com.snakefish.visms;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -49,13 +50,15 @@ public class IncomingMessage extends SMSActivity {
     	/** These commands may be updated at a later time */
     	
     	//If the command mimics the read button
-    	if(command == "read" || command == "view"){
+    	if(command.equals("read") || command.equals("view")){
 			//The bundle used for the new textActivity view
 			Bundle textBundle = new Bundle();
 			//Makes a new TextActivity
-			TextActivity viewText = new TextActivity();
-			//Creates the TextActivity
-			viewText.onCreate(textBundle);
+			Intent vText = new Intent();
+			//Sets the intent to class activity
+			vText.setClassName("com.snakefish.visms", "ConversationActivity");
+			//Starts the activity
+			startActivity(vText);
 			//This beep will be turned into an earcon in a later version
 			speak("BEEP");
     	}
