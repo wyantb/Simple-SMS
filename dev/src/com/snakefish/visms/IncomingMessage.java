@@ -52,11 +52,11 @@ public class IncomingMessage extends SMSActivity {
 			//Makes a new TextActivity
 			Intent vText = new Intent();
 			//Sets the intent to class activity
-			vText.setClassName("com.snakefish.visms", "ConversationActivity");
+			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.ConversationActivity");
 			//Starts the activity
 			startActivity(vText);
 			//Sends in the name of the contact
-			vText.putExtra(name, name);
+			vText.putExtra("com.snakefish.CONTACT", name);
     	}
     	
     	//If the command mimics the ignore button
