@@ -13,6 +13,8 @@
 		</activity>
 		<activity android:name="OptionsList">
 		</activity>
+		<activity android:name="MainChatWindow">
+		</activity>
 		<activity android:name=".IncomingMessage" android:label="SnakefishIncoming">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />

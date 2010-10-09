@@ -204,6 +204,15 @@ public class SmsDbAdapter {
     }
     
     /**
+     * TODO Returns a thread when given a threadID
+     * @param threadID
+     * @return
+     */
+    public Cursor fetchThreadByThreadID(int threadID){
+	return null;
+    }
+    
+    /**
      * This is a utility method that wipes the entire inbox. Use with caution:
      * This action cannot be undone.
      * @return the number of rows deleted; zero means unsuccessful
