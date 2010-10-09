@@ -138,10 +138,12 @@ public class ConversationsActivity extends SMSListActivity {
 		/*
 		 * START hard-coded transition to dummy message screen
 		 */
-		Intent compose = new Intent();
-		compose.setClassName("com.snakefish.visms", 
-				"com.snakefish.visms.TextActivity");
-		startActivity(compose);
+		Intent thread = new Intent();
+		thread.setClassName("com.snakefish.visms", 
+				"com.snakefish.visms.MainChatWindow");
+		System.out.println(id);
+		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
+		startActivity(thread);
 		/*
 		 * END
 		 */
