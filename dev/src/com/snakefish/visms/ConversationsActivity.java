@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
@@ -71,15 +72,15 @@ public class ConversationsActivity extends SMSListActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case COMPOSE_ID:
-			Intent compose = new Intent();
-			compose.setClassName("com.snakefish.visms", 
-					"com.snakefish.visms.TextActivity");
-			startActivity(compose);
+//			Intent compose = new Intent();
+//			compose.setClassName("com.snakefish.visms", 
+//					"com.snakefish.visms.TextActivity");
+//			startActivity(compose);
 			return true;
 		case SETTINGS_ID:
-			Intent options = new Intent();
-			options.setClassName("com.snakefish.visms",
-					"com.snakefish.visms.OptionsList");
+			Intent options = new Intent(this, OptionsList.class);
+//			options.setClassName("com.snakefish.visms",
+//					"com.snakefish.visms.OptionsList");
 			startActivity(options);
 			return true;
 		}
@@ -92,9 +93,11 @@ public class ConversationsActivity extends SMSListActivity {
 		case OPEN_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			Intent i = new Intent(this, TextActivity.class);
-			i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
-			startActivity(i);
+//			Intent i = new Intent(this, TextActivity.class);
+//			i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
+//			startActivity(i);
+			
+			openConvo(info.id);
 			return true;
 		case DELETE_ID:
 			// AdapterContextMenuInfo info =(AdapterContextMenuInfo)
@@ -105,6 +108,13 @@ public class ConversationsActivity extends SMSListActivity {
 		}
 		return super.onContextItemSelected(item);
 	}
+	
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        
+        openConvo(id);
+        
+    }
 
 
 	private void fillInbox() {
@@ -119,6 +129,19 @@ public class ConversationsActivity extends SMSListActivity {
 				R.layout.list_item, c, from, to);
 		setListAdapter(convos);
 
+	}
+	
+	private void openConvo(long id) {
+		/*
+		 * START hard-coded transition to dummy message screen
+		 */
+		Intent compose = new Intent();
+		compose.setClassName("com.snakefish.visms", 
+				"com.snakefish.visms.TextActivity");
+		startActivity(compose);
+		/*
+		 * END
+		 */
 	}
 
 }
