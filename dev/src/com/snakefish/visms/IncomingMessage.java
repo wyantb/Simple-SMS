@@ -59,8 +59,8 @@ public class IncomingMessage extends SMSActivity {
 			vText.setClassName("com.snakefish.visms", "ConversationActivity");
 			//Starts the activity
 			startActivity(vText);
-			//This beep will be turned into an earcon in a later version
-			speak("BEEP");
+			//Sends in the name of the contact
+			vText.putExtra(name, name);
     	}
     	
     	//If the command mimics the ignore button
@@ -176,11 +176,14 @@ public class IncomingMessage extends SMSActivity {
 			//The bundle used for the new textActivity view
 			Bundle textBundle = new Bundle();
 			//Makes a new TextActivity
-			TextActivity viewText = new TextActivity();
-			//Creates the TextActivity
-			viewText.onCreate(textBundle);
-			//This beep will be turned into an earcon in a later version
-			speak("BEEP");
+			Intent vText = new Intent();
+			//Sets the intent to class activity
+			vText.setClassName("com.snakefish.visms", "ConversationActivity");
+			//Starts the activity
+			startActivity(vText);
+			//Sends in the name of the contact
+			vText.putExtra(name, name);
+			
 		}
     }
     
