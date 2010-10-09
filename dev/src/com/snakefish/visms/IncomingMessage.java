@@ -2,7 +2,10 @@ package com.snakefish.visms;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * This class deals with the GUI used for an 
@@ -12,29 +15,57 @@ import android.widget.Button;
  *
  */
 public class IncomingMessage extends SMSActivity {
-	/**Used to positon buttons */
+	/**Used to position buttons */
 	public static final int COMPOSE_POSITION = Menu.FIRST;
 	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
 	/** The button used for viewing the message */
-	protected Button btnRead;
+	protected Button btnRead = null;
 	/** The button used to ignore messages */
-	protected Button btnIgnore;
+	protected Button btnIgnore = null;
 	/** Used to get the name of the contact */
 	protected String name = new String();
 	/** Used to determine orientation of the phone */
     protected boolean landscape = false;
+    /** The text view that is the contact information */
+    protected TextView messageFrom = null; 
     
     /**
      * Creates a new incoming message
      */
     IncomingMessage(String name){
     	super (R.xml.newtext_speech);
-    	
+    	//Sets the contact name to the name of the person
+    	// sending the message.
     	this.name = name;
+    	//Sets the xml text to the same name
+    	messageFrom.setText(name, TextView.BufferType.NORMAL);
     }
     
+    /**
+     * This method will process the voice command and turn it into 
+     * a command for the application
+     */
     public void processVoice(String command) {
+    	/** These commands may be updated at a later time */
     	
+    	//If the command mimics the read button
+    	if(command == "read" || command == "view"){
+			//The bundle used for the new textActivity view
+			Bundle textBundle = new Bundle();
+			//Makes a new TextActivity
+			TextActivity viewText = new TextActivity();
+			//Creates the TextActivity
+			viewText.onCreate(textBundle);
+			//This beep will be turned into an earcon in a later version
+			speak("BEEP");
+    	}
+    	
+    	//If the command mimics the ignore button
+    	if(command == "ignore"){
+    		//Calls the onFinish method
+    		onFinish();
+    	}
+    		
     }
     
     /** Called when the activity is first created. */
@@ -52,7 +83,14 @@ public class IncomingMessage extends SMSActivity {
         }
         //Sets btnRead and btnIgnore to the button on the android xml
         btnRead = (Button) findViewById(R.id.btnRead);
-        btnIgnore = (Button) findViewById(R.id.btnIgnore);        
+        btnIgnore = (Button) findViewById(R.id.btnIgnore);   
+        
+        //Sets the messageFrom text view
+        messageFrom = (TextView) findViewById(R.id.messageFrom);
+        
+        //Sets listeners to each button
+        btnRead.setOnClickListener(new ReadListener());
+        btnIgnore.setOnClickListener(new IgnoreListener());
     }    
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,5 +121,88 @@ public class IncomingMessage extends SMSActivity {
      */
     public void setView(boolean landscape){
     	this.landscape = landscape;
+    }
+    
+    /**
+     * This class will be used if the incoming message
+     * is ignored. The program will speak "Message
+     * Ignored" and close gracefully.
+     */
+    public void onFinish(){
+    	//Lets the user know the message has been ignored
+    	speak("Message Ignored");
+    }
+    
+    /**
+     * The stopping method used for the program. 
+     * I really don't know if we need to use this or 
+     * not.
+     */
+    public void onStop(){
+    	super.onStop();
+    }
+    
+    /**
+     * The destroy method for the 
+     * class.
+     */
+    public void onDestroy(){
+    	super.onDestroy();
+    }
+    
+    /**
+     * The listener used for reading messages. This class
+     * will be used to change the screen to the message
+     * screen.
+     */
+    private class ReadListener implements OnClickListener {
+
+    	/**
+    	 * Use to call the work method. Similar to the 
+    	 * implementation in TextActivity.java
+    	 */
+		public void onClick(View arg0) {
+			// Calls the work method
+			doWork();
+		}
+    	
+		/**
+		 * Switches to the next screen
+		 */
+		public void doWork(){
+			//The bundle used for the new textActivity view
+			Bundle textBundle = new Bundle();
+			//Makes a new TextActivity
+			TextActivity viewText = new TextActivity();
+			//Creates the TextActivity
+			viewText.onCreate(textBundle);
+			//This beep will be turned into an earcon in a later version
+			speak("BEEP");
+		}
+    }
+    
+    /**
+     * The listener used for ignoring messages. It will call 
+     * the doWork method which will call onFinish.
+     */
+    private class IgnoreListener implements OnClickListener {
+
+    	/**
+    	 * Use to call the work method. Similar to the 
+    	 * implementation in TextActivity.java
+    	 */
+		public void onClick(View arg0) {
+			// Calls the work method
+			doWork();
+		}
+    	
+		/**
+		 * Calls the onFinish method to end
+		 * the application.
+		 */
+		public void doWork(){
+			//Calls onFinish
+			onFinish();
+		}
     }
 }
