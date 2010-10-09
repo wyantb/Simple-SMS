@@ -18,12 +18,12 @@
         </activity>
 
     
-<activity android:name="IncomingMessage" android:label="SnakefishIncoming"><intent-filter></intent-filter>
-</activity>
+<activity android:name="IncomingMessage" android:label="SnakefishIncoming">
     <intent-filter>
         <action android:name="android.intent.action.MAIN" />
     	<category android:name="android.intent.category.LAUNCHER" />
 	</intent-filter>
+</activity>
 </application>
     <uses-sdk android:minSdkVersion="7" />
     <uses-permission android:name="android.permission.SEND_SMS">

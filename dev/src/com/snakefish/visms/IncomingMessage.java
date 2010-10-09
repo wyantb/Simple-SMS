@@ -1,5 +1,7 @@
 package com.snakefish.visms;
 
+import com.snakefish.feedback.SpeechType;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,8 +19,7 @@ import android.widget.TextView;
  */
 public class IncomingMessage extends SMSActivity {
 	/**Used to position buttons */
-	public static final int COMPOSE_POSITION = Menu.FIRST;
-	public static final int SETTINGS_POSITION = Menu.FIRST + 1;
+	public static final int SETTINGS_POSITION = Menu.FIRST;
 	/** The button used for viewing the message */
 	protected Button btnRead = null;
 	/** The button used to ignore messages */
@@ -33,13 +34,10 @@ public class IncomingMessage extends SMSActivity {
     /**
      * Creates a new incoming message
      */
-    IncomingMessage(String name){
+    public IncomingMessage(){
     	super (R.xml.newtext_speech);
     	//Sets the contact name to the name of the person
     	// sending the message.
-    	this.name = name;
-    	//Sets the xml text to the same name
-    	messageFrom.setText(name, TextView.BufferType.NORMAL);
     }
     
     /**
@@ -51,8 +49,6 @@ public class IncomingMessage extends SMSActivity {
     	
     	//If the command mimics the read button
     	if(command.equals("read") || command.equals("view")){
-			//The bundle used for the new textActivity view
-			Bundle textBundle = new Bundle();
 			//Makes a new TextActivity
 			Intent vText = new Intent();
 			//Sets the intent to class activity
@@ -76,6 +72,7 @@ public class IncomingMessage extends SMSActivity {
     public void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
+        
         //Sets the correct layout
         if(landscape == false){
         	//Portrait view
@@ -84,12 +81,16 @@ public class IncomingMessage extends SMSActivity {
         	//Landscape view
         	setContentView(R.layout.incoming_message_landscape);
         }
+    	
         //Sets btnRead and btnIgnore to the button on the android xml
         btnRead = (Button) findViewById(R.id.btnRead);
         btnIgnore = (Button) findViewById(R.id.btnIgnore);   
         
         //Sets the messageFrom text view
         messageFrom = (TextView) findViewById(R.id.messageFrom);
+        
+        // TODO get name from intent
+    	messageFrom.setText("Jason", TextView.BufferType.NORMAL);
         
         //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
@@ -98,7 +99,6 @@ public class IncomingMessage extends SMSActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        menu.add(0, COMPOSE_POSITION, 0, R.string.compose);
         menu.add(0, Menu.FIRST, 0, R.string.settings);
         return result;
     }
@@ -133,7 +133,17 @@ public class IncomingMessage extends SMSActivity {
      */
     public void onFinish(){
     	//Lets the user know the message has been ignored
-    	speak("Message Ignored");
+    	speak("Message Ignored", SpeechType.INFO, true);
+    	
+    	// TODO sleep better
+    	try {
+    		Thread.sleep(400);
+    	}
+    	catch (Exception e) {
+    		// same as above
+    	}
+    	
+    	finish();
     }
     
     /**
@@ -173,14 +183,14 @@ public class IncomingMessage extends SMSActivity {
 		 * Switches to the next screen
 		 */
 		public void doWork(){
-			//The bundle used for the new textActivity view
-			Bundle textBundle = new Bundle();
+			
 			//Makes a new TextActivity
 			Intent vText = new Intent();
 			//Sets the intent to class activity
-			vText.setClassName("com.snakefish.visms", "ConversationActivity");
+			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.ConversationsActivity");
 			//Starts the activity
 			startActivity(vText);
+			
 			//Sends in the name of the contact
 			vText.putExtra(name, name);
 			

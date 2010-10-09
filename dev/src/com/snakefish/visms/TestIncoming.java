@@ -17,7 +17,7 @@ public class TestIncoming {
 	 */
 	public static void main(String args[]){
 		//Makes a new IncomingMessage
-		IncomingMessage testIncoming = new IncomingMessage("Jason");
+		IncomingMessage testIncoming = new IncomingMessage();
 		//Calls onCreate
 		//testIncoming.onCreate("incomingMessage");
 	}
