@@ -21,6 +21,9 @@ public class SMSDelegate implements SMSBase {
 	
 	private static final int VOICE_REQUEST_CODE = 1234112;
 	
+	@Deprecated
+	public static boolean HEADPHONES_REQUIRED = false;
+	
 	private TextToSpeech tts;
 	private SpeechPack speechPack;
 	private Activity callback;
@@ -76,7 +79,11 @@ public class SMSDelegate implements SMSBase {
 		
 	}
 
-	public void speak(String text, boolean doFlush) {
+	public void speak(String text, SpeechType type, boolean doFlush) {
+		if (type == SpeechType.PERSONAL && HEADPHONES_REQUIRED) {
+			return;
+		}
+		
 		if (doFlush) {
 			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
 		}
@@ -85,8 +92,12 @@ public class SMSDelegate implements SMSBase {
 		}
 	}
 	
+	public void speak(String text, SpeechType type) {
+		speak(text, type, false);
+	}
+	
 	public void speak(String text) {
-		speak(text, false);
+		speak(text, SpeechType.PERSONAL, false);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -117,8 +128,11 @@ public class SMSDelegate implements SMSBase {
 				
 				CommandAction command = CommandAction.fromString(commandPart);
 				
-				if (command == CommandAction.HELP || command == CommandAction.LIST) {
-					speak(speechPack.getTutorial(), true);
+				if (command == CommandAction.HELP) {
+					speak(speechPack.getTutorial(), SpeechType.TUTORIAL_REQUESTED, true);
+				}
+				if (command == CommandAction.LIST) {
+					speak(speechPack.getList(), SpeechType.TUTORIAL_REQUESTED, true);
 				}
 				else {
 					commandsRequested.add(CommandAction.fromString(commandPart));

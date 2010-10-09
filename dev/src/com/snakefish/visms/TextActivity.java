@@ -3,6 +3,7 @@ package com.snakefish.visms;
 import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -129,7 +130,7 @@ public class TextActivity extends SMSActivity {
     		speak("Error: Message not sent");
     	}
     	
-    	speak("Message sent", true);
+    	speak("Message sent", SpeechType.INFO, true);
     	
     	// TODO can we pause the app better?
     	try {

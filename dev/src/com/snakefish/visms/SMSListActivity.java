@@ -3,6 +3,7 @@ package com.snakefish.visms;
 import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.SMSBase;
 import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SMSDelegateCallback;
@@ -74,9 +75,15 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		}
 	}
 	
-	public void speak(String text, boolean doFlush) {
+	public void speak(String text, SpeechType type, boolean doFlush) {
 		if (delegate != null) {
-			delegate.speak(text, doFlush);
+			delegate.speak(text, type, doFlush);
+		}
+	}
+	
+	public void speak(String text, SpeechType type) {
+		if (delegate != null) {
+			delegate.speak(text, type);
 		}
 	}
 	

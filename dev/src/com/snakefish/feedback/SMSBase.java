@@ -8,7 +8,15 @@ import android.speech.tts.TextToSpeech;
 
 public interface SMSBase extends TextToSpeech.OnInitListener {
 
-	public void speak(String text, boolean doFlush);
+	public void speak(String text, SpeechType type, boolean doFlush);
+	public void speak(String text, SpeechType type);
+	
+	/**
+	 * Deprecated!  Use one of the versions that accepts a MessageType.
+	 * See MessageType for descriptions of the types of spoken messages.
+	 * @param text
+	 */
+	@Deprecated
 	public void speak(String text);
 
 	public boolean onSearchRequested();
