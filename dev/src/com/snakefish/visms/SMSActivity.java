@@ -1,5 +1,8 @@
 package com.snakefish.visms;
 
+import java.util.List;
+
+import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SMSBase;
 import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SMSDelegateCallback;
@@ -30,6 +33,22 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
     	
     	return false;
     }
+	
+	public List<CommandAction> commandsRequested() {
+		if (delegate != null) {
+			return delegate.commandsRequested();
+		}
+		
+		return null;
+	}
+    
+    public String processCommands(String text) {
+    	if (delegate != null) {
+    		return delegate.processCommands(text);
+    	}
+    	
+    	return null;
+    }
     
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -56,6 +75,12 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
 	public void onInit(int arg0) {
 		if (delegate != null) {
 			delegate.onInit(arg0);
+		}
+	}
+	
+	public void speak(String text, boolean doFlush) {
+		if (delegate != null) {
+			delegate.speak(text, doFlush);
 		}
 	}
 	

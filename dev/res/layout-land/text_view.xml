@@ -25,7 +25,7 @@
 
   <EditText
       android:id="@+id/text_bot"
-      android:hint="Enter text here"
+      android:hint="@string/enter_msg"
       android:textColor="#000000"
       android:background="#FFFFFF"
       android:textSize="24sp"

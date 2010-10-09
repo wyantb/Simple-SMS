@@ -2,8 +2,9 @@ package com.snakefish.visms;
 
 import java.util.List;
 
+import com.snakefish.feedback.CommandAction;
+
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,8 +17,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+/**
+ * Represents the view with which users will send messages in a conversation.
+ * 
+ * Upon sending the message, this screen will finish() and return to the previous screen, if any.
+ * 
+ * Further, please make use of the CONVERSATION_LAST_MSG String, if you want to populate the
+ * 	upper text box of this screen with previous conversation history.
+ * NOTE: make it ArrayList<String> data, with 2 elements.  First element should be the from,
+ *  second element should be the message.  (ie "derek" "hey what's up?")
+ *
+ * @author Brian
+ *
+ */
 public class TextActivity extends SMSActivity {
 
+	public static final String CONVERSATION_LAST_MSG = "com.snakefish.LAST_MESSAGE";
 	public static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
 	
 	public TextActivity() {
@@ -42,7 +57,7 @@ public class TextActivity extends SMSActivity {
         butLeft = (Button)findViewById(R.id.text_b1);
         butRight = (Button)findViewById(R.id.text_b2);
 
-        //assert(textTop != null);
+        assert(textTop != null);
         assert(textBot != null);
         assert(butLeft != null);
         assert(butRight != null);
@@ -52,6 +67,25 @@ public class TextActivity extends SMSActivity {
         
         smsReceiver = new SMSBroadcastReceiver();
         registerReceiver(smsReceiver, new IntentFilter(ACTION_SMS_SENT));
+        
+        populateWithIntent(getIntent());
+    }
+    
+    protected void populateWithIntent(Intent intent) {
+    	if (intent != null) {
+    		List<String> convData = intent.getStringArrayListExtra(CONVERSATION_LAST_MSG);
+    		
+    		if (convData != null) {
+    			if (convData.size() == 2) {
+    				textTop.setText(convData.get(0) + ":");
+    				textTop.append(" " + convData.get(1));
+    			}
+    			if (convData.size() == 1) {
+    				// TODO this isn't an ideal case, we shouldn't hit it
+    				textTop.setText(convData.get(0));
+    			}
+    		}
+    	}
     }
     
     @Override
@@ -62,7 +96,18 @@ public class TextActivity extends SMSActivity {
     }
     
     public void processVoice(String command) {
-    	textBot.setText("Received from voice: " + command);
+    	List<CommandAction> commands = this.commandsRequested();
+    	
+    	if (commands.contains(CommandAction.READ)) {
+    		speak(textBot.getText().toString());
+    	}
+    	else {
+    		textBot.getText().append(command);
+    		
+    		if (commands.contains(CommandAction.SEND)) {
+    			sendMessage();
+    		}
+    	}
     }
     
     protected void sendMessage() {
@@ -71,17 +116,34 @@ public class TextActivity extends SMSActivity {
     	List<String> messages = sms.divideMessage(textBot.getText().toString());
     	String recipient = "";  // TODO insert address here
     	
+    	// TODO actually send message
+    	//  For now, we'll just report success anyway
+    	//  and close immdiately
     	try {
-    		for (String message : messages) {
-    			sms.sendTextMessage(recipient, null, message, 
-    					PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
-    		}
+    		//for (String message : messages) {
+    		//	sms.sendTextMessage(recipient, null, message, 
+    		//			PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+    		//}
     	}
     	catch (Exception e) {
-    		speak("Made a booboo, message almost brought down app.");
+    		speak("Error: Message not sent");
     	}
+    	
+    	speak("Message sent", true);
+    	
+    	// TODO can we pause the app better?
+    	try {
+    		Thread.sleep(400);
+    	}
+    	catch (Exception e) {
+    		// Well, just did this so it could speak anyway, so
+    	}
+    	
+    	finish();
     }
     
+    // TODO
+    // WITH DUMMY IMPLEMENTATION OF SEND(), THIS WILL NOT OCCUR
     private class SMSBroadcastReceiver extends BroadcastReceiver {
     	
     	@Override
@@ -107,7 +169,6 @@ public class TextActivity extends SMSActivity {
                 break;
             }
 
-            textTop.setText(message);
             speak(message);
 
     	}
@@ -140,8 +201,6 @@ public class TextActivity extends SMSActivity {
 		}
 		
 		public void doWork() {
-			// TODO actual work
-			textBot.setText("SEND MORE!");
 			sendMessage();
 		}
     	

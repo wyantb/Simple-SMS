@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Scanner;
 
 
 import android.app.Activity;
@@ -16,6 +17,8 @@ import android.speech.tts.TextToSpeech;
 
 public class SMSDelegate implements SMSBase {
 
+	public static String SNAKEFISH_KEYWORD = "snakefish";
+	
 	private static final int VOICE_REQUEST_CODE = 1234112;
 	
 	private TextToSpeech tts;
@@ -24,6 +27,7 @@ public class SMSDelegate implements SMSBase {
 	private SMSDelegateCallback smsCallback;
 	private List<String> queuedMessages;
 	private boolean isHidden;
+	private List<CommandAction> commandsRequested;
 	
 	public SMSDelegate(SMSDelegateCallback callback, Activity context, int xmlResId) {
 		this.tts = new TextToSpeech(context, this);
@@ -72,16 +76,60 @@ public class SMSDelegate implements SMSBase {
 		
 	}
 
+	public void speak(String text, boolean doFlush) {
+		if (doFlush) {
+			tts.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+		}
+		else {
+			tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+		}
+	}
+	
 	public void speak(String text) {
-		tts.speak(text, TextToSpeech.QUEUE_ADD, null);
+		speak(text, false);
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == VOICE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			
-			smsCallback.processVoice(matched.get(0));
+			String spokenWords = matched.get(0);
+			spokenWords = processCommands(spokenWords);
+			smsCallback.processVoice(spokenWords);
 		}
+	}
+	
+	public List<CommandAction> commandsRequested() {
+		return commandsRequested;
+	}
+	
+	public String processCommands(String userText) {
+		commandsRequested = new ArrayList<CommandAction>();
+		
+		Scanner textParser = new Scanner(userText);
+		String remainingSpeech = "";
+		
+		while (textParser.hasNext()) {
+			String textPart = textParser.next();
+			
+			if (textPart.equalsIgnoreCase(SNAKEFISH_KEYWORD)) {
+				String commandPart = textParser.next();
+				
+				CommandAction command = CommandAction.fromString(commandPart);
+				
+				if (command == CommandAction.HELP || command == CommandAction.LIST) {
+					speak(speechPack.getTutorial(), true);
+				}
+				else {
+					commandsRequested.add(CommandAction.fromString(commandPart));
+				}
+			}
+			else {
+				remainingSpeech += textPart;
+			}
+		}
+		
+		return remainingSpeech;
 	}
 
 	public Object onRetainNonConfigurationInstance() {
