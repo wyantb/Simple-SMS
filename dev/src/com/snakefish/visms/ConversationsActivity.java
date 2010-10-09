@@ -19,11 +19,11 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int DELETE_ID = Menu.FIRST + 3;
 	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
 	private SmsDbAdapter mDbHelper;
-	
+
 	public ConversationsActivity() {
 		super(R.xml.conv_speech);
 	}
-	
+
 	public void processVoice(String command) {
 		// TODO
 	}
@@ -33,18 +33,19 @@ public class ConversationsActivity extends SMSListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.convo_list);
-		
+
 		mDbHelper = new SmsDbAdapter(this);
 		mDbHelper.open();
-		
+
 		// **TESTING DATABASE, REMOVE WHEN DONE
 		// Adding dummy conversations to db
 		mDbHelper.deleteInbox();
 		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456244, "Yo what's up?");
 		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456844, "R u thar?");
-		mDbHelper.addMsg(2, "1-203-733-8028", 3, 1286551147, "Are you done yet?");
+		mDbHelper.addMsg(2, "1-203-733-8028", 3, 1286551147,
+				"Are you done yet?");
 		// ** TESTING DATABASE, REMOVE WHEN DONE
-		
+
 		fillInbox();
 		registerForContextMenu(getListView());
 	}
@@ -70,61 +71,52 @@ public class ConversationsActivity extends SMSListActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case COMPOSE_ID:
-			// Start activity to compose a new message
+			Intent compose = new Intent();
+			compose.setClassName("com.snakefish.visms", 
+					"com.snakefish.visms.TextActivity");
+			startActivity(compose);
 			return true;
 		case SETTINGS_ID:
-			// Start activity to edit options
+			Intent options = new Intent();
+			options.setClassName("com.snakefish.visms",
+					"com.snakefish.visms.OptionsList");
+			startActivity(options);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-	
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case OPEN_ID:
-				AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-				Intent i = new Intent(this, TextActivity.class);
-				i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
-				startActivity(i);
-				return true;
-			case DELETE_ID:
-//				AdapterContextMenuInfo info =(AdapterContextMenuInfo) item.getMenuInfo();
-//				mDbHelper.deleteThread(info.id);
-//				getInbox();
-				return true;
+		case OPEN_ID:
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+					.getMenuInfo();
+			Intent i = new Intent(this, TextActivity.class);
+			i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
+			startActivity(i);
+			return true;
+		case DELETE_ID:
+			// AdapterContextMenuInfo info =(AdapterContextMenuInfo)
+			// item.getMenuInfo();
+			// mDbHelper.deleteThread(info.id);
+			// getInbox();
+			return true;
 		}
 		return super.onContextItemSelected(item);
 	}
 
-/**
-     * Fires when an item in the options menu is selected.
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-        case Menu.FIRST: //Options
-           Intent options = new Intent();
-           options.setClassName("com.snakefish.visms", "com.snakefish.visms.OptionsList");
-           startActivity(options);
-           return true;
-        default:
-            return super.onOptionsItemSelected(item);
-        }
-    }
 
 	private void fillInbox() {
 		Cursor c = mDbHelper.fetchAllMsgs();
 		startManagingCursor(c);
-		
-		String[] from = new String[] {SmsDbAdapter.KEY_ADDRESS};
-		
-		int[] to = new int[] {R.id.convo_entry};
-		
-		SimpleCursorAdapter convos =
-			new SimpleCursorAdapter(this, R.layout.list_item, c, from, to);
+
+		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
+
+		int[] to = new int[] { R.id.convo_entry };
+
+		SimpleCursorAdapter convos = new SimpleCursorAdapter(this,
+				R.layout.list_item, c, from, to);
 		setListAdapter(convos);
 
 	}
