@@ -198,10 +198,11 @@ public class IncomingMessage extends SMSActivity {
 			//Makes a new TextActivity
 			Intent vText = new Intent();
 			//Sets the intent to class activity
-			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.ConversationsActivity");
+			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
 			//Starts the activity
 			startActivity(vText);
 			
+			// TODO dangit Jason, this doesn't go after you launch the intent
 			//Sends in the name of the contact
 			vText.putExtra(name, name);
 			
