@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<item name="intro" type="string">TODO</item>
-	<item name="tutorial" type="string">TODO</item>
-	<item name="list" type="string">TODO</item>
+	<item name="intro" type="string">Options screen</item>
+	<item name="tutorial" type="string">This is the options screen.  You can set various settings for this application here.  Speak 'snakefish list' to get a list of all available voice commands.</item>
+	<item name="list" type="string">Command keywords available are as follows: help and list</item>
 </resources>

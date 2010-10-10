@@ -69,7 +69,7 @@ public class SMSDelegate implements SMSBase {
 			for (Iterator<String> msgItr = queuedMessages.iterator();
 				msgItr.hasNext(); ) {
 				
-				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_ADD, null);
+				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_FLUSH, null);
 				
 				if (result == TextToSpeech.SUCCESS) {
 					msgItr.remove();
@@ -105,8 +105,11 @@ public class SMSDelegate implements SMSBase {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			
 			String spokenWords = matched.get(0);
-			spokenWords = processCommands(spokenWords);
-			smsCallback.processVoice(spokenWords);
+			spokenWords = parseCommands(spokenWords);
+			smsCallback.processVoice(commandsRequested, spokenWords);
+		}
+		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {
+			speak(speechPack.getIntro(), SpeechType.INTRO, true);
 		}
 	}
 	
@@ -114,7 +117,7 @@ public class SMSDelegate implements SMSBase {
 		return commandsRequested;
 	}
 	
-	public String processCommands(String userText) {
+	public String parseCommands(String userText) {
 		commandsRequested = new ArrayList<CommandAction>();
 		
 		Scanner textParser = new Scanner(userText);
@@ -170,6 +173,7 @@ public class SMSDelegate implements SMSBase {
 	}
 	
 	public void onRestart() {
+		tts = new TextToSpeech(callback, this);
 		isHidden = true;
 	}
 	
@@ -180,13 +184,12 @@ public class SMSDelegate implements SMSBase {
 	}
 	
 	public void onStop() {
-		tts.stop();
+		tts.shutdown();
 		
 		isHidden = true;
 	}
 	
 	public void onDestroy() {
-		tts.shutdown();
 	}
 	
 	private void queueMesssageOnInit(String message) {

@@ -6,7 +6,7 @@
 
   <TextView
       android:id="@+id/text_top"
-      android:text="@string/not_ready"
+      android:text="@string/no_history"
       android:textColor="#FFFFFF"
       android:background="#000000"
       android:padding="16dp"

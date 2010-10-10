@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<item name="intro" type="string">TODO</item>
-	<item name="tutorial" type="string">TODO</item>
-	<item name="list" type="string">TODO</item>
+	<item name="intro" type="string">New message received</item>
+	<item name="tutorial" type="string">You have received a new message.  You can ignore or respond to the message here.  Available commands are reply, read, and ignore</item>
+	<item name="list" type="string">Available commands are help, list, reply, read, and ignore</item>
 </resources>
