@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<item name="intro" type="string">TODO</item>
-	<item name="tutorial" type="string">TODO</item>
-	<item name="list" type="string">TODO</item>
+	<item name="intro" type="string">Conversation List</item>
+	<item name="tutorial" type="string">This is the conversation list screen.  You can see a list of the conversations in your inbox here. Speak 'command list' to get a list of all available voice commands.</item>
+	<item name="list" type="string">Command keywords available are as follows: help, list, view conversation, compose</item>
 </resources>

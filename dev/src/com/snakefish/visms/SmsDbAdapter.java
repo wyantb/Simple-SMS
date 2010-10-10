@@ -175,6 +175,12 @@ public class SmsDbAdapter {
                 null, null);
     }
     
+    
+    /**
+     * TODO Fetch all the individual threads in the inbox
+     * Presently this just does the same as fetchAllMsgs()
+     * @return A Cursor over all the threads in the database
+     */
     public Cursor fetchAllThreads() {
     	Cursor c = mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_THREADID,
                 KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, null, null, null,

@@ -82,8 +82,6 @@ public class ConversationsActivity extends SMSListActivity {
 			return true;
 		case SETTINGS_ID:
 			Intent options = new Intent(this, OptionsList.class);
-//			options.setClassName("com.snakefish.visms",
-//					"com.snakefish.visms.OptionsList");
 			startActivity(options);
 			return true;
 		}
@@ -121,7 +119,7 @@ public class ConversationsActivity extends SMSListActivity {
 
 
 	private void fillInbox() {
-		Cursor c = mDbHelper.fetchAllMsgs();
+		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
 		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
@@ -134,6 +132,11 @@ public class ConversationsActivity extends SMSListActivity {
 
 	}
 	
+	/**
+	 * Open a conversation.
+	 * @param id the thread_id of the conversation being opened
+	 */
+	
 	private void openConvo(long id) {
 		/*
 		 * START hard-coded transition to dummy message screen
@@ -142,7 +145,7 @@ public class ConversationsActivity extends SMSListActivity {
 		thread.setClassName("com.snakefish.visms", 
 				"com.snakefish.visms.MainChatWindow");
 		System.out.println(id);
-		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
+//		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
 		startActivity(thread);
 		/*
 		 * END
