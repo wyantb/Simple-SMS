@@ -41,11 +41,7 @@ public class OptionsList extends SMSListActivity {
     }
 
 	public void processVoice(List<CommandAction> commands, String text) {
-		// TODO Auto-generated method stub
-		
+		// TODO actually do stuff in options view...
 	}
-    
- 
-    
     
 }

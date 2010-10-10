@@ -33,7 +33,16 @@ public class ConversationsActivity extends SMSListActivity {
 	}
 
 	public void processVoice(List<CommandAction> commands, String text) {
-		// TODO
+		
+		if (commands.contains(CommandAction.COMPOSE)) {
+			doCompose();
+		}
+		
+	}
+	
+	public void doCompose() {
+		// TODO do we want to compose with some other id?
+		openConvo(-1);
 	}
 
 	/** Called when the activity is first created. */
@@ -69,7 +78,6 @@ public class ConversationsActivity extends SMSListActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, OPEN_ID, 0, R.string.open);
 		menu.add(0, DELETE_ID, 0, R.string.delete);
@@ -79,15 +87,12 @@ public class ConversationsActivity extends SMSListActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case COMPOSE_ID:
-//			Intent compose = new Intent();
-//			compose.setClassName("com.snakefish.visms", 
-//					"com.snakefish.visms.TextActivity");
-//			startActivity(compose);
+			doCompose();
 			return true;
 		case SETTINGS_ID:
 			Intent options = new Intent(this, OptionsList.class);
-//			options.setClassName("com.snakefish.visms",
-//					"com.snakefish.visms.OptionsList");
+			options.setClassName("com.snakefish.visms",
+					"com.snakefish.visms.OptionsList");
 			startActivity(options);
 			return true;
 		}
