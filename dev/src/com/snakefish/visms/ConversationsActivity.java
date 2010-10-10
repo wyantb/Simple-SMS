@@ -13,8 +13,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class ConversationsActivity extends SMSListActivity {
@@ -27,6 +29,7 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int DELETE_ID = Menu.FIRST + 3;
 	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
 	private SmsDbAdapter mDbHelper;
+	private TextView btnCompose;
 
 	public ConversationsActivity() {
 		super(R.xml.conv_speech);
@@ -51,6 +54,10 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.convo_list);
 
+		btnCompose = (TextView)findViewById(R.id.btnCompose);
+		
+		btnCompose.setOnClickListener(new ComposeClickListener());
+		
 		mDbHelper = new SmsDbAdapter(this);
 		mDbHelper.open();
 
@@ -161,6 +168,14 @@ public class ConversationsActivity extends SMSListActivity {
 		/*
 		 * END
 		 */
+	}
+	
+	private class ComposeClickListener implements OnClickListener {
+
+		public void onClick(View arg0) {
+			doCompose();
+		}
+		
 	}
 
 }

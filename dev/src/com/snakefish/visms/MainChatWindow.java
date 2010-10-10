@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -107,11 +108,12 @@ public class MainChatWindow extends SMSListActivity {
     public void processVoice(List<CommandAction> commands, String text) {
     	
     	if (commands.contains(CommandAction.READ)) {
-    		
+    		speak("Ok fine ignore me", SpeechType.PERSONAL);
     	}
     	if (commands.contains(CommandAction.REPLY)) {
-    		
+    		doReply();
     	}
+    	
     }
     
     public void doReply() {

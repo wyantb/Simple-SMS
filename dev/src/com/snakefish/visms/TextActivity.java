@@ -77,16 +77,16 @@ public class TextActivity extends SMSActivity {
     
     protected void populateWithIntent(Intent intent) {
     	if (intent != null) {
-    		List<String> convData = intent.getStringArrayListExtra(CONVERSATION_LAST_MSG);
+    		String[] convData = intent.getStringArrayExtra(CONVERSATION_LAST_MSG);
     		
     		if (convData != null) {
-    			if (convData.size() == 2) {
-    				textTop.setText(convData.get(0) + ":");
-    				textTop.append(" " + convData.get(1));
+    			if (convData.length == 2) {
+    				textTop.setText(convData[0] + ":");
+    				textTop.append(" " + convData[1]);
     			}
-    			if (convData.size() == 1) {
+    			if (convData.length == 1) {
     				// TODO this isn't an ideal case, we shouldn't hit it
-    				textTop.setText(convData.get(0));
+    				textTop.setText(convData[0]);
     			}
     		}
     	}

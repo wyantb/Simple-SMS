@@ -2,5 +2,5 @@
 <resources>
 	<item name="intro" type="string">Conversation screen</item>
 	<item name="tutorial" type="string">This is the conversation screen. You can see all messages between you and the other person. At the bottom is a button to compose a new message to the person</item>
-	<item name="list" type="string">TODO</item>
+	<item name="list" type="string">Command keywords available are as follows: help, list, read, and reply</item>
 </resources>
