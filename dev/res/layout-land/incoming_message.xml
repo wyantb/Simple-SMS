@@ -17,11 +17,6 @@
     >
 </TextView>
 
-<ImageView android:id = "@+id/textPic"
-
->
-</ImageView>
-
 <TextView android:id="@+id/messageFrom" 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 

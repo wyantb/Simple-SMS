@@ -6,7 +6,7 @@
       
   <TextView
       android:id="@+id/text_top"
-      android:text="@string/read_short"
+      android:text="@string/no_history"
       android:visibility="invisible"
       android:layout_width="0sp"
       android:layout_height="0sp"

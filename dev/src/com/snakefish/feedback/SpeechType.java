@@ -19,7 +19,7 @@ public enum SpeechType {
 	TUTORIAL_REQUESTED,
 	
 	/**
-	 * By definition, I don't know what this would be.
+	 * Just basic information for the user.  Should likely always pass through.
 	 */
 	INFO,
 	
