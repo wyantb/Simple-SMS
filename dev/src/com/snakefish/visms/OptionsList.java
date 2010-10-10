@@ -1,5 +1,9 @@
 package com.snakefish.visms;
 
+import java.util.List;
+
+import com.snakefish.feedback.CommandAction;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,12 +40,8 @@ public class OptionsList extends SMSListActivity {
       });
     }
 
-	public void processVoice(String command) {
-		// TODO Auto-generated method stub
-		
+	public void processVoice(List<CommandAction> commands, String text) {
+		// TODO actually do stuff in options view...
 	}
-    
- 
-    
     
 }

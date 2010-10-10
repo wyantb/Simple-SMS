@@ -12,6 +12,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,6 +35,7 @@ import android.widget.TextView;
  */
 public class TextActivity extends SMSActivity {
 
+	public static final int SETTINGS_ID = Menu.FIRST;
 	public static final String CONVERSATION_LAST_MSG = "com.snakefish.LAST_MESSAGE";
 	public static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
 	
@@ -88,6 +91,28 @@ public class TextActivity extends SMSActivity {
     		}
     	}
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		boolean result = super.onCreateOptionsMenu(menu);
+		menu.add(0, SETTINGS_ID, 0, R.string.settings);
+		return result;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		
+		case SETTINGS_ID:
+			Intent options = new Intent(this, OptionsList.class);
+			options.setClassName("com.snakefish.visms",
+					"com.snakefish.visms.OptionsList");
+			startActivity(options);
+			return true;
+		}
+		
+		return super.onMenuItemSelected(featureId, item);
+	}
     
     @Override
     public void onDestroy() {
@@ -95,20 +120,20 @@ public class TextActivity extends SMSActivity {
     	
     	this.unregisterReceiver(smsReceiver);
     }
-    
-    public void processVoice(String command) {
-    	List<CommandAction> commands = this.commandsRequested();
-    	
+
+	public void processVoice(List<CommandAction> commands, String text) {
+		
     	if (commands.contains(CommandAction.READ)) {
-    		speak(textBot.getText().toString());
+    		speak(textBot.getText().toString(), SpeechType.PERSONAL);
     	}
     	else {
-    		textBot.getText().append(command);
+    		textBot.getText().append(text);
     		
     		if (commands.contains(CommandAction.SEND)) {
     			sendMessage();
     		}
     	}
+    	
     }
     
     protected void sendMessage() {
@@ -119,7 +144,7 @@ public class TextActivity extends SMSActivity {
     	
     	// TODO actually send message
     	//  For now, we'll just report success anyway
-    	//  and close immdiately
+    	//  and close immediately
     	try {
     		//for (String message : messages) {
     		//	sms.sendTextMessage(recipient, null, message, 
@@ -127,7 +152,7 @@ public class TextActivity extends SMSActivity {
     		//}
     	}
     	catch (Exception e) {
-    		speak("Error: Message not sent");
+    		speak("Error: Message not sent", SpeechType.INFO);
     	}
     	
     	speak("Message sent", SpeechType.INFO, true);
@@ -170,7 +195,7 @@ public class TextActivity extends SMSActivity {
                 break;
             }
 
-            speak(message);
+            speak(message, SpeechType.INFO);
 
     	}
     }
@@ -186,7 +211,7 @@ public class TextActivity extends SMSActivity {
 		}
 		
 		public void doWork() {
-			speak(textBot.getText().toString());
+			speak(textBot.getText().toString(), SpeechType.PERSONAL);
 		}
     	
     }

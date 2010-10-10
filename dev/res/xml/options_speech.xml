@@ -2,5 +2,5 @@
 <resources>
 	<item name="intro" type="string">Options screen</item>
 	<item name="tutorial" type="string">This is the options screen. The options in order from top to bottom are: Toggle headphones only. Increase text size. Decrease text size. Change color scheme.</item>
-	<item name="list" type="string">TODO</item>
+	<item name="list" type="string">Command keywords available are as follows: help and list</item>
 </resources>
