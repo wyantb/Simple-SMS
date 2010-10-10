@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
@@ -46,7 +47,7 @@ public class MainChatWindow extends SMSListActivity {
         assert(compose != null);
         
         //Throwing a null pointer for some reason
-        //compose.setOnClickListener(new ComposeClickListener());
+        compose.setOnClickListener(new ComposeClickListener());
         
         //TODO Pull actual data
 //        DBHelper = new SmsDbAdapter(this);

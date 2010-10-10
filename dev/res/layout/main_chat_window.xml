@@ -20,7 +20,7 @@
     android:layout_weight="1"
     android:gravity="fill_vertical"/>
   <Button
-  	android.id="@+id/mcw_compose"
+  	android:id="@+id/mcw_compose"
   	android:text="@string/compose"
     android:textSize="72sp"
     android:background="#DDDDDD"
