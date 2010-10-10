@@ -1,8 +1,5 @@
 package com.snakefish.visms;
 
-import java.util.List;
-
-import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.SMSBase;
 import com.snakefish.feedback.SMSDelegate;
@@ -28,6 +25,7 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
     		delegate.setHidden(o);
     	}
     }
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,22 +42,6 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
     	}
     	
     	return false;
-    }
-	
-	public List<CommandAction> commandsRequested() {
-		if (delegate != null) {
-			return delegate.commandsRequested();
-		}
-		
-		return null;
-	}
-    
-    public String processCommands(String text) {
-    	if (delegate != null) {
-    		return delegate.processCommands(text);
-    	}
-    	
-    	return null;
     }
     
     @Override
@@ -84,12 +66,6 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 	public void speak(String text, SpeechType type) {
 		if (delegate != null) {
 			delegate.speak(text, type);
-		}
-	}
-	
-	public void speak(String text) {
-		if (delegate != null) {
-			delegate.speak(text);
 		}
 	}
 	

@@ -7,6 +7,7 @@
 	<string name="read_short">Read</string>
 	<string name="send_short">Send</string>
 	<string name="not_ready">DEFAULT</string>
+	<string name="no_history">No history here</string>
 	<string name="no_msgs">No Messages</string>
 	<string name="open">Open</string>
 	<string name ="delete">Delete</string>
