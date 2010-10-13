@@ -182,9 +182,14 @@ public class SmsDbAdapter {
      * @return A Cursor over all the threads in the database
      */
     public Cursor fetchAllThreads() {
-    	Cursor c = mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_THREADID,
-                KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, null, null, null,
-                null, null);
+//    	Cursor c = mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_THREADID}, null, null, null,
+//                null, null);
+    	
+    	Cursor c = mDb.query(DATABASE_TABLE, 
+    			new String[] {KEY_ROWID, KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE}, 
+    			null, null, 
+    			KEY_THREADID, "MAX(" + KEY_DATE + ")", 
+    			KEY_DATE + " DESC");
     	
     	return c;
     }
