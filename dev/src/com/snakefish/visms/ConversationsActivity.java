@@ -27,7 +27,7 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
-	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
+//	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
 	private SmsDbAdapter mDbHelper;
 	private TextView btnCompose;
 
@@ -98,8 +98,6 @@ public class ConversationsActivity extends SMSListActivity {
 			return true;
 		case SETTINGS_ID:
 			Intent options = new Intent(this, OptionsList.class);
-//			options.setClassName("com.snakefish.visms",
-//					"com.snakefish.visms.OptionsList");
 			startActivity(options);
 			return true;
 		}
@@ -139,7 +137,7 @@ public class ConversationsActivity extends SMSListActivity {
 	private void fillInbox() {
 		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
-
+		
 		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
 
 		int[] to = new int[] { R.id.convo_entry };
