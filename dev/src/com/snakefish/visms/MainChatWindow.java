@@ -29,7 +29,7 @@ public class MainChatWindow extends SMSListActivity {
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
     private TextView textTop;
     private Button compose;
-    private SmsDbAdapter DBHelper;
+    private SmsDbAdapter mDbHelper;
     private String recipient;
     
     public MainChatWindow() {
@@ -48,12 +48,11 @@ public class MainChatWindow extends SMSListActivity {
         assert(compose != null);
         
         //Throwing a null pointer for some reason
-        compose.setOnClickListener(new ComposeClickListener());
+//        compose.setOnClickListener(new ComposeClickListener());
+        
+        mDbHelper = new SmsDbAdapter(this);
         
         //TODO Pull actual data
-//        DBHelper = new SmsDbAdapter(this);
-//        DBHelper.open();
-        
         populateConversationList(getIntent());
     }
 
@@ -84,6 +83,9 @@ public class MainChatWindow extends SMSListActivity {
      * @param intent
      */
     protected void populateConversationList(Intent intent) {
+        int thread_id = intent.getIntExtra(MainChatWindow.THREAD_ID, -1);
+        
+        Cursor c = mDbHelper.fetchThreadByThreadId(thread_id);
     	//TODO Pull actual data
     	//	if (intent != null) {
     	//    		int threadID = intent.getIntExtra(THREAD_ID,-1);

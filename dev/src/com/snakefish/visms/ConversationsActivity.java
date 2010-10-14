@@ -64,9 +64,9 @@ public class ConversationsActivity extends SMSListActivity {
 		// **TESTING DATABASE, REMOVE WHEN DONE
 		// Adding dummy conversations to db
 		mDbHelper.deleteInbox();
-		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456244, "Yo what's up?");
-		mDbHelper.addMsg(1, "1-570-400-0104", 2, 1286456844, "R u thar?");
-		mDbHelper.addMsg(2, "1-203-733-8028", 3, 1286551147,
+		mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456244, "Yo what's up?");
+		mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456844, "R u thar?");
+		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551147,
 				"Are you done yet?");
 		// ** TESTING DATABASE, REMOVE WHEN DONE
 
@@ -160,8 +160,7 @@ public class ConversationsActivity extends SMSListActivity {
 		Intent thread = new Intent();
 		thread.setClassName("com.snakefish.visms", 
 				"com.snakefish.visms.MainChatWindow");
-		System.out.println(id);
-//		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
+		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
 		startActivity(thread);
 		/*
 		 * END
