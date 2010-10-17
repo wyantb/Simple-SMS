@@ -1,35 +1,58 @@
 package com.snakefish.feedback;
 
-public enum CommandAction {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-	COMPOSE("compose"),
-	VIEW("view"),
-	REPLY("reply"),
-	READ("read"),
-	SEND("send"),
-	IGNORE("ignore"),
-	HELP("help"),
-	LIST("list"),
-	NULL("null");
+import android.util.Log;
+
+public enum CommandAction {
 	
-	private String command;
+	COMPOSE("compose(.*)", true),   // 'snakefish compose Brian Wyant'
+	VIEW("view(.*)", true),         // 'snakefish view Brian Wyant'
+	REPLY("reply(.*)", true),       // 'snakefish reply hey what's up'
+	READ("read", true),             // 'snakefish read'
+	SEND("send(.*)", true),         // 'snakefish send hey what's up'
+	IGNORE("ignore", true),         // 'snakefish ignore'
+	HELP("help", true),             // 'snakefish help'
+	LIST("list", true),             // 'snakefish list'
+	UNRECOGNIZED(".*", true),         // 'snakefish ???'
+	TEXT(".*", false);              // 'seriously, just about anything'
 	
-	private CommandAction(String command) {
-		this.command = command;
+	private String regex;
+	
+	private static final String TAG = "CommandAction";
+	
+	private CommandAction(String regex, boolean hasKeyword) {
+		if (hasKeyword) {
+			this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
+		}
+		else {
+			this.regex = regex;
+		}
 	}
 	
-	public String getCommandString() {
-		return command;
+	public String regex() {
+		return regex;
 	}
 	
-	public static CommandAction fromString(String str) {
+	public String toString() {
+		return regex();
+	}
+	
+	public static VoiceCommand fromString(String str) {
+		Log.v(TAG, "Checking against string: " + str);
+		
 		for (CommandAction command : CommandAction.values()) {
-			if (command.getCommandString().equals(str)) {
-				return command;
+			Pattern pat = Pattern.compile(command.regex());
+			Matcher mat = pat.matcher(str);
+			
+			if (mat.matches()) {
+				Log.v(TAG, "Found match for pattern: " + command);
+				return new VoiceCommand(command, mat);
 			}
 		}
 		
-		return null;
+		return new VoiceCommand(UNRECOGNIZED);
 	}
 	
 }

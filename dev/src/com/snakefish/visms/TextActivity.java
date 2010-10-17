@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
+import com.snakefish.feedback.VoiceCommand;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -121,17 +122,19 @@ public class TextActivity extends SMSActivity {
     	this.unregisterReceiver(smsReceiver);
     }
 
-	public void processVoice(List<CommandAction> commands, String text) {
+	public void processVoice(VoiceCommand command) {
 		
-    	if (commands.contains(CommandAction.READ)) {
+    	if (command.getType() == CommandAction.READ) {
     		speak(textBot.getText().toString(), SpeechType.PERSONAL);
     	}
-    	else {
-    		textBot.getText().append(text);
+    	else if (command.getType() == CommandAction.SEND ||
+    			command.getType() == CommandAction.REPLY) {
     		
-    		if (commands.contains(CommandAction.SEND)) {
-    			sendMessage();
-    		}
+    		textBot.getText().append(command.getGroup(1));
+    		sendMessage();
+    	}
+    	else if (command.getType() == CommandAction.TEXT) {
+    		textBot.getText().append(command.getGroup(0));
     	}
     	
     }

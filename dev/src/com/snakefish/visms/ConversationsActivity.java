@@ -1,12 +1,10 @@
 package com.snakefish.visms;
 
-import java.util.List;
-
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.VoiceCommand;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -35,9 +33,9 @@ public class ConversationsActivity extends SMSListActivity {
 		super(R.xml.conv_speech);
 	}
 
-	public void processVoice(List<CommandAction> commands, String text) {
+	public void processVoice(VoiceCommand command) {
 		
-		if (commands.contains(CommandAction.COMPOSE)) {
+		if (command.getType() == CommandAction.COMPOSE) {
 			doCompose();
 		}
 		

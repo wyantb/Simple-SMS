@@ -14,6 +14,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 
 public class SMSDelegate implements SMSBase {
 
@@ -30,7 +31,6 @@ public class SMSDelegate implements SMSBase {
 	private SMSDelegateCallback smsCallback;
 	private List<String> queuedMessages;
 	private boolean isHidden;
-	private List<CommandAction> commandsRequested;
 	
 	public SMSDelegate(SMSDelegateCallback callback, Activity context, int xmlResId) {
 		this.tts = new TextToSpeech(context, this);
@@ -105,48 +105,33 @@ public class SMSDelegate implements SMSBase {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			
 			String spokenWords = matched.get(0);
-			spokenWords = parseCommands(spokenWords);
-			smsCallback.processVoice(commandsRequested, spokenWords);
+			Log.v("SMSDelegate", "Received speech: " + spokenWords);
+			VoiceCommand command = CommandAction.fromString(spokenWords);
+			boolean handled = handleCommand(command);
+			
+			if (!handled) {
+				smsCallback.processVoice(command);
+			}
 		}
 		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {
 			speak(speechPack.getIntro(), SpeechType.INTRO, true);
 		}
 	}
 	
-	public List<CommandAction> commandsRequested() {
-		return commandsRequested;
-	}
-	
-	public String parseCommands(String userText) {
-		commandsRequested = new ArrayList<CommandAction>();
-		
-		Scanner textParser = new Scanner(userText);
-		String remainingSpeech = "";
-		
-		while (textParser.hasNext()) {
-			String textPart = textParser.next();
-			
-			if (textPart.equalsIgnoreCase(SNAKEFISH_KEYWORD)) {
-				String commandPart = textParser.next();
-				
-				CommandAction command = CommandAction.fromString(commandPart);
-				
-				if (command == CommandAction.HELP) {
-					speak(speechPack.getTutorial(), SpeechType.TUTORIAL_REQUESTED, true);
-				}
-				if (command == CommandAction.LIST) {
-					speak(speechPack.getList(), SpeechType.TUTORIAL_REQUESTED, true);
-				}
-				else {
-					commandsRequested.add(CommandAction.fromString(commandPart));
-				}
-			}
-			else {
-				remainingSpeech += textPart;
-			}
+	public boolean handleCommand(VoiceCommand command) {
+		if (command.getType() == CommandAction.HELP) {
+			speak(speechPack.getTutorial(), SpeechType.TUTORIAL_REQUESTED, true);
+			return true;
+		}
+		if (command.getType() == CommandAction.LIST) {
+			speak(speechPack.getList(), SpeechType.TUTORIAL_REQUESTED, true);
+			return true;
+		}
+		if (command.getType() == CommandAction.UNRECOGNIZED) {
+			speak("Unrecognized command, please try again.", SpeechType.INFO, false);
 		}
 		
-		return remainingSpeech;
+		return false;
 	}
 
 	public Object onRetainNonConfigurationInstance() {
