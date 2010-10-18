@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
+import com.snakefish.feedback.VoiceCommand;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -29,7 +30,7 @@ public class MainChatWindow extends SMSListActivity {
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
     private TextView textTop;
     private Button compose;
-    private SmsDbAdapter DBHelper;
+    private SmsDbAdapter mDbHelper;
     private String recipient;
     
     public MainChatWindow() {
@@ -50,10 +51,9 @@ public class MainChatWindow extends SMSListActivity {
         //Throwing a null pointer for some reason
         compose.setOnClickListener(new ComposeClickListener());
         
-        //TODO Pull actual data
-//        DBHelper = new SmsDbAdapter(this);
-//        DBHelper.open();
+        mDbHelper = new SmsDbAdapter(this);
         
+        //TODO Pull actual data
         populateConversationList(getIntent());
     }
 
@@ -84,6 +84,9 @@ public class MainChatWindow extends SMSListActivity {
      * @param intent
      */
     protected void populateConversationList(Intent intent) {
+        int thread_id = intent.getIntExtra(MainChatWindow.THREAD_ID, -1);
+        
+        //Cursor c = mDbHelper.fetchThreadByThreadId(thread_id);
     	//TODO Pull actual data
     	//	if (intent != null) {
     	//    		int threadID = intent.getIntExtra(THREAD_ID,-1);
@@ -104,13 +107,13 @@ public class MainChatWindow extends SMSListActivity {
     	setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, messages));
     	//End dummy data.
     }
-    
-    public void processVoice(List<CommandAction> commands, String text) {
+
+	public void processVoice(VoiceCommand command) {
     	
-    	if (commands.contains(CommandAction.READ)) {
+    	if (command.getType() == CommandAction.READ) {
     		speak("Ok fine ignore me", SpeechType.PERSONAL);
     	}
-    	if (commands.contains(CommandAction.REPLY)) {
+    	if (command.getType() == CommandAction.REPLY) {
     		doReply();
     	}
     	

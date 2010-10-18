@@ -1,9 +1,8 @@
 package com.snakefish.visms;
 
-import java.util.List;
-
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
+import com.snakefish.feedback.VoiceCommand;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -46,11 +45,11 @@ public class IncomingMessage extends SMSActivity {
      * This method will process the voice command and turn it into 
      * a command for the application
      */
-	public void processVoice(List<CommandAction> commands, String text) {
+	public void processVoice(VoiceCommand command) {
     	/** These commands may be updated at a later time */
     	
-		if (commands.contains(CommandAction.READ) || commands.contains(CommandAction.REPLY)
-				|| commands.contains(CommandAction.VIEW)) {
+		if (command.getType() == CommandAction.READ || command.getType() == CommandAction.REPLY
+				|| command.getType() == CommandAction.VIEW) {
 			
 			//Makes a new TextActivity
 			Intent vText = new Intent();
@@ -63,7 +62,7 @@ public class IncomingMessage extends SMSActivity {
 		}
 		
     	//If the command mimics the ignore button
-		if (commands.contains(CommandAction.IGNORE)) {
+		if (command.getType() == CommandAction.IGNORE) {
 			onIgnored();
 		}
     		
