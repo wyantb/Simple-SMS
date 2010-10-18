@@ -2,6 +2,14 @@ package com.snakefish.feedback;
 
 import java.util.regex.Matcher;
 
+/**
+ * Is a thin wrapper around two objects:
+ *  First, the CommandAction that was matched when the user spoke something.
+ *  Second, the Matcher for the regex that matched.
+ * With this data, we can get specific parts of what they stated,
+ *  or the raw mapper.
+ * Be careful because we can't have named groups, only group numbers.
+ */
 public class VoiceCommand {
 
 	public static String SNAKEFISH_KEYWORD = "snakefish ";
@@ -20,6 +28,10 @@ public class VoiceCommand {
 	
 	public CommandAction getType() {
 		return command;
+	}
+	
+	public Matcher getMatcher() {
+		return matched;
 	}
 	
 	public String getGroup(int i) {

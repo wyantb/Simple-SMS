@@ -129,6 +129,27 @@ public class SMSDelegate implements SMSBase {
 		}
 		if (command.getType() == CommandAction.UNRECOGNIZED) {
 			speak("Unrecognized command, please try again.", SpeechType.INFO, false);
+			return true;
+		}
+		if (command.getType() == CommandAction.HEADPHONES_OFF) {
+			// TODO handle
+		}
+		if (command.getType() == CommandAction.HEADPHONES_ON) {
+			// TODO handle
+		}
+		if (command.getType() == CommandAction.TEXT_DOWN) {
+			// TODO handle
+		}
+		if (command.getType() == CommandAction.TEXT_UP) {
+			// TODO handle
+		}
+		if (command.getType() == CommandAction.OPTIONS) {
+			Intent optionsIntent = new Intent();
+			optionsIntent.setClassName("com.snakefish.visms", 
+					"com.snakefish.visms.OptionsList");
+			callback.startActivity(optionsIntent);
+			
+			return true;
 		}
 		
 		return false;

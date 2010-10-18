@@ -70,6 +70,11 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 	}
 	
 	@Override
+	public Object onRetainNonConfigurationInstance() {
+		return delegate.onRetainNonConfigurationInstance();
+	}
+	
+	@Override
 	public void onStart() {
 		if (delegate != null) {
 			delegate.onStart();
