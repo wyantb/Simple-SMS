@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>   
 <TextView android:id="@+id/convo_entry" 
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	style="@style/ListTheme"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textSize="36sp" 
-    android:textColor= "#FFF" >
+    android:layout_height="wrap_content" >
 </TextView>
