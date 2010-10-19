@@ -1,8 +1,5 @@
 package com.snakefish.visms;
 
-import com.snakefish.feedback.CommandAction;
-import com.snakefish.feedback.VoiceCommand;
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,6 +13,9 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+
+import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.VoiceCommand;
 
 public class ConversationsActivity extends SMSListActivity {
 	/** The user who you are communicating with */
@@ -111,8 +111,11 @@ public class ConversationsActivity extends SMSListActivity {
 //			Intent i = new Intent(this, TextActivity.class);
 //			i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
 //			startActivity(i);
+			TextView v = (TextView)this.findViewById((int)info.id);
+			String address = String.valueOf(v.getText());
+			long id = mDbHelper.getThreadId(address);
 			
-			openConvo(info.id);
+			openConvo(id);
 			return true;
 		case DELETE_ID:
 			// AdapterContextMenuInfo info =(AdapterContextMenuInfo)
