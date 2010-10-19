@@ -3,7 +3,7 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-	<TextView android:id="@+id/btnCompose" style="@style/ListTheme"
+	<Button android:id="@+id/btnCompose" style="@style/ListTheme"
 		android:layout_width="fill_parent" android:layout_height="wrap_content"
 		android:paddingTop="10dp" android:background="#111"
 		android:longClickable="false" android:clickable="true" android:text="@string/new_convo" />

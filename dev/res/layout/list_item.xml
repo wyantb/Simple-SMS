@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>   
-<TextView android:id="@+id/convo_entry" 
+<TextView android:id="@+id/list_entry" 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	style="@style/ListTheme"
     android:layout_width="fill_parent"

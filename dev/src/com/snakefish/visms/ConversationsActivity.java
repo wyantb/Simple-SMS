@@ -20,12 +20,11 @@ import com.snakefish.feedback.VoiceCommand;
 public class ConversationsActivity extends SMSListActivity {
 	/** The user who you are communicating with */
 	public static final String CONVERSATION_CONTACT = "com.snakefish.CONTACT";
-	
+
 	public static final int COMPOSE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
-//	public static final Uri SMS_INBOX_URI = Uri.parse("content://sms/inbox");
 	private SmsDbAdapter mDbHelper;
 	private TextView btnCompose;
 
@@ -34,13 +33,13 @@ public class ConversationsActivity extends SMSListActivity {
 	}
 
 	public void processVoice(VoiceCommand command) {
-		
+
 		if (command.getType() == CommandAction.COMPOSE) {
 			doCompose();
 		}
-		
+
 	}
-	
+
 	public void doCompose() {
 		// TODO do we want to compose with some other id?
 		openConvo(-1);
@@ -52,13 +51,14 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.convo_list);
 
-		btnCompose = (TextView)findViewById(R.id.btnCompose);
-		
+		btnCompose = (TextView) findViewById(R.id.btnCompose);
+
 		btnCompose.setOnClickListener(new ComposeClickListener());
-		
+
 		mDbHelper = new SmsDbAdapter(this);
 		mDbHelper.open();
 
+		// TODO remove this shit
 		// **TESTING DATABASE, REMOVE WHEN DONE
 		// Adding dummy conversations to db
 		mDbHelper.deleteInbox();
@@ -108,13 +108,13 @@ public class ConversationsActivity extends SMSListActivity {
 		case OPEN_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-//			Intent i = new Intent(this, TextActivity.class);
-//			i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
-//			startActivity(i);
-			TextView v = (TextView)this.findViewById((int)info.id);
+			// Intent i = new Intent(this, TextActivity.class);
+			// i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
+			// startActivity(i);
+			TextView v = (TextView) this.findViewById((int) info.id);
 			String address = String.valueOf(v.getText());
 			long id = mDbHelper.getThreadId(address);
-			
+
 			openConvo(id);
 			return true;
 		case DELETE_ID:
@@ -126,54 +126,49 @@ public class ConversationsActivity extends SMSListActivity {
 		}
 		return super.onContextItemSelected(item);
 	}
-	
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        
-        openConvo(id);
-        
-    }
 
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+
+		openConvo(id);
+
+	}
 
 	private void fillInbox() {
 		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
-		
+
 		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
 
-		int[] to = new int[] { R.id.convo_entry };
+		int[] to = new int[] { R.id.list_entry };
 
 		SimpleCursorAdapter convos = new SimpleCursorAdapter(this,
 				R.layout.list_item, c, from, to);
 		setListAdapter(convos);
 
 	}
-	
+
 	/**
 	 * Open a conversation.
-	 * @param id the thread_id of the conversation being opened
+	 * 
+	 * @param id
+	 *            the thread_id of the conversation being opened
 	 */
-	
+
 	private void openConvo(long id) {
-		/*
-		 * START hard-coded transition to dummy message screen
-		 */
 		Intent thread = new Intent();
-		thread.setClassName("com.snakefish.visms", 
+		thread.setClassName("com.snakefish.visms",
 				"com.snakefish.visms.MainChatWindow");
-		thread.putExtra(MainChatWindow.THREAD_ID, (int)id);
+		thread.putExtra(MainChatWindow.THREAD_ID, (int) id);
 		startActivity(thread);
-		/*
-		 * END
-		 */
 	}
-	
+
 	private class ComposeClickListener implements OnClickListener {
 
 		public void onClick(View arg0) {
 			doCompose();
 		}
-		
+
 	}
 
 }
