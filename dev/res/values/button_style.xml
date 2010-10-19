@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<style name="Button" parent="android:Widget.Button">
+		<item name="android:textSize">48sp</item>
+		<item name="android:height">80sp</item>
+	</style>
+</resources>
