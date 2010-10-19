@@ -37,8 +37,6 @@ public class IncomingMessage extends SMSActivity {
      */
     public IncomingMessage(){
     	super (R.xml.newtext_speech);
-    	//Sets the contact name to the name of the person
-    	// sending the message.
     }
     
     /**
@@ -84,8 +82,10 @@ public class IncomingMessage extends SMSActivity {
         //Sets the messageFrom text view
         messageFrom = (TextView) findViewById(R.id.messageFrom);
         
-        // TODO get name from intent
-    	//messageFrom.setText("Jason", TextView.BufferType.NORMAL);
+        //Makes a new Intent
+		Intent vText = new Intent();
+		//Gets the name of the contact
+        vText.getStringExtra(name);
         
         //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
@@ -198,13 +198,10 @@ public class IncomingMessage extends SMSActivity {
 			Intent vText = new Intent();
 			//Sets the intent to class activity
 			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
-			//Starts the activity
-			startActivity(vText);
-			
-			// TODO dangit Jason, this doesn't go after you launch the intent
 			//Sends in the name of the contact
 			vText.putExtra(name, name);
-			
+			//Starts the activity
+			startActivity(vText);
 		}
     }
     
