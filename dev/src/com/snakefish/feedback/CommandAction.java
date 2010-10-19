@@ -8,11 +8,11 @@ import android.util.Log;
 public enum CommandAction {
 	
 	// OPTIONS
-	HEADPHONES_ON(" headphones (required|on|yes)", true),
-	HEADPHONES_OFF(" headphones (not required|off|no)", true),
-	TEXT_UP(" text (increase|up)", true),
-	TEXT_DOWN(" text (decrease|down)", true),
-	OPTIONS(" options( menu)*", true),
+	HEADPHONES_ON("headphones (required|on|yes)", true),
+	HEADPHONES_OFF("headphones (not required|off|no)", true),
+	TEXT_UP("text (increase|up)", true),
+	TEXT_DOWN("text (decrease|down)", true),
+	OPTIONS("options( menu)*", true),
 	// END OPTIONS
 	
 	// GLOBAL COMMANDS
