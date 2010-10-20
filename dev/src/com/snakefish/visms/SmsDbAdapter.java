@@ -245,7 +245,7 @@ public class SmsDbAdapter {
 	public long getThreadId(String address) {
 		Cursor c = mDb.query(DATABASE_TABLE, 
 				new String[] {KEY_THREADID}, 
-				KEY_THREADID + "=" + address, 
+				KEY_ADDRESS + "='" + address + "'", 
 				null, null, null, null);
 		c.moveToFirst();
 		

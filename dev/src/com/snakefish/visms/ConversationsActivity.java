@@ -129,8 +129,10 @@ public class ConversationsActivity extends SMSListActivity {
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-
-		openConvo(id);
+		TextView tv = (TextView) v;
+		String address = String.valueOf(tv.getText());
+		long thread_id = mDbHelper.getThreadId(address);
+		openConvo(thread_id);
 
 	}
 
