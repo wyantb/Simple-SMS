@@ -3,6 +3,7 @@ package com.snakefish.visms;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,11 +41,6 @@ public class ConversationsActivity extends SMSListActivity {
 
 	}
 
-	public void doCompose() {
-		// TODO do we want to compose with some other id?
-		openConvo(-1);
-	}
-
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +62,11 @@ public class ConversationsActivity extends SMSListActivity {
 		mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456844, "R u thar?");
 		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551147,
 				"Are you done yet?");
+		mDbHelper.addMsg(2, "1-555-867-5309", 0, 1286551207,
+				"I'm workin' on it.");
+		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551230, "Hurry up!");
+		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551288,
+				"Dammit Jim, send me the right fucking thread id.");
 		// ** TESTING DATABASE, REMOVE WHEN DONE
 
 		fillInbox();
@@ -95,6 +96,7 @@ public class ConversationsActivity extends SMSListActivity {
 			doCompose();
 			return true;
 		case SETTINGS_ID:
+			Log.v("ConversationsActivity", "Starting OptionsList...");
 			Intent options = new Intent(this, OptionsList.class);
 			startActivity(options);
 			return true;
@@ -108,13 +110,11 @@ public class ConversationsActivity extends SMSListActivity {
 		case OPEN_ID:
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
 					.getMenuInfo();
-			// Intent i = new Intent(this, TextActivity.class);
-			// i.putExtra(SmsDbAdapter.KEY_ROWID, info.id);
-			// startActivity(i);
-			TextView v = (TextView) this.findViewById((int) info.id);
+			TextView v = (TextView) info.targetView;
 			String address = String.valueOf(v.getText());
 			long id = mDbHelper.getThreadId(address);
-
+			Log.v("ConversationsActivity",
+					"Opening conversation from context menu, thread id: " + id);
 			openConvo(id);
 			return true;
 		case DELETE_ID:
@@ -132,11 +132,13 @@ public class ConversationsActivity extends SMSListActivity {
 		TextView tv = (TextView) v;
 		String address = String.valueOf(tv.getText());
 		long thread_id = mDbHelper.getThreadId(address);
+		Log.v(this.toString(), "Opening conversation, thread id: " + thread_id);
 		openConvo(thread_id);
 
 	}
 
 	private void fillInbox() {
+		Log.v(this.toString(), "Filling inbox from database...");
 		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
@@ -171,6 +173,11 @@ public class ConversationsActivity extends SMSListActivity {
 			doCompose();
 		}
 
+	}
+	
+	public void doCompose() {
+		// TODO do we want to compose with some other id?
+		openConvo(-1);
 	}
 
 }

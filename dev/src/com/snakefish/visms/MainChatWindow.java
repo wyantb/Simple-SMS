@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -88,11 +89,10 @@ public class MainChatWindow extends SMSListActivity {
         
     		if (intent != null) {
     	        
-    	    		//int threadID = intent.getIntExtra(THREAD_ID,-1);
-    				int threadID = 1; //TODO Testing only
-    			
+    	    		int threadID = intent.getIntExtra(THREAD_ID,-1);
+    				    			
     	    		//TODO Debug
-        	        System.out.println(threadID);
+        	        Log.v("MainChatWindow, populateConversationList", "Thread ID: "+threadID);
     	    		
         	        if (threadID != -1) {
     	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
@@ -104,6 +104,8 @@ public class MainChatWindow extends SMSListActivity {
     	    		    setListAdapter(thread);
     	    		    textTop.setText("TEST");
     	    		    
+    	    		} else {
+    	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
     	    		}
     	    	}
 
