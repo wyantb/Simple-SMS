@@ -1,0 +1,29 @@
+Todd:
+  Voice:
+    Ignore: 'ignore (message?)'
+    Read message: 'read/reply to message'
+    Send message: 'send|message send'
+    Menu: 'settings'
+    Compose new: '
+
+  Is reply the same as read?  Tad confusing
+  Can't see the divider between text messages
+  Also, there is no divider between 'User' and the first message
+  Confused conversation screen with inbox
+    What else can we do to differentiate the two?
+  What does read mean? (reply screen)
+  'Oh, it means read what I wrote' -> moving buttons to bottom
+  How can we differentiate the two better?
+  The feedback for headphones and options is messed up
+
+Other:
+  Voice:
+    'headphones' -> does auto-toggle
+    'settings|options'
+
+  Entering message: 'do i press the text?' figured out on his own
+  Text entry: We have no need for multiline texts, enter should work differently
+  Text entry: Confused by 'enter your text here'
+  Text entry: Is that a text box?  Looks like the background.
+
+
