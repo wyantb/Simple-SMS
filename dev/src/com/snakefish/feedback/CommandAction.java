@@ -33,21 +33,25 @@ public enum CommandAction {
 	UNRECOGNIZED(".*", true),       // 'snakefish ???'
 	TEXT(".*", false);              // 'seriously, just about anything'
 
-	private String regex;
+	private String regex;    // With 'snakefish '
+	private String regexAlt; // Without 'snakefish '
+	private boolean useAlt;
 	
 	private static final String TAG = "CommandAction";
 	
 	private CommandAction(String regex, boolean hasKeyword) {
-		if (hasKeyword) {
-			this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
-		}
-		else {
-			this.regex = regex;
-		}
+		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
+		this.regexAlt = regex;
+		
+		useAlt = hasKeyword;
 	}
 	
 	public String regex() {
 		return regex;
+	}
+	
+	public String regexAlt() {
+		return regexAlt;
 	}
 	
 	public String toString() {
@@ -61,9 +65,21 @@ public enum CommandAction {
 			Pattern pat = Pattern.compile(command.regex());
 			Matcher mat = pat.matcher(str);
 			
-			if (mat.matches()) {
-				Log.v(TAG, "Found match for pattern: " + command);
-				return new VoiceCommand(command, mat);
+			boolean matchesMain = mat.matches();
+			if (matchesMain) {
+				Log.v(TAG, "Found match for user command: " + command);
+			}
+			
+			Pattern patAlt = Pattern.compile(command.regexAlt());
+			Matcher matAlt = patAlt.matcher(str);
+			
+			boolean matchesAlt = matAlt.matches();
+			if (matchesAlt) {
+				Log.v(TAG, "Found match for user command: " + command);
+			}
+			
+			if (matchesMain || matchesAlt) {
+				return new VoiceCommand(command, mat, matAlt, matchesMain, matchesAlt);
 			}
 		}
 		

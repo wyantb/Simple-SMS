@@ -15,15 +15,23 @@ public class VoiceCommand {
 	public static String SNAKEFISH_KEYWORD = "snakefish ";
 	
 	private CommandAction command;
-	private Matcher matched;
+	private Matcher matcherMain;
+	private Matcher matcherAlt;
+	private boolean matchesMain;
+	private boolean matchesAlt;
 	
-	public VoiceCommand(CommandAction command, Matcher matcher) {
+	public VoiceCommand(CommandAction command, Matcher matcher, Matcher matcherAlt, boolean matchesMain, boolean matchesAlt) {
 		this.command = command;
-		this.matched = matcher;
+		
+		this.matcherMain = matcher;
+		this.matcherAlt = matcherAlt;
+		
+		this.matchesMain = matchesMain;
+		this.matchesAlt = matchesAlt;
 	}
 	
 	public VoiceCommand(CommandAction action) {
-		this(action, null);
+		this(action, null, null, false, false);
 	}
 	
 	public CommandAction getType() {
@@ -31,12 +39,27 @@ public class VoiceCommand {
 	}
 	
 	public Matcher getMatcher() {
-		return matched;
+		return matcherMain;
+	}
+	
+	public Matcher getAltMatcher() {
+		return matcherAlt;
+	}
+	
+	public boolean matchesMain() {
+		return matchesMain;
+	}
+	
+	public boolean matchesAlt() {
+		return matchesAlt;
 	}
 	
 	public String getGroup(int i) {
-		if (matched != null) {
-			return matched.group(i);
+		if (matchesMain && matcherMain != null) {
+			return matcherMain.group(i);
+		}
+		else if (matchesAlt && matcherAlt != null) {
+			return matcherAlt.group(i);
 		}
 		
 		return null;
