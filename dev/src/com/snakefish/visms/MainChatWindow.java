@@ -52,6 +52,7 @@ public class MainChatWindow extends SMSListActivity {
         compose.setOnClickListener(new ComposeClickListener());
         
         mDbHelper = new SmsDbAdapter(this);
+        mDbHelper.open();
         
         //TODO Pull actual data
         populateConversationList(getIntent());
@@ -84,27 +85,31 @@ public class MainChatWindow extends SMSListActivity {
      * @param intent
      */
     protected void populateConversationList(Intent intent) {
-        int thread_id = intent.getIntExtra(MainChatWindow.THREAD_ID, -1);
         
-        //Cursor c = mDbHelper.fetchThreadByThreadId(thread_id);
-    	//TODO Pull actual data
-    	//	if (intent != null) {
-    	//    		int threadID = intent.getIntExtra(THREAD_ID,-1);
-    	//    		if (threadID != -1) {
-    	//    		    Cursor c = DBHelper.fetchThreadByThreadID(threadID);
-    	//    		    startManagingCursor(c);
-    	//    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
-    	//    		    int[] to = new int[] {R.id.convo_entry };
-    	//    		    SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
-    	//			R.layout.list_item, c, from, to);
-    	//    		    setListAdapter(thread);
-    	//    		    textTop.setText("TEST");
-    	//    		}
-    	//    	}
+    		if (intent != null) {
+    	        
+    	    		//int threadID = intent.getIntExtra(THREAD_ID,-1);
+    				int threadID = 1; //TODO Testing only
+    			
+    	    		//TODO Debug
+        	        System.out.println(threadID);
+    	    		
+        	        if (threadID != -1) {
+    	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
+    	    		    startManagingCursor(c);
+    	    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
+    	    		    int[] to = new int[] {R.id.list_entry }; //TODO Maybe?
+    	    		    SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
+    				R.layout.list_item, c, from, to);
+    	    		    setListAdapter(thread);
+    	    		    textTop.setText("TEST");
+    	    		    
+    	    		}
+    	    	}
 
     	//Start dummy data:
-    	String[] messages = {"hey whus up", "want to get fud?", "lol u there???", "txt me back pls", "Ok fine ignore me"};
-    	setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, messages));
+//    	String[] messages = {"hey whus up", "want to get fud?", "lol u there???", "txt me back pls", "Ok fine ignore me"};
+//    	setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, messages));
     	//End dummy data.
     }
 

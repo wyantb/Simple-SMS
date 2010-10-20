@@ -211,6 +211,7 @@ public class SmsDbAdapter {
 	 * @return	a Cursor over the result set containing all messages in the given thread
 	 */
 	public Cursor fetchThreadByThreadId(int threadId) {
+		System.out.println(mDb);
 		Cursor c = mDb.query(DATABASE_TABLE, 
 				new String[] {KEY_ROWID, KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, 
 				KEY_THREADID + "=" + String.valueOf(threadId), null, null, null, 
