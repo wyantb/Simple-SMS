@@ -7,6 +7,7 @@
   <TextView
       android:id="@+id/text_top"
       android:text="@string/no_history"
+      android:textSize="36sp"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="8"/>
@@ -21,6 +22,8 @@
 		  style="@style/Button"
           android:id="@+id/text_b1"
           android:text="@string/read_short"
+          android:background="#DDDDDD"
+          android:textColor="#000000"
           android:layout_width="fill_parent"
           android:layout_height="fill_parent"
           android:layout_weight="1"
@@ -51,6 +54,8 @@
       android:id="@+id/text_bot"
       android:hint="@string/enter_msg"
       android:textColorHint="#FFFFFF"
+      android:background="#000000"
+      android:textSize="36sp"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="5"/>
