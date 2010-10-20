@@ -1,3 +1,7 @@
+---------
+By Brian:
+---------
+
 Todd:
   Voice:
     Ignore: 'ignore (message?)'
@@ -26,4 +30,56 @@ Other:
   Text entry: Confused by 'enter your text here'
   Text entry: Is that a text box?  Looks like the background.
 
+-------
+By Jim:
+-------
+
+Organized by section of the form
+Loc = Location in the task description
+Heur = heuristic violated
+Usa = Usability Defect Description
+Comm = Inspector's comments regarding defect
+
+Loc: Ignore received message
+Heur: Recognition recall
+Comm: Text could be bigger
+
+Loc: Read
+Heur: 7
+Usa: can't go straight to reply
+Comments: should be able to immediately reply to message
+
+Loc: Conversation screen
+Heur: 5
+Comm: Can't see divides between messages (gray)
+
+Loc: Conversation screen
+Heur: 2 (system vs. real world)
+Usa: Conversations look like the inbox
+Comm: Looks like inbox
+
+Loc: Conversation screen
+Heur: 8
+Usa: can't see divider between messages, blends into black
+
+Loc: ANY (options menu popup)
+Heur: 6
+Usa: unreadable text in menu
+Comm: Make text bigger
+
+Loc: Sending message
+Heur: 2
+Usa: enter doesn't send message
+Comm: enter should send message: provide an option
+
+Loc: Sending message
+Heur: 2, 4
+Usa: text box looks like background
+Comm: auto-focus text box
+
+++Notes++
+Todd hasn't used Android before: wasn't an issue
+Scrollable contacts list may be better than text entry box for recipient
+
+Bug: text in box is black on black
 
