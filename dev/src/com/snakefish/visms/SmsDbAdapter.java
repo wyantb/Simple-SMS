@@ -154,22 +154,6 @@ public class SmsDbAdapter {
 		return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
-	/**
-	 * Find the id of the thread to which a particular message belongs, given
-	 * the message id.
-	 * 
-	 * @param rowId
-	 *            the id of the message in question
-	 * @return the id of the thread to which that message belongs; -1 means the
-	 *         thread could not be found
-	 */
-
-	public long findThreadId(long rowId) {
-		long threadId = -1;
-		mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_THREADID },
-				KEY_ROWID + "=" + rowId, null, null, null, null, null);
-		return threadId;
-	}
 
 	/**
 	 * Return a Cursor over the list of all messages in the database
@@ -190,9 +174,6 @@ public class SmsDbAdapter {
 	 * @return A Cursor over all the threads in the database
 	 */
 	public Cursor fetchAllThreads() {
-		// Cursor c = mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID,
-		// KEY_THREADID}, null, null, null,
-		// null, null);
 
 		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
 				KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE }, null, null,
@@ -230,11 +211,45 @@ public class SmsDbAdapter {
 	 * @return	a Cursor over the result set containing all messages in the given thread
 	 */
 	public Cursor fetchThreadByThreadId(int threadId) {
+		System.out.println(mDb);
 		Cursor c = mDb.query(DATABASE_TABLE, 
 				new String[] {KEY_ROWID, KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, 
 				KEY_THREADID + "=" + String.valueOf(threadId), null, null, null, 
 				ORDER_CHRON);
 		return c;
+	}
+	
+	/**
+	 * Find the id of the thread to which a particular message belongs, given
+	 * the message id.
+	 * 
+	 * @param rowId
+	 *            the id of the message in question
+	 * @return the id of the thread to which that message belongs; -1 means the
+	 *         thread could not be found
+	 */
+
+	public long getThreadId(long rowId) {
+		long threadId = -1;
+		mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_THREADID },
+				KEY_ROWID + "=" + rowId, null, null, null, null, null);
+		return threadId;
+	}
+	
+	/**
+	 * Returns the thread_id of the conversation thread with the specified addressee
+	 * @param address String representation of the address (phone number) of the recipient
+	 * @return thread_id of conversation with that person
+	 */
+	
+	public long getThreadId(String address) {
+		Cursor c = mDb.query(DATABASE_TABLE, 
+				new String[] {KEY_THREADID}, 
+				KEY_THREADID + "=" + address, 
+				null, null, null, null);
+		c.moveToFirst();
+		
+		return c.getLong(0);
 	}
 
 	/**
