@@ -146,6 +146,7 @@ public class IncomingMessage extends SMSActivity {
 			dbHelper.deleteInbox();
 			threadId = 3;
 			dbHelper.addMsg(3, "1-570-400-0106", 1, 1286459844, "Hey man");
+			dbHelper.addMsg(3, "1-908-339-5544", -1, 1286479844, "Hey back");
 		}
     	// End database dealing
     	

@@ -98,9 +98,10 @@ public class MainChatWindow extends SMSListActivity {
     	    		    startManagingCursor(c);
     	    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
     	    		    int[] to = new int[] {R.id.list_entry }; //TODO Maybe?
-    	    		    SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
-    				R.layout.list_item, c, from, to);
-    	    		    setListAdapter(thread);
+    	    		    //SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
+    				//R.layout.list_item, c, from, to);
+    	    		    //setListAdapter(thread);
+    					setListAdapter(new ConversationAdapter(this, c));
     	    		    textTop.setText("TEST");
     	    		    
     	    		} else {
