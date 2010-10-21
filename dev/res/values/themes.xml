@@ -4,5 +4,6 @@
 		<item name="android:background">#000000</item>
 		<item name="android:listViewStyle">@style/DefaultList</item>
 		<item name="android:textAppearance">@style/DefaultTextAppearance</item>
+		<item name="android:itemTextAppearance">@style/DefaultTextAppearance</item>
 	</style>
 </resources>

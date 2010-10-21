@@ -57,16 +57,17 @@ public class ConversationsActivity extends SMSListActivity {
 		// TODO remove this shit
 		// **TESTING DATABASE, REMOVE WHEN DONE
 		// Adding dummy conversations to db
-		mDbHelper.deleteInbox();
-		mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456244, "Yo what's up?");
-		mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456844, "R u thar?");
-		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551147,
-				"Are you done yet?");
-		mDbHelper.addMsg(2, "1-555-867-5309", 0, 1286551207,
-				"I'm workin' on it.");
-		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551230, "Hurry up!");
-		mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551288,
-				"Dammit Jim, send me the right fucking thread id.");
+		// mDbHelper.deleteInbox();
+		// mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456244,
+		// "Yo what's up?");
+		// mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456844, "R u thar?");
+		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551147,
+		// "Are you done yet?");
+		// mDbHelper.addMsg(2, "1-555-867-5309", 0, 1286551207,
+		// "I'm workin' on it.");
+		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551230, "Hurry up!");
+		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551288,
+		// "Dammit Jim, send me the right fucking thread id.");
 		// ** TESTING DATABASE, REMOVE WHEN DONE
 
 		fillInbox();
@@ -106,23 +107,21 @@ public class ConversationsActivity extends SMSListActivity {
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		TextView v = (TextView) info.targetView;
+		String address = String.valueOf(v.getText());
+		long id = mDbHelper.getThreadId(address);
+		
 		switch (item.getItemId()) {
 		case OPEN_ID:
-			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-					.getMenuInfo();
-			TextView v = (TextView) info.targetView;
-			String address = String.valueOf(v.getText());
-			long id = mDbHelper.getThreadId(address);
 			Log.v("ConversationsActivity",
 					"Opening conversation from context menu, thread id: " + id);
 			openConvo(id);
 			return true;
 		case DELETE_ID:
-			// AdapterContextMenuInfo info =(AdapterContextMenuInfo)
-			// item.getMenuInfo();
-			// mDbHelper.deleteThread(info.id);
-			// getInbox();
-			return true;
+			Log.v("ConversationsActivity", "Deleting conversation from context menu, thread id: " + id);
+			return deleteConvo(id);
 		}
 		return super.onContextItemSelected(item);
 	}
@@ -137,7 +136,7 @@ public class ConversationsActivity extends SMSListActivity {
 
 	}
 
-	private void fillInbox() {
+	public void fillInbox() {
 		Log.v(this.toString(), "Filling inbox from database...");
 		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
@@ -166,6 +165,17 @@ public class ConversationsActivity extends SMSListActivity {
 		thread.putExtra(MainChatWindow.THREAD_ID, (int) id);
 		startActivity(thread);
 	}
+	
+	/**
+	 * Delete a conversation.
+	 * @param id the thread_id of the conversation to delete
+	 * @return true if deleted, otherwise falses
+	 */
+	private boolean deleteConvo(long id) {
+		boolean deleted = mDbHelper.deleteThread(id);
+		fillInbox();
+		return deleted;
+	}
 
 	private class ComposeClickListener implements OnClickListener {
 
@@ -174,7 +184,7 @@ public class ConversationsActivity extends SMSListActivity {
 		}
 
 	}
-	
+
 	public void doCompose() {
 		// TODO do we want to compose with some other id?
 		openConvo(-1);

@@ -154,6 +154,15 @@ public class SmsDbAdapter {
 		return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
+	/**
+	 * Delete an entire thread with the given thread id
+	 * @param threadId the thread_id of the conversation to delete
+	 * @return true if deleted, otherwise false
+	 */
+	public boolean deleteThread(long threadId) {
+		
+		return mDb.delete(DATABASE_TABLE, KEY_THREADID + "=" + threadId, null) > 0;
+	}
 
 	/**
 	 * Return a Cursor over the list of all messages in the database
