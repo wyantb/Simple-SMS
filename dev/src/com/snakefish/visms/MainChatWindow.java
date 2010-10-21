@@ -49,7 +49,6 @@ public class MainChatWindow extends SMSListActivity {
         assert(textTop != null);
         assert(compose != null);
         
-        //Throwing a null pointer for some reason
         compose.setOnClickListener(new ComposeClickListener());
         
         mDbHelper = new SmsDbAdapter(this);

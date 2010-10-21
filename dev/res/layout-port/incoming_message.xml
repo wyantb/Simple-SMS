@@ -23,7 +23,7 @@
 	android:layout_height="wrap_content" 
     android:padding="16dp"
     android:textSize="30sp"
-    android:layout_marginLeft ="80sp" 
+    android:layout_marginLeft ="40sp" 
     android:text = "Jason Buoni"
     >
 </TextView>

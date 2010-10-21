@@ -130,13 +130,13 @@ public class SmsDbAdapter {
 	 *            the body of the message
 	 * @return rowId or -1 if failed
 	 */
-	public long addMsg(int thread_id, String address, int person, int date,
+	public long addMsg(int thread_id, String address, int person, long dateTime,
 			String body) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_THREADID, thread_id);
 		initialValues.put(KEY_ADDRESS, address);
 		initialValues.put(KEY_PERSON, person);
-		initialValues.put(KEY_DATE, date);
+		initialValues.put(KEY_DATE, dateTime);
 		initialValues.put(KEY_BODY, body);
 
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
@@ -242,14 +242,21 @@ public class SmsDbAdapter {
 	 * @return thread_id of conversation with that person
 	 */
 	
-	public long getThreadId(String address) {
+	public int getThreadId(String address) {
 		Cursor c = mDb.query(DATABASE_TABLE, 
 				new String[] {KEY_THREADID}, 
 				KEY_ADDRESS + "='" + address + "'", 
 				null, null, null, null);
-		c.moveToFirst();
 		
-		return c.getLong(0);
+		boolean hasFirst = c.moveToFirst();
+		
+		if (hasFirst) {
+			return c.getInt(0);
+		}
+		else {
+			// TODO generate a new id
+			return 1000;
+		}
 	}
 
 	/**
