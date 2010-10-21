@@ -1,5 +1,7 @@
 package com.snakefish.visms;
 
+import java.sql.Date;
+
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
@@ -21,22 +23,37 @@ import android.widget.TextView;
  *
  */
 public class IncomingMessage extends SMSActivity {
+	
+	public static final String SMS_FROM_ADDRESS_EXTRA = "com.snakefish.FROM_EXTRA";
+	public static final String SMS_FROM_DISPLAY_NAME_EXTRA = "com.snakefish.DISPLAY_EXTRA";
+	public static final String SMS_MESSAGE_EXTRA = "com.snakefish.MESSAGE_EXTRA";
+	public static final String SMS_TIME_SENT_EXTRA = "com.snakefish.TIME_SENT";
+	
 	/**Used to position buttons */
 	public static final int SETTINGS_POSITION = Menu.FIRST;
 	/** The button used for viewing the message */
 	protected Button btnRead = null;
 	/** The button used to ignore messages */
 	protected Button btnIgnore = null;
-	/** Used to get the name of the contact */
-	protected String name = new String();
     /** The text view that is the contact information */
     protected TextView messageFrom = null; 
+    
+    /** The person who sent the text message to us */
+    protected int threadId = -1;
+    
+    /** Our helper for messages, options, etc in the database */
+    protected SmsDbAdapter dbHelper;
     
     /**
      * Creates a new incoming message
      */
     public IncomingMessage(){
     	super (R.xml.newtext_speech);
+    }
+    
+    /** Gets the partner of this conversation */
+    public int getThreadId() {
+    	return threadId;
     }
     
     /**
@@ -49,14 +66,7 @@ public class IncomingMessage extends SMSActivity {
 		if (command.getType() == CommandAction.READ || command.getType() == CommandAction.REPLY
 				|| command.getType() == CommandAction.VIEW) {
 			
-			//Makes a new TextActivity
-			Intent vText = new Intent();
-			//Sets the intent to class activity
-			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
-			//Starts the activity
-			startActivity(vText);
-			//Sends in the name of the contact
-			vText.putExtra("com.snakefish.CONTACT", name);
+			openConversationWindow();
 		}
 		
     	//If the command mimics the ignore button
@@ -65,6 +75,24 @@ public class IncomingMessage extends SMSActivity {
 		}
     		
     }
+	
+	/**
+	 * Switches to the next screen
+	 */
+	public void openConversationWindow(){
+		
+		//Makes a new TextActivity
+		Intent vText = new Intent();
+		
+		//Sets the intent to class activity
+		vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
+		
+		// Puts the thread id in for MainChatWindow
+		vText.putExtra(MainChatWindow.THREAD_ID, getThreadId());
+		
+		//Starts the activity
+		startActivity(vText);
+	}
     
     /** Called when the activity is first created. */
     @Override
@@ -82,15 +110,46 @@ public class IncomingMessage extends SMSActivity {
         //Sets the messageFrom text view
         messageFrom = (TextView) findViewById(R.id.messageFrom);
         
-        //Makes a new Intent
-		Intent vText = new Intent();
-		//Gets the name of the contact
-        vText.getStringExtra(name);
-        
         //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
         btnIgnore.setOnClickListener(new IgnoreListener());
-    } 
+        
+        dbHelper = new SmsDbAdapter(this);
+        dbHelper.open();
+        
+        parseMessageData(getIntent());
+    }
+    
+    private void parseMessageData(Intent intent) {
+    	String fromAddress = null;
+    	String displayName = null;
+    	String message = null;
+    	long timeSent = -1;
+    	
+    	fromAddress = intent.getStringExtra(SMS_FROM_ADDRESS_EXTRA);
+    	displayName = intent.getStringExtra(SMS_FROM_DISPLAY_NAME_EXTRA);
+    	message = intent.getStringExtra(SMS_MESSAGE_EXTRA);
+    	timeSent = intent.getLongExtra(SMS_TIME_SENT_EXTRA, -1);
+    	
+    	// Deal with the database
+    	//  We need the thread from this person, and to put the text into the db
+    	if (fromAddress != null) {
+    		threadId = dbHelper.getThreadId(fromAddress);
+    	}
+    	
+    	if (fromAddress != null && message != null) {
+    		dbHelper.addMsg(getThreadId(), fromAddress, -1, timeSent, message);
+    	}
+    	// End database dealing
+    	
+    	
+    	if (displayName != null) {
+    		messageFrom.setText(displayName);
+    	}
+    	else if (fromAddress != null) {
+    		messageFrom.setText(fromAddress);
+    	}
+    }
     
     /**
      * The pop up menu that allows the user to adjust
@@ -125,15 +184,6 @@ public class IncomingMessage extends SMSActivity {
     @Override
     public void onPause(){
     	super.onPause();
-    }
-    
-    /**
-     * Sets the name string
-     * 
-     * @param name - the name of the person texting 
-     */
-    public void setName(String name){
-    	this.name = name;
     }
     
     /**
@@ -185,23 +235,7 @@ public class IncomingMessage extends SMSActivity {
     	 * implementation in TextActivity.java
     	 */
 		public void onClick(View arg0) {
-			// Calls the work method
-			doWork();
-		}
-    	
-		/**
-		 * Switches to the next screen
-		 */
-		public void doWork(){
-			
-			//Makes a new TextActivity
-			Intent vText = new Intent();
-			//Sets the intent to class activity
-			vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
-			//Sends in the name of the contact
-			vText.putExtra(name, name);
-			//Starts the activity
-			startActivity(vText);
+			openConversationWindow();
 		}
     }
     
