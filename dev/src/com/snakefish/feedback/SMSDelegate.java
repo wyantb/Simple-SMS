@@ -132,6 +132,9 @@ public class SMSDelegate implements SMSBase {
 			speak("Unrecognized command, please try again.", SpeechType.INFO, false);
 			return true;
 		}
+		if (command.getType() == CommandAction.HEADPHONES_TOGGLE) {
+			// TODO handle
+		}
 		if (command.getType() == CommandAction.HEADPHONES_OFF) {
 			// TODO handle
 		}

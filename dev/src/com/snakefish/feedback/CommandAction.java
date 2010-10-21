@@ -8,11 +8,12 @@ import android.util.Log;
 public enum CommandAction {
 	
 	// OPTIONS
+	HEADPHONES_TOGGLE("headphones", true),
 	HEADPHONES_ON("headphones (required|on|yes)", true),
 	HEADPHONES_OFF("headphones (not required|off|no)", true),
 	TEXT_UP("text (increase|up)", true),
 	TEXT_DOWN("text (decrease|down)", true),
-	OPTIONS("options( menu)*", true),
+	OPTIONS("((options( menu)*)|(settings( menu)*))", true),
 	// END OPTIONS
 	
 	// GLOBAL COMMANDS
@@ -26,16 +27,17 @@ public enum CommandAction {
 	REPLY("reply(.*)", true),       // 'snakefish reply hey what's up'
 	READ("read", true),             // 'snakefish read'
 	SEND("send(.*)", true),         // 'snakefish send hey what's up'
-	IGNORE("ignore", true),         // 'snakefish ignore'
+	IGNORE("ignore( message)*", true),         // 'snakefish ignore'
 	// END CUSTOM COMMANDS
 	
 	// Keep unrecognized before text!  Important that we catch this case
-	UNRECOGNIZED(".*", true),       // 'snakefish ???'
+	UNRECOGNIZED(".*", true, true),       // 'snakefish ???'
 	TEXT(".*", false);              // 'seriously, just about anything'
 
 	private String regex;    // With 'snakefish '
 	private String regexAlt; // Without 'snakefish '
-	private boolean useAlt;
+	private boolean forceAlt;
+	private boolean forceKeyword = false;
 	
 	private static final String TAG = "CommandAction";
 	
@@ -43,7 +45,15 @@ public enum CommandAction {
 		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
 		this.regexAlt = regex;
 		
-		useAlt = hasKeyword;
+		forceAlt = hasKeyword;
+	}
+	
+	private CommandAction(String regex, boolean hasKeyword, boolean keywordOnly) {
+		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
+		this.regexAlt = regex;
+		
+		forceAlt = !hasKeyword;
+		forceKeyword = keywordOnly;
 	}
 	
 	public String regex() {
@@ -67,7 +77,7 @@ public enum CommandAction {
 			
 			boolean matchesMain = mat.matches();
 			if (matchesMain) {
-				Log.v(TAG, "Found match for user command: " + command);
+				Log.v(TAG, "Found match for user command: " + command.regex());
 			}
 			
 			Pattern patAlt = Pattern.compile(command.regexAlt());
@@ -75,10 +85,13 @@ public enum CommandAction {
 			
 			boolean matchesAlt = matAlt.matches();
 			if (matchesAlt) {
-				Log.v(TAG, "Found match for user command: " + command);
+				Log.v(TAG, "Found match for user command: " + command.regexAlt());
 			}
 			
-			if (matchesMain || matchesAlt) {
+			// TODO
+			// Integrate the matchesAlt with that.
+			// It's useful information.
+			if ((matchesMain && !command.forceAlt) || (matchesAlt && !command.forceKeyword)) {
 				return new VoiceCommand(command, mat, matAlt, matchesMain, matchesAlt);
 			}
 		}
