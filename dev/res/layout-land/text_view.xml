@@ -16,10 +16,8 @@
       
   <Button
       android:id="@+id/text_b1"
-      android:text="@string/read_short"
-      android:textSize="18sp"
-      android:background="#DDDDDD"
-      android:textColor="#000000"
+      android:text="@string/read_vert"
+      style="@style/Button"
       android:layout_weight="5"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
@@ -39,10 +37,8 @@
       
   <Button
       android:id="@+id/text_b2"
-      android:text="@string/send_short"
-      android:textSize="18sp"
-      android:background="#DDDDDD"
-      android:textColor="#000000"
+      android:text="@string/send_vert"
+      style="@style/Button"
       android:layout_weight="5"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
