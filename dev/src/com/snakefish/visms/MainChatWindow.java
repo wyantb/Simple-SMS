@@ -96,12 +96,9 @@ public class MainChatWindow extends SMSListActivity {
         	        if (threadID != -1) {
     	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
     	    		    startManagingCursor(c);
-    	    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
-    	    		    int[] to = new int[] {R.id.list_entry }; //TODO Maybe?
-    	    		    //SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
-    				//R.layout.list_item, c, from, to);
-    	    		    //setListAdapter(thread);
+    	    		    
     					setListAdapter(new ConversationAdapter(this, c));
+    					
     	    		    textTop.setText("TEST");
     	    		    
     	    		} else {
