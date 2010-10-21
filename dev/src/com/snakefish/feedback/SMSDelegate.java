@@ -111,7 +111,11 @@ public class SMSDelegate implements SMSBase {
 			boolean handled = handleCommand(command);
 			
 			if (!handled) {
-				smsCallback.processVoice(command);
+				handled = smsCallback.processVoice(command);
+			}
+			
+			if (!handled) {
+				speak("Unsupported command for this window, please try again.", SpeechType.INFO, false);
 			}
 		}
 		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {

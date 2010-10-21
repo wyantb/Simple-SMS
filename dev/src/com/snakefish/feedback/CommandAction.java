@@ -22,12 +22,12 @@ public enum CommandAction {
 	// END GLOBAL COMMANDS
 	
 	// CUSTOM COMMANDS
-	COMPOSE("compose(.*)", true),   // 'snakefish compose Brian Wyant'
-	VIEW("view(.*)", true),         // 'snakefish view Brian Wyant'
-	REPLY("reply(.*)", true),       // 'snakefish reply hey what's up'
-	READ("read", true),             // 'snakefish read'
-	SEND("send(.*)", true),         // 'snakefish send hey what's up'
-	IGNORE("ignore( message)*", true),         // 'snakefish ignore'
+	COMPOSE("compose\\s?(.*)", true),   // 'snakefish compose Brian Wyant'
+	VIEW("view\\s?(.*)", true),         // 'snakefish view Brian Wyant'
+	REPLY("reply\\s?(.*)", true),       // 'snakefish reply hey what's up'
+	READ("read\\s?(.*)", true),             // 'snakefish read'
+	SEND("send\\s?(.*)", true),         // 'snakefish send hey what's up'
+	IGNORE("ignore\\s?(message)*", true),         // 'snakefish ignore'
 	// END CUSTOM COMMANDS
 	
 	// Keep unrecognized before text!  Important that we catch this case
@@ -45,7 +45,7 @@ public enum CommandAction {
 		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
 		this.regexAlt = regex;
 		
-		forceAlt = hasKeyword;
+		forceAlt = !hasKeyword;
 	}
 	
 	private CommandAction(String regex, boolean hasKeyword, boolean keywordOnly) {

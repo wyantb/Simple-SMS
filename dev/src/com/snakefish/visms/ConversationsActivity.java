@@ -33,12 +33,18 @@ public class ConversationsActivity extends SMSListActivity {
 		super(R.xml.conv_speech);
 	}
 
-	public void processVoice(VoiceCommand command) {
+	public boolean processVoice(VoiceCommand command) {
 
 		if (command.getType() == CommandAction.COMPOSE) {
 			doCompose();
+			
+			return true;
 		}
+		// TODO view/read
+		// In these cases, view *some* thread,
+		//  and read the last in *some* thread
 
+		return false;
 	}
 
 	/** Called when the activity is first created. */
