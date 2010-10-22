@@ -14,7 +14,6 @@
   <EditText
       android:id="@+id/text_bot"
       android:hint="@string/enter_msg"
-      android:editable="true"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
       android:layout_weight="5"/>

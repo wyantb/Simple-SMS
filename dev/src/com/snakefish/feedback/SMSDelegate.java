@@ -180,7 +180,7 @@ public class SMSDelegate implements SMSBase {
 	public void onCreate(Bundle savedInstanceState) {
 		if (isHidden) {
 			// TODO Uncomment the following line to re-enable TTS			
-//			queueMesssageOnInit(speechPack.getIntro());
+			queueMesssageOnInit(speechPack.getIntro());
 			
 			isHidden = false;
 		}
