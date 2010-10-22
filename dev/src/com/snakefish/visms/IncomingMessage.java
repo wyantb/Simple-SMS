@@ -2,6 +2,7 @@ package com.snakefish.visms;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,8 @@ public class IncomingMessage extends SMSActivity {
     /** The contact retrieved name that we got earlier */
     // TODO example data
     protected String actualFrom = "Jason Buoni";
+    
+    protected String fromAddress = null;
     
     /** Our helper for messages, options, etc in the database */
     protected SmsDbAdapter dbHelper;
@@ -112,6 +115,8 @@ public class IncomingMessage extends SMSActivity {
 		
 		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, fromData);
 		
+		replyIntent.putExtra(TextActivity.FROM_ADDRESS, fromAddress);
+		
 		startActivity(replyIntent);
 	}
 	
@@ -160,7 +165,6 @@ public class IncomingMessage extends SMSActivity {
     }
     
     private void parseMessageData(Intent intent) {
-    	String fromAddress = null;
     	String displayName = null;
     	String message = null;
     	long timeSent = -1;
@@ -168,18 +172,19 @@ public class IncomingMessage extends SMSActivity {
     	fromAddress = intent.getStringExtra(SMS_FROM_ADDRESS_EXTRA);
     	displayName = intent.getStringExtra(SMS_FROM_DISPLAY_NAME_EXTRA);
     	message = intent.getStringExtra(SMS_MESSAGE_EXTRA);
-    	timeSent = intent.getLongExtra(SMS_TIME_SENT_EXTRA, -1);
+    	timeSent = intent.getLongExtra(SMS_TIME_SENT_EXTRA, -1) / 1000;
     	
     	// Deal with the database
     	//  We need the thread from this person, and to put the text into the db
     	if (fromAddress != null) {
+    		// TODO get the correct thread id or store it right
+    		// Right now we're getting extra msgs in one convo
     		threadId = dbHelper.getThreadId(fromAddress);
     	}
     	
     	if (fromAddress != null && message != null) {
-    		dbHelper.addMsg(getThreadId(), fromAddress, -1, timeSent, message);
+    		dbHelper.addMsg(threadId, fromAddress, 1, timeSent, message);
     	}
-			dbHelper.addMsg(3, "1-908-339-5544", -1, 1286479844, "Hey back");
     	// End database dealing
     	
     	
@@ -189,6 +194,7 @@ public class IncomingMessage extends SMSActivity {
     	else if (fromAddress != null) {
     		messageFrom.setText(fromAddress);
     	}
+    	
     }
     
     /**

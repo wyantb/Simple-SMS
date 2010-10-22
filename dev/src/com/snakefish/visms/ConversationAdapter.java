@@ -45,6 +45,7 @@ public class ConversationAdapter extends CursorAdapter {
 			newView.setText(bodyValue);
 			return newView;
 		}
+		
 		// If sent by you...
 		else {
 			TextView newView = (TextView)layoutInflater.inflate(R.layout.conversation_you, null);
