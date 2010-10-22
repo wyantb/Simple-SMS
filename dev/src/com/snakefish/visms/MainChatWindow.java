@@ -8,10 +8,16 @@ import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,10 +35,12 @@ public class MainChatWindow extends SMSListActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
+	private static final int PICK_CONTACT_REQUEST = 1;
     private TextView textTop;
     private Button compose;
     private SmsDbAdapter mDbHelper;
     private String recipient;
+    private ContactInfo contactResult;
     
     public MainChatWindow() {
     	super(R.xml.mcw_speech);
@@ -53,6 +61,7 @@ public class MainChatWindow extends SMSListActivity {
         
         mDbHelper = new SmsDbAdapter(this);
         mDbHelper.open();
+        
         
         //TODO Pull actual data
         populateConversationList(getIntent());
@@ -139,6 +148,7 @@ public class MainChatWindow extends SMSListActivity {
     }
     
     
+    
     private class ComposeClickListener implements OnClickListener {
 
     	/**
@@ -150,5 +160,90 @@ public class MainChatWindow extends SMSListActivity {
 		}
     	
     }
+    
+    /////////////////////////////////////////
+    //Code for picking contacts
+    /////////////////////////////////////////
+    
+    //TODO Use this to start the contact picker:
+    //			startActivityForResult(getContactIntent(), PICK_CONTACT_REQUEST);
+
+    
+    /**
+     * Invoked when the contact picker is completed.
+     */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == PICK_CONTACT_REQUEST && resultCode == RESULT_OK) {
+			processContactInfo(data.getData());
+		}else {
+			Log.e("MainChatWindow", "Error choosing contact");
+		}
+	}
+	
+	/**
+	 * Returns an Intent to be used as the Contact picker
+	 */
+	protected Intent getContactIntent(){
+		return new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI);
+	}
+
+
+	/**
+	 * Process the contact info
+	 */
+	public void processContactInfo(Uri contact ){
+		AsyncTask<Uri, Void, ContactInfo> task = new AsyncTask<Uri, Void, ContactInfo>() {
+
+			@Override
+			protected ContactInfo doInBackground(Uri... uris) {
+
+				ContentResolver contentResolver = getContentResolver();
+				Uri contactUri = uris[0];
+
+				ContactInfo contactInfo = new ContactInfo();
+				long contactId = -1;
+
+				// Load the display name for the specified person
+				Cursor cursor = contentResolver.query(contactUri,
+						new String[]{Contacts._ID, Contacts.DISPLAY_NAME}, null, null, null);
+				try {
+					if (cursor.moveToFirst()) {
+						contactId = cursor.getLong(0);
+						contactInfo.setDisplayName(cursor.getString(1));
+					}
+				} finally {
+					cursor.close();
+				}
+
+				// Load the phone number (if any).
+				cursor = contentResolver.query(Phone.CONTENT_URI,
+						new String[]{Phone.NUMBER},
+						Phone.CONTACT_ID + "=" + contactId, null, Phone.IS_SUPER_PRIMARY + " DESC");
+				try {
+					if (cursor.moveToFirst()) {
+						contactInfo.setPhoneNumber(cursor.getString(0));
+					}
+				} finally {
+					cursor.close();
+				}
+
+				return contactInfo;       	
+			}
+
+			/**
+			 * Called after contact info is processed. 
+			 * @param result 	The final result containing the Contact name and number
+			 */
+			@Override
+			protected void onPostExecute(ContactInfo result) {
+				////////////////////////////////
+				//TODO Code to set recipient
+				////////////////////////////////
+			}
+		};
+
+		task.execute(contact);
+	}
 
 }
