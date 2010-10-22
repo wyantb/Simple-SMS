@@ -41,6 +41,7 @@ public class MainChatWindow extends SMSListActivity {
     private SmsDbAdapter mDbHelper;
     private String recipient;
     private ContactInfo contactResult;
+
     
     public MainChatWindow() {
     	super(R.xml.mcw_speech);
@@ -112,6 +113,8 @@ public class MainChatWindow extends SMSListActivity {
     	    		    setListAdapter(thread);
     	    		    textTop.setText("TEST");
     	    		    
+    	    		    this.threadId = threadID;
+    	    		    
     	    		} else {
     	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
     	    		}
@@ -123,28 +126,39 @@ public class MainChatWindow extends SMSListActivity {
     	//End dummy data.
     }
 
-	public void processVoice(VoiceCommand command) {
+	public boolean processVoice(VoiceCommand command) {
     	
     	if (command.getType() == CommandAction.READ) {
-    		speak("Ok fine ignore me", SpeechType.PERSONAL);
+    		if (threadId != -1) {
+
+        		// TODO don't assume the last message in convo
+    			Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
+    			c.moveToLast();
+    			
+    			int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
+    			String bodyValue = c.getString(bodyColumn);
+    			
+    			speak(bodyValue, SpeechType.PERSONAL);
+    		}
+    		else {
+    			speak("No messages in this conversation", SpeechType.PERSONAL);
+    		}
+    		
+    		return true;
     	}
-    	if (command.getType() == CommandAction.REPLY) {
-    		doReply();
+    	if (command.getType() == CommandAction.REPLY ||
+    			command.getType() == CommandAction.COMPOSE) {
+    		doReply(command.getTextGroup());
+    		
+    		return true;
     	}
+    	
+    	return false;
     	
     }
     
-    public void doReply() {
-    	Intent textIntent = new Intent();
-    	textIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.TextActivity");
-    	
-    	String[] messageData = new String[2];
-    	messageData[0] = ("Jason");
-    	messageData[1] = ("Ok fine ignore me");
-    	
-    	textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, messageData);
-    	
-    	startActivity(textIntent);
+    public void doReply() {    	
+    	doReply(null);
     }
     
     
@@ -161,6 +175,25 @@ public class MainChatWindow extends SMSListActivity {
     	
     }
     
+public void doReply(String text) {
+    	Intent textIntent = new Intent();
+    	textIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.TextActivity");
+    	
+    	String[] messageData = new String[2];
+    	
+    	messageData = grabLastData();
+    	
+    	if (messageData != null) {
+    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, messageData);
+    	}
+    	
+    	if (text != null && !text.equals("")) {
+    		textIntent.putExtra(TextActivity.INITIAL_TEXT, text);
+    	}
+    	
+    	startActivity(textIntent);
+    }
+
     /////////////////////////////////////////
     //Code for picking contacts
     /////////////////////////////////////////
@@ -245,5 +278,6 @@ public class MainChatWindow extends SMSListActivity {
 
 		task.execute(contact);
 	}
+	
 
 }

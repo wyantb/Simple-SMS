@@ -37,6 +37,8 @@ import android.widget.TextView;
 public class TextActivity extends SMSActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
+	
+	public static final String INITIAL_TEXT = "com.snakefish.INITIAL_TEXT";
 	public static final String CONVERSATION_LAST_MSG = "com.snakefish.LAST_MESSAGE";
 	public static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
 	
@@ -90,6 +92,16 @@ public class TextActivity extends SMSActivity {
     				textTop.setText(convData[0]);
     			}
     		}
+    		else {
+    			// No conversation history
+    			textTop.setText(R.string.new_convo);
+    		}
+    		
+    		String initialMessage = intent.getStringExtra(INITIAL_TEXT);
+    		
+    		if (initialMessage != null && !initialMessage.equals("")) {
+    			textBot.setText(initialMessage);
+    		}
     	}
     }
 
@@ -122,20 +134,33 @@ public class TextActivity extends SMSActivity {
     	this.unregisterReceiver(smsReceiver);
     }
 
-	public void processVoice(VoiceCommand command) {
+	public boolean processVoice(VoiceCommand command) {
 		
     	if (command.getType() == CommandAction.READ) {
     		speak(textBot.getText().toString(), SpeechType.PERSONAL);
-    	}
-    	else if (command.getType() == CommandAction.SEND ||
-    			command.getType() == CommandAction.REPLY) {
     		
-    		textBot.getText().append(command.getGroup(1));
+    		return true;
+    	}
+    	else if (command.getType() == CommandAction.COMPOSE || 
+    			command.getType() == CommandAction.REPLY) {
+    		textBot.getText().append(command.getTextGroup());
+    		
+    		speak("Waiting to send message", SpeechType.INFO);
+    		
+    		return true;
+    	}
+    	else if (command.getType() == CommandAction.SEND) {
     		sendMessage();
+    		
+    		return true;
     	}
     	else if (command.getType() == CommandAction.TEXT) {
-    		textBot.getText().append(command.getGroup(0));
+    		textBot.getText().append(command.getTextGroup());
+    		
+    		return true;
     	}
+    	
+    	return false;
     	
     }
     

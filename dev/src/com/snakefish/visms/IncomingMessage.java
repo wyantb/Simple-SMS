@@ -38,8 +38,13 @@ public class IncomingMessage extends SMSActivity {
     /** The text view that is the contact information */
     protected TextView messageFrom = null; 
     
-    /** The person who sent the text message to us */
+    /** The thread this message is going into */
     protected int threadId = -1;
+    /** The message data that we received */
+    protected String actualMessage = "";
+    /** The contact retrieved name that we got earlier */
+    // TODO example data
+    protected String actualFrom = "Jason Buoni";
     
     /** Our helper for messages, options, etc in the database */
     protected SmsDbAdapter dbHelper;
@@ -60,21 +65,57 @@ public class IncomingMessage extends SMSActivity {
      * This method will process the voice command and turn it into 
      * a command for the application
      */
-	public void processVoice(VoiceCommand command) {
+	public boolean processVoice(VoiceCommand command) {
     	/** These commands may be updated at a later time */
     	
-		if (command.getType() == CommandAction.READ || command.getType() == CommandAction.REPLY
-				|| command.getType() == CommandAction.VIEW) {
+		if (command.getType() == CommandAction.SEND ||
+				command.getType() == CommandAction.REPLY) {
+			String text = command.getTextGroup();
 			
+			skipToReply(text);
+			
+			return true;
+		}
+		if (command.getType() == CommandAction.READ) {
+			 speak(actualMessage, SpeechType.PERSONAL);
+			 
+			 return true;
+		}
+		if (command.getType() == CommandAction.VIEW) {
 			openConversationWindow();
+			
+			return true;
 		}
 		
     	//If the command mimics the ignore button
 		if (command.getType() == CommandAction.IGNORE) {
 			onIgnored();
+			
+			return true;
 		}
+		
+		return false;
     		
     }
+	
+	private void skipToReply() {
+		skipToReply("");
+	}
+	
+	private void skipToReply(String text) {
+		Intent replyIntent = new Intent();
+		replyIntent.setClass(this, TextActivity.class);
+		
+		replyIntent.putExtra(TextActivity.INITIAL_TEXT, text);
+		
+		String[] fromData = new String[2];
+		fromData[0] = actualFrom;
+		fromData[1] = actualMessage;
+		
+		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, fromData);
+		
+		startActivity(replyIntent);
+	}
 	
 	/**
 	 * Switches to the next screen
@@ -158,6 +199,7 @@ public class IncomingMessage extends SMSActivity {
     	}
     	else {
     		// TODO example data case!
+    		actualMessage = "Yo what's up";
     		messageFrom.setText("1-570-400-0106");
     	}
     }

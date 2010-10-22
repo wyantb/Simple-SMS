@@ -20,15 +20,32 @@ public enum CommandAction {
 	HELP("help", true),             // 'snakefish help'
 	LIST("list", true),             // 'snakefish list'
 	// END GLOBAL COMMANDS
-	
+
+	//---------------------
 	// CUSTOM COMMANDS
-	COMPOSE("compose(.*)", true),   // 'snakefish compose Brian Wyant'
-	VIEW("view(.*)", true),         // 'snakefish view Brian Wyant'
-	REPLY("reply(.*)", true),       // 'snakefish reply hey what's up'
-	READ("read", true),             // 'snakefish read'
-	SEND("send(.*)", true),         // 'snakefish send hey what's up'
-	IGNORE("ignore( message)*", true),         // 'snakefish ignore'
+	//---------------------
+	
+	// 'snakefish compose Brian Wyant'
+	COMPOSE("compose\\s?(.*)", true, 1),
+	
+	// 'snakefish view Brian Wyant'
+	VIEW("view\\s?(.*)", true, 1),
+	
+	// 'snakefish reply hey what's up'
+	REPLY("(reply|respond)\\s?(.*)", true, 2),
+	
+	// 'snakefish read'
+	READ("(read|speak|say|open|display|repeat|play)\\s?(.*)", true, 2),
+
+	// 'snakefish send hey what's up'
+	SEND("send\\s?(.*)", true, 1),
+	
+	// 'snakefish ignore'
+	IGNORE("(ignore|discard|delete)\\s?(message)*", true),
+	
+	//---------------------
 	// END CUSTOM COMMANDS
+	//---------------------
 	
 	// Keep unrecognized before text!  Important that we catch this case
 	UNRECOGNIZED(".*", true, true),       // 'snakefish ???'
@@ -38,6 +55,7 @@ public enum CommandAction {
 	private String regexAlt; // Without 'snakefish '
 	private boolean forceAlt;
 	private boolean forceKeyword = false;
+	private int textGroup = -1;
 	
 	private static final String TAG = "CommandAction";
 	
@@ -45,15 +63,24 @@ public enum CommandAction {
 		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
 		this.regexAlt = regex;
 		
-		forceAlt = hasKeyword;
+		this.forceAlt = !hasKeyword;
+	}
+	
+	private CommandAction(String regex, boolean hasKeyword, int textGroup) {
+		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
+		this.regexAlt = regex;
+		
+		this.forceAlt = !hasKeyword;
+		
+		this.textGroup = textGroup;
 	}
 	
 	private CommandAction(String regex, boolean hasKeyword, boolean keywordOnly) {
 		this.regex = VoiceCommand.SNAKEFISH_KEYWORD + regex;
 		this.regexAlt = regex;
 		
-		forceAlt = !hasKeyword;
-		forceKeyword = keywordOnly;
+		this.forceAlt = !hasKeyword;
+		this.forceKeyword = keywordOnly;
 	}
 	
 	public String regex() {
@@ -92,7 +119,7 @@ public enum CommandAction {
 			// Integrate the matchesAlt with that.
 			// It's useful information.
 			if ((matchesMain && !command.forceAlt) || (matchesAlt && !command.forceKeyword)) {
-				return new VoiceCommand(command, mat, matAlt, matchesMain, matchesAlt);
+				return new VoiceCommand(command, mat, matAlt, matchesMain, matchesAlt, command.textGroup);
 			}
 		}
 		
