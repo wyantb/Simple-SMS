@@ -132,6 +132,8 @@ public class SmsDbAdapter {
 	 */
 	public long addMsg(int thread_id, String address, int person,
 			long dateTime, String body) {
+		Log.v("SmsDbAdapter", "Entering value with threadId = " + thread_id);
+		
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_THREADID, thread_id);
 		initialValues.put(KEY_ADDRESS, address);
@@ -140,6 +142,12 @@ public class SmsDbAdapter {
 		initialValues.put(KEY_BODY, body);
 
 		return mDb.insert(DATABASE_TABLE, null, initialValues);
+	}
+	
+	public long addMsg(String address, int person, long dateTime, String body) {
+		int threadId = getThreadId(address);
+		
+		return addMsg(threadId, address, person, dateTime, body);
 	}
 
 	/**
@@ -271,6 +279,7 @@ public class SmsDbAdapter {
 			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
 					null, KEY_THREADID, "MAX(" + KEY_THREADID + ")", null);
 			if (c.moveToFirst()) {
+				Log.v("SmsDbAdapter", "Highest thread = " + c.getInt(0));
 				return c.getInt(0) + 1;
 			} else {
 				Log.e(this.toString(),

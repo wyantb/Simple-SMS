@@ -3,6 +3,7 @@ package com.snakefish.visms;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -38,6 +39,7 @@ public class TextActivity extends SMSActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
 	
+	public static final String FROM_ADDRESS = "com.snakefish.FROM_ADDRESS";
 	public static final String INITIAL_TEXT = "com.snakefish.INITIAL_TEXT";
 	public static final String CONVERSATION_LAST_MSG = "com.snakefish.LAST_MESSAGE";
 	public static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
@@ -51,6 +53,8 @@ public class TextActivity extends SMSActivity {
 	private Button butLeft = null;
 	private Button butRight = null;
 	private SMSBroadcastReceiver smsReceiver;
+	private String toAddress = null;
+	private SmsDbAdapter dbHelper;
 	
     /** Called when the activity is first created. */
     @Override
@@ -71,6 +75,8 @@ public class TextActivity extends SMSActivity {
         
         butLeft.setOnClickListener(new LeftButtonClickListener());
         butRight.setOnClickListener(new RightButtonClickListener());
+        
+        dbHelper = new SmsDbAdapter(this);
         
         smsReceiver = new SMSBroadcastReceiver();
         registerReceiver(smsReceiver, new IntentFilter(ACTION_SMS_SENT));
@@ -102,6 +108,8 @@ public class TextActivity extends SMSActivity {
     		if (initialMessage != null && !initialMessage.equals("")) {
     			textBot.setText(initialMessage);
     		}
+    		
+    		toAddress = intent.getStringExtra(FROM_ADDRESS);
     	}
     }
 
@@ -165,19 +173,23 @@ public class TextActivity extends SMSActivity {
     }
     
     protected void sendMessage() {
+        dbHelper.open();
+        
     	SmsManager sms = SmsManager.getDefault();
     	
     	List<String> messages = sms.divideMessage(textBot.getText().toString());
-    	String recipient = "";  // TODO insert address here
+    	String recipient = toAddress;  // TODO insert address here
+    	int threadId = dbHelper.getThreadId(toAddress);
     	
     	// TODO actually send message
     	//  For now, we'll just report success anyway
     	//  and close immediately
     	try {
-    		//for (String message : messages) {
-    		//	sms.sendTextMessage(recipient, null, message, 
-    		//			PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
-    		//}
+    		for (String message : messages) {
+    			dbHelper.addMsg(threadId, toAddress, -1, System.currentTimeMillis() / 1000, message);
+    			//sms.sendTextMessage(recipient, null, message, 
+    			//		PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+    		}
     	}
     	catch (Exception e) {
     		speak("Error: Message not sent", SpeechType.INFO);

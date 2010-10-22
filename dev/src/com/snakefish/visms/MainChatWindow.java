@@ -114,6 +114,7 @@ public class MainChatWindow extends SMSListActivity {
         	        if (threadID != -1) {
     	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
     	    		    startManagingCursor(c);
+    	    		    
     	    		    if (c.moveToFirst()) {
     	    		    	recipient = c.getString(c.getColumnIndex(SmsDbAdapter.KEY_ADDRESS));
     	    		    } else {
@@ -216,6 +217,10 @@ public class MainChatWindow extends SMSListActivity {
     		textIntent.putExtra(TextActivity.INITIAL_TEXT, text);
     	}
     	
+    	if (recipient != null) {
+    		textIntent.putExtra(TextActivity.FROM_ADDRESS, recipient);
+    	}
+    	
     	startActivity(textIntent);
     }
     
@@ -314,9 +319,10 @@ public class MainChatWindow extends SMSListActivity {
 			 */
 			@Override
 			protected void onPostExecute(ContactInfo result) {
-				////////////////////////////////
-				//TODO Code to set recipient
-				////////////////////////////////
+				recipient = result.getPhoneNumber();
+
+				// TODO handle getting the better visible version
+		    	textTop.setText(recipient);
 			}
 		};
 

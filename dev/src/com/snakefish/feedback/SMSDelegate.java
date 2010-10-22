@@ -139,19 +139,24 @@ public class SMSDelegate implements SMSBase {
 			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_TOGGLE) {
-			// TODO handle
+			speak("Headphones toggled", SpeechType.INFO);
+			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_OFF) {
-			// TODO handle
+			speak("Headphones off", SpeechType.INFO);
+			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_ON) {
-			// TODO handle
+			speak("Headphones on", SpeechType.INFO);
+			return true;
 		}
 		if (command.getType() == CommandAction.TEXT_DOWN) {
-			// TODO handle
+			speak("Textsize increased", SpeechType.INFO);
+			return true;
 		}
 		if (command.getType() == CommandAction.TEXT_UP) {
-			// TODO handle
+			speak("Textsize decreased", SpeechType.INFO);
+			return true;
 		}
 		if (command.getType() == CommandAction.OPTIONS) {
 			Intent optionsIntent = new Intent();
