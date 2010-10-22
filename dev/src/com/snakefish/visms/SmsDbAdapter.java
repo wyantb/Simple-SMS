@@ -130,8 +130,8 @@ public class SmsDbAdapter {
 	 *            the body of the message
 	 * @return rowId or -1 if failed
 	 */
-	public long addMsg(int thread_id, String address, int person, long dateTime,
-			String body) {
+	public long addMsg(int thread_id, String address, int person,
+			long dateTime, String body) {
 		ContentValues initialValues = new ContentValues();
 		initialValues.put(KEY_THREADID, thread_id);
 		initialValues.put(KEY_ADDRESS, address);
@@ -154,6 +154,17 @@ public class SmsDbAdapter {
 		return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
 	}
 
+	/**
+	 * Delete an entire thread with the given thread id
+	 * 
+	 * @param threadId
+	 *            the thread_id of the conversation to delete
+	 * @return true if deleted, otherwise false
+	 */
+	public boolean deleteThread(long threadId) {
+
+		return mDb.delete(DATABASE_TABLE, KEY_THREADID + "=" + threadId, null) > 0;
+	}
 
 	/**
 	 * Return a Cursor over the list of all messages in the database
@@ -207,18 +218,20 @@ public class SmsDbAdapter {
 	/**
 	 * Returns a Cursor over a thread when given a threadId
 	 * 
-	 * @param threadId the thread_id of the thread we want to fetch
-	 * @return	a Cursor over the result set containing all messages in the given thread
+	 * @param threadId
+	 *            the thread_id of the thread we want to fetch
+	 * @return a Cursor over the result set containing all messages in the given
+	 *         thread
 	 */
 	public Cursor fetchThreadByThreadId(int threadId) {
 		System.out.println(mDb);
-		Cursor c = mDb.query(DATABASE_TABLE, 
-				new String[] {KEY_ROWID, KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY}, 
-				KEY_THREADID + "=" + String.valueOf(threadId), null, null, null, 
-				ORDER_CHRON);
+		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
+				KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY },
+				KEY_THREADID + "=" + String.valueOf(threadId), null, null,
+				null, ORDER_CHRON);
 		return c;
 	}
-	
+
 	/**
 	 * Find the id of the thread to which a particular message belongs, given
 	 * the message id.
@@ -235,27 +248,36 @@ public class SmsDbAdapter {
 				KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		return threadId;
 	}
-	
+
 	/**
-	 * Returns the thread_id of the conversation thread with the specified addressee
-	 * @param address String representation of the address (phone number) of the recipient
+	 * Returns the thread_id of the conversation thread with the specified
+	 * addressee
+	 * 
+	 * @param address
+	 *            String representation of the address (phone number) of the
+	 *            recipient
 	 * @return thread_id of conversation with that person
 	 */
-	
+
 	public int getThreadId(String address) {
-		Cursor c = mDb.query(DATABASE_TABLE, 
-				new String[] {KEY_THREADID}, 
-				KEY_ADDRESS + "='" + address + "'", 
-				null, null, null, null);
-		
+		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID },
+				KEY_ADDRESS + "='" + address + "'", null, null, null, null);
+
 		boolean hasFirst = c.moveToFirst();
-		
+
 		if (hasFirst) {
 			return c.getInt(0);
-		}
-		else {
-			// TODO generate a new id
-			return 1000;
+		} else {
+			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
+					null, KEY_THREADID, "MAX(" + KEY_THREADID + ")", null);
+			if (c.moveToFirst()) {
+				return c.getInt(0) + 1;
+			} else {
+				Log.e(this.toString(),
+						"Could not find thread id corresponding to given address: "
+								+ address);
+				return -1;
+			}
 		}
 	}
 

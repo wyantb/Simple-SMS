@@ -65,7 +65,7 @@ public class SMSDelegate implements SMSBase {
 	
 	public void onInit(int arg0) {
 		
-		// TODO Uncomment the following lines to re-enable TTS
+
 		synchronized (queuedMessages) {
 			for (Iterator<String> msgItr = queuedMessages.iterator();
 				msgItr.hasNext(); ) {
@@ -111,7 +111,13 @@ public class SMSDelegate implements SMSBase {
 			boolean handled = handleCommand(command);
 			
 			if (!handled) {
-				smsCallback.processVoice(command);
+				handled = smsCallback.processVoice(command);
+			}
+			
+			if (!handled) {
+				speak("Unsupported command for this window, please try again.", SpeechType.INFO, false);
+				
+				speak("Unrecognized string was: " + spokenWords, SpeechType.INFO, false);
 			}
 		}
 		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {
@@ -173,7 +179,8 @@ public class SMSDelegate implements SMSBase {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isHidden) {
-			queueMesssageOnInit(speechPack.getIntro());
+			// TODO Uncomment the following line to re-enable TTS			
+//			queueMesssageOnInit(speechPack.getIntro());
 			
 			isHidden = false;
 		}

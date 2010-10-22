@@ -1,20 +1,16 @@
 package com.snakefish.visms;
 
-import java.util.List;
-
-import com.snakefish.feedback.CommandAction;
-import com.snakefish.feedback.VoiceCommand;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.VoiceCommand;
 
 /**
  * This class will be used to handle all of the options in the application.
@@ -70,20 +66,10 @@ public class OptionsList extends SMSListActivity {
 	 * commands will consist allow users to edit each option and can be found in
 	 * CommandAction.java.
 	 */
-	public void processVoice(VoiceCommand command) {
-
-		// Command used to turn headphones on/off and edit fonts
-		if (command.getType() == CommandAction.HEADPHONES_OFF) {
-			// calls the headphones off method
-			headphones_off();
-		} else if (command.getType() == CommandAction.HEADPHONES_ON) {
-			// Calls the headphones on method
-			headphones_on();
-		} else if (command.getType() == CommandAction.TEXT_UP) {
-			// TODO functionality to edit text size up
-		} else if (command.getType() == CommandAction.TEXT_DOWN) {
-			// TODO functionality to edit text size down
-		}
+	public boolean processVoice(VoiceCommand command) {
+		// Already handled elsewhere
+		
+		return false;
 	}
 
 	@Override
