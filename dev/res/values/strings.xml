@@ -5,19 +5,9 @@
 	<string name="settings">Settings</string>
 	<string name="compose">Compose</string>
 	<string name="read_short">Read</string>
-	<string name="read_vert">
-	R
-	e
-	a
-	d
-	</string>
+	<string name="read_vert">R\ne\na\nd</string>
 	<string name="send_short">Send</string>
-	<string name="send_vert">
-	S
-	e
-	n
-	d
-	</string>
+	<string name="send_vert">S\ne\nn\nd</string>
 	<string name="ignore">Ignore</string>
 	<string name="not_ready">DEFAULT</string>
 	<string name="no_history">No history here</string>
