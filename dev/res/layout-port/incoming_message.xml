@@ -24,12 +24,14 @@
 <Button 
         android:id="@+id/btnRead"  
         android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"
         android:text="@string/read_short"
 /> 
         
 <Button 
         android:id="@+id/btnIgnore"  
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:text="@string/ignore"
 /> 
 
