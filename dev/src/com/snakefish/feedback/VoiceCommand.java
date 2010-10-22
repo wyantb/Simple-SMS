@@ -19,8 +19,9 @@ public class VoiceCommand {
 	private Matcher matcherAlt;
 	private boolean matchesMain;
 	private boolean matchesAlt;
+	private int textGroup;
 	
-	public VoiceCommand(CommandAction command, Matcher matcher, Matcher matcherAlt, boolean matchesMain, boolean matchesAlt) {
+	public VoiceCommand(CommandAction command, Matcher matcher, Matcher matcherAlt, boolean matchesMain, boolean matchesAlt, int textGroup) {
 		this.command = command;
 		
 		this.matcherMain = matcher;
@@ -28,6 +29,12 @@ public class VoiceCommand {
 		
 		this.matchesMain = matchesMain;
 		this.matchesAlt = matchesAlt;
+		
+		this.textGroup = textGroup;	
+	}
+	
+	public VoiceCommand(CommandAction command, Matcher matcher, Matcher matcherAlt, boolean matchesMain, boolean matchesAlt) {
+		this(command, matcher, matcherAlt, matchesMain, matchesAlt, -1);
 	}
 	
 	public VoiceCommand(CommandAction action) {
@@ -54,7 +61,16 @@ public class VoiceCommand {
 		return matchesAlt;
 	}
 	
-	public String getGroup(int i) {
+	public String getTextGroup() {
+		if (textGroup != -1) {
+			return getRawGroup(textGroup);
+		}
+		else {
+			return "";
+		}
+	}
+	
+	public String getRawGroup(int i) {
 		if (matchesMain && matcherMain != null) {
 			return matcherMain.group(i);
 		}

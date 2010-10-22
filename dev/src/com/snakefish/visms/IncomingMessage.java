@@ -70,7 +70,7 @@ public class IncomingMessage extends SMSActivity {
     	
 		if (command.getType() == CommandAction.SEND ||
 				command.getType() == CommandAction.REPLY) {
-			String text = command.getGroup(1);
+			String text = command.getTextGroup();
 			
 			skipToReply(text);
 			
@@ -78,6 +78,8 @@ public class IncomingMessage extends SMSActivity {
 		}
 		if (command.getType() == CommandAction.READ) {
 			 speak(actualMessage, SpeechType.PERSONAL);
+			 
+			 return true;
 		}
 		if (command.getType() == CommandAction.VIEW) {
 			openConversationWindow();

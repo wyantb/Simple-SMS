@@ -116,6 +116,8 @@ public class SMSDelegate implements SMSBase {
 			
 			if (!handled) {
 				speak("Unsupported command for this window, please try again.", SpeechType.INFO, false);
+				
+				speak("Unrecognized string was: " + spokenWords, SpeechType.INFO, false);
 			}
 		}
 		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {

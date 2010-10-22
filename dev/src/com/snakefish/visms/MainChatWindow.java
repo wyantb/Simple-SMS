@@ -139,7 +139,7 @@ public class MainChatWindow extends SMSListActivity {
     	}
     	if (command.getType() == CommandAction.REPLY ||
     			command.getType() == CommandAction.COMPOSE) {
-    		doReply(command.getGroup(1));
+    		doReply(command.getTextGroup());
     		
     		return true;
     	}

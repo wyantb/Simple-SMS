@@ -143,7 +143,7 @@ public class TextActivity extends SMSActivity {
     	}
     	else if (command.getType() == CommandAction.COMPOSE || 
     			command.getType() == CommandAction.REPLY) {
-    		textBot.getText().append(command.getGroup(1));
+    		textBot.getText().append(command.getTextGroup());
     		
     		speak("Waiting to send message", SpeechType.INFO);
     		
@@ -155,7 +155,7 @@ public class TextActivity extends SMSActivity {
     		return true;
     	}
     	else if (command.getType() == CommandAction.TEXT) {
-    		textBot.getText().append(command.getGroup(0));
+    		textBot.getText().append(command.getTextGroup());
     		
     		return true;
     	}
