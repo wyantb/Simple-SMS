@@ -103,7 +103,8 @@ public class MainChatWindow extends SMSListActivity {
     		if (intent != null) {
     	        
     	    		int threadID = intent.getIntExtra(THREAD_ID,-1);
-    				    			
+    				this.threadId = threadID;
+    	    		
     	    		//TODO Debug
         	        Log.v("MainChatWindow, populateConversationList", "Thread ID: "+threadID);
     	    		
@@ -210,7 +211,7 @@ public class MainChatWindow extends SMSListActivity {
     	// TODO don't be a prick about DB access
     	if (threadId != -1) {
     		Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
-    		c.moveToLast();
+    		boolean didLast = c.moveToLast();
     		
     		int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
     		String bodyValue = c.getString(bodyColumn);
