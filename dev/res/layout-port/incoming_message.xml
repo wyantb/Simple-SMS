@@ -10,10 +10,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:textSize="35sp" 
-    android:layout_marginLeft ="15sp" 
-    android:text = "NEW TEXT MESSAGE"
+    android:text="@string/new_msg"
     >
 </TextView>
 
@@ -21,32 +18,19 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" 
 	android:layout_height="wrap_content" 
-    android:padding="16dp"
-    android:textSize="30sp"
-    android:layout_marginLeft ="40sp" 
-    android:text = "Jason Buoni"
     >
 </TextView>
 
 <Button 
         android:id="@+id/btnRead"  
         android:layout_width="fill_parent" 
-        android:layout_height="90sp"
-        android:layout_marginTop="10sp"
-        android:layout_marginLeft="10sp"
-        android:layout_marginRight="10sp"  
-        android:textSize="30sp"
-        android:text="Read"
+        android:text="@string/read_short"
 /> 
         
 <Button 
         android:id="@+id/btnIgnore"  
-        android:layout_width="fill_parent" 
-        android:layout_height="90sp"
-        android:layout_marginLeft ="10sp"
-        android:layout_marginRight ="10sp" 
-        android:textSize = "30sp"
-        android:text="Ignore"
+        android:layout_width="fill_parent"
+        android:text="@string/ignore"
 /> 
 
 </LinearLayout>

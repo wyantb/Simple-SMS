@@ -2,10 +2,6 @@ package com.snakefish.visms;
 
 import java.util.List;
 
-import com.snakefish.feedback.CommandAction;
-import com.snakefish.feedback.SpeechType;
-import com.snakefish.feedback.VoiceCommand;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +16,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
+import com.snakefish.feedback.VoiceCommand;
 
 /**
  * Represents the view with which users will send messages in a conversation.
