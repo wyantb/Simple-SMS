@@ -205,6 +205,25 @@ public class MainChatWindow extends SMSListActivity {
     	
     	startActivity(textIntent);
     }
+    
+    private String[] grabLastData() {
+    	// TODO don't be a prick about DB access
+    	if (threadId != -1) {
+    		Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
+    		c.moveToLast();
+    		
+    		int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
+    		String bodyValue = c.getString(bodyColumn);
+    		
+    		// TODO pull person from cursor and contacts api
+    		
+    		return new String[] {"Jason", bodyValue};
+    	}
+    	else {
+    		// TODO make sure this case doesn't happen
+    		return null;
+    	}
+    }
 
     /////////////////////////////////////////
     //Code for picking contacts

@@ -49,7 +49,7 @@ public enum CommandAction {
 	
 	// Keep unrecognized before text!  Important that we catch this case
 	UNRECOGNIZED(".*", true, true),       // 'snakefish ???'
-	TEXT(".*", false);              // 'seriously, just about anything'
+	TEXT(".*", false, 0);              // 'seriously, just about anything'
 
 	private String regex;    // With 'snakefish '
 	private String regexAlt; // Without 'snakefish '
