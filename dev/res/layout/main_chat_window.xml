@@ -3,9 +3,23 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+		
+		<Button android:id="@+id/mcw_contact_chooser" 
+			android:text="Choose contact"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"/>
+		
 		<TextView android:id="@+id/mcw_text_top" android:text="Recipient"
 			android:textSize="30sp" android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:gravity="top" />
+			android:layout_height="wrap_content" android:gravity="top"
+			android:editable="true"
+			android:visibility="gone" />
+	</LinearLayout>
+	
 		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:layout_weight="1"
 			android:gravity="fill_vertical" />

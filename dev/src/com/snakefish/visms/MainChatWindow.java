@@ -42,6 +42,7 @@ public class MainChatWindow extends SMSListActivity {
 	private static final int PICK_CONTACT_REQUEST = 1;
     private TextView textTop;
     private Button compose;
+    private Button contactChooser;
     private SmsDbAdapter mDbHelper;
     private String recipient;
     private ContactInfo contactResult;
@@ -59,16 +60,18 @@ public class MainChatWindow extends SMSListActivity {
         
         textTop = (TextView)findViewById(R.id.mcw_text_top);
         compose = (Button)findViewById(R.id.mcw_compose);
+        contactChooser = (Button)findViewById(R.id.mcw_contact_chooser);
 
         assert(textTop != null);
         assert(compose != null);
+        assert(contactChooser != null);
         
+        contactChooser.setOnClickListener(new OnContactListener());
         compose.setOnClickListener(new ComposeClickListener());
         
         mDbHelper = new SmsDbAdapter(this);
         mDbHelper.open();
         
-        //TODO Pull actual data
         populateConversationList(getIntent());
     }
 
@@ -128,8 +131,12 @@ public class MainChatWindow extends SMSListActivity {
     				R.layout.list_item, c, from, to);
     	    		    setListAdapter(thread);
     	    		    
+    	    		    contactChooser.setVisibility(View.GONE);
+    	    		    textTop.setVisibility(View.VISIBLE);
     	    		} else {
     	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
+    	    			
+    	    			compose.setEnabled(false);
     	    		}
     	    	}
 
@@ -174,7 +181,14 @@ public class MainChatWindow extends SMSListActivity {
     	doReply(null);
     }
     
-    
+    private class OnContactListener implements OnClickListener {
+
+		public void onClick(View arg0) {
+			compose.setEnabled(true);
+			startActivityForResult(getContactIntent(), PICK_CONTACT_REQUEST);
+		}
+    	
+    }
     
     private class ComposeClickListener implements OnClickListener {
 
