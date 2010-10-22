@@ -269,7 +269,7 @@ public class SmsDbAdapter {
 			return c.getInt(0);
 		} else {
 			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
-					null, null, "MAX(" + KEY_THREADID + ")", null);
+					null, KEY_THREADID, "MAX(" + KEY_THREADID + ")", null);
 			if (c.moveToFirst()) {
 				return c.getInt(0) + 1;
 			} else {
