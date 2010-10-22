@@ -133,6 +133,7 @@ public class MainChatWindow extends SMSListActivity {
     	    		    
     	    		    contactChooser.setVisibility(View.GONE);
     	    		    textTop.setVisibility(View.VISIBLE);
+    	    		    compose.setEnabled(true);
     	    		} else {
     	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
     	    			

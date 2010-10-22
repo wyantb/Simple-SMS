@@ -179,13 +179,6 @@ public class IncomingMessage extends SMSActivity {
     	if (fromAddress != null && message != null) {
     		dbHelper.addMsg(getThreadId(), fromAddress, -1, timeSent, message);
     	}
-		else {
-			// TODO example data case!
-			// REMOVE ALL OF THIS FOR PRODUCTION
-			dbHelper.deleteInbox();
-			threadId = 3;
-			dbHelper.addMsg(3, "1-570-400-0106", 1, 1286459844, "Hey man");
-		}
     	// End database dealing
     	
     	
@@ -194,11 +187,6 @@ public class IncomingMessage extends SMSActivity {
     	}
     	else if (fromAddress != null) {
     		messageFrom.setText(fromAddress);
-    	}
-    	else {
-    		// TODO example data case!
-    		actualMessage = "Yo what's up";
-    		messageFrom.setText("1-570-400-0106");
     	}
     }
     
