@@ -41,6 +41,7 @@ public class MainChatWindow extends SMSListActivity {
     private SmsDbAdapter mDbHelper;
     private String recipient;
     private ContactInfo contactResult;
+    private int threadId;
 
     
     public MainChatWindow() {
@@ -175,7 +176,7 @@ public class MainChatWindow extends SMSListActivity {
     	
     }
     
-public void doReply(String text) {
+    public void doReply(String text) {
     	Intent textIntent = new Intent();
     	textIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.TextActivity");
     	
