@@ -3,9 +3,6 @@
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent">
 
-<!--	<LinearLayout android:orientation="vertical"-->
-<!--		android:layout_width="fill_parent" android:layout_height="wrap_content"-->
-<!--		style="@style/ListTheme">-->
 		<TextView android:id="@+id/mcw_text_top" android:text="Recipient"
 			android:textSize="30sp" android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:gravity="top" />
@@ -13,9 +10,7 @@
 			android:layout_height="wrap_content" android:layout_weight="1"
 			android:gravity="fill_vertical" />
 
-<!--	</LinearLayout>-->
-
-	<Button style="@style/Button" android:id="@+id/mcw_compose"
+	<Button android:id="@+id/mcw_compose"
 		android:text="@string/compose" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" />
 </LinearLayout>

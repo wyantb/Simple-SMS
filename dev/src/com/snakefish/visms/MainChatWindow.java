@@ -30,6 +30,10 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
+import com.snakefish.feedback.VoiceCommand;
+
 
 public class MainChatWindow extends SMSListActivity {
 
@@ -63,7 +67,6 @@ public class MainChatWindow extends SMSListActivity {
         
         mDbHelper = new SmsDbAdapter(this);
         mDbHelper.open();
-        
         
         //TODO Pull actual data
         populateConversationList(getIntent());
@@ -107,14 +110,22 @@ public class MainChatWindow extends SMSListActivity {
         	        if (threadID != -1) {
     	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
     	    		    startManagingCursor(c);
+    	    		    if (c.moveToFirst()) {
+    	    		    	recipient = c.getString(c.getColumnIndex(SmsDbAdapter.KEY_ADDRESS));
+    	    		    } else {
+    	    		    	Log.e(this.toString(), "Cursor is empty.");
+    	    		    }
+    	    		    if (false) { // If the address is in our contacts...
+    	    		    	// Set recipient to contact name
+    	    		    } else { // Just use phone number
+    	    		    	textTop.setText(recipient);
+    	    		    }
+    	    		    
     	    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
     	    		    int[] to = new int[] {R.id.list_entry }; //TODO Maybe?
     	    		    SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
     				R.layout.list_item, c, from, to);
     	    		    setListAdapter(thread);
-    	    		    textTop.setText("TEST");
-    	    		    
-    	    		    this.threadId = threadID;
     	    		    
     	    		} else {
     	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");

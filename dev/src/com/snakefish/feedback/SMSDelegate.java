@@ -65,18 +65,18 @@ public class SMSDelegate implements SMSBase {
 	
 	public void onInit(int arg0) {
 		
-		// TODO Uncomment the following lines to re-enable TTS
-//		synchronized (queuedMessages) {
-//			for (Iterator<String> msgItr = queuedMessages.iterator();
-//				msgItr.hasNext(); ) {
-//				
-//				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_FLUSH, null);
-//				
-//				if (result == TextToSpeech.SUCCESS) {
-//					msgItr.remove();
-//				}
-//			}
-//		}
+
+		synchronized (queuedMessages) {
+			for (Iterator<String> msgItr = queuedMessages.iterator();
+				msgItr.hasNext(); ) {
+				
+				int result = tts.speak(msgItr.next(), TextToSpeech.QUEUE_FLUSH, null);
+				
+				if (result == TextToSpeech.SUCCESS) {
+					msgItr.remove();
+				}
+			}
+		}
 		
 	}
 
@@ -179,7 +179,8 @@ public class SMSDelegate implements SMSBase {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isHidden) {
-			queueMesssageOnInit(speechPack.getIntro());
+			// TODO Uncomment the following line to re-enable TTS			
+//			queueMesssageOnInit(speechPack.getIntro());
 			
 			isHidden = false;
 		}

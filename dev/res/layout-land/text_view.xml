@@ -17,7 +17,6 @@
   <Button
       android:id="@+id/text_b1"
       android:text="@string/read_vert"
-      style="@style/Button"
       android:layout_weight="5"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
@@ -26,10 +25,6 @@
   <EditText
       android:id="@+id/text_bot"
       android:hint="@string/enter_msg"
-      android:textColorHint="#FFFFFF"
-      android:textColor="#FFFFFF"
-      android:background="#000000"
-      android:textSize="24sp"
       android:layout_weight="2"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
@@ -38,7 +33,6 @@
   <Button
       android:id="@+id/text_b2"
       android:text="@string/send_vert"
-      style="@style/Button"
       android:layout_weight="5"
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"
