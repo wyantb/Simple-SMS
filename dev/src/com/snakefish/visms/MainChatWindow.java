@@ -129,8 +129,7 @@ public class MainChatWindow extends SMSListActivity {
     	    		    } else { // Just use phone number
     	    		    	textTop.setText(recipient);
     	    		    }
-    	    		    
-    					setListAdapter(new ConversationAdapter(this, c));
+    	    		    setListAdapter(new ConversationAdapter(this, c));
     					
     	    		    
     	    		    contactChooser.setVisibility(View.GONE);
