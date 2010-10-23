@@ -5,11 +5,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
 
 /**
@@ -26,16 +28,20 @@ public class OptionsList extends SMSListActivity {
 	protected boolean headphones = false;
 
 	/** The button used to determine headphone options */
+	//protected CheckBox btnHeadphones;
 	protected Button btnHeadphones;
 
 	/** Button used to determine font size */
-	protected Button btnFontSize;
+	protected Button btnFontUp;
 
 	/** The button used to determine font color */
-	protected Button btnFontColor;
+	protected Button btnFontDown;
 
 	/** The back button */
-	protected Button btnBack;
+	protected Button btnColorScheme;
+	
+	/** The button array for the list item */
+	protected Button[] buttonList;
 
 	/**
 	 * The constructor used for the options list
@@ -57,8 +63,58 @@ public class OptionsList extends SMSListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.options_screen);
 
-		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
-				OPTIONS));
+		//Creates the new buttons for the list
+		//btnHeadphones = (CheckBox) findViewById(R.id.btnHeadPhones);
+		btnHeadphones = (Button) findViewById(R.id.btnHeadphones);
+		btnFontUp = (Button) findViewById(R.id.btnFontUp);
+		btnFontDown = (Button) findViewById(R.id.btnFontDown);
+		btnColorScheme = (Button) findViewById(R.id.btnColorScheme);
+		
+		//Adds listeners to the buttons
+		btnHeadphones.setOnClickListener(new HeadphonesListener());
+		btnFontUp.setOnClickListener(new FontSizeListener(1));
+		btnHeadphones.setOnClickListener(new FontSizeListener(-1));
+		btnHeadphones.setOnClickListener(new ColorListener());
+		
+		/*
+		//Sets the CharSequence to a null value without using null
+		CharSequence tempC = "";
+		
+		//Loops through and makes buttons with the same names as OPTIONS
+		for(int x = 0; x < 4; x++){
+			//Sets char sequence to buttonList[x]
+			tempC.equals(buttonList[x]);
+			//Sets the button name to the name of the text
+			buttonList[x].setText(tempC);
+			
+			//The case statements assign each button to the right listener
+			switch(x){
+			//Headphones button
+			case(0): 
+				buttonList[x] = (Button) findViewById(R.id.btnHeadphones);
+				buttonList[x].setOnClickListener(new HeadphonesListener());
+				break;
+			//Font size up
+			case(1):
+				buttonList[x] = (Button) findViewById(R.id.btnFontUp);
+				buttonList[x].setOnClickListener(new FontSizeListener(1));
+				break;
+			//Font size down
+			case(2):
+				buttonList[x] = (Button) findViewById(R.id.btnFontDown);
+				buttonList[x].setOnClickListener(new FontSizeListener(-1));
+				break;
+			//Color scheme
+			case(3):
+				buttonList[x] = (Button) findViewById(R.id.btnColorScheme);
+				buttonList[x].setOnClickListener(new ColorListener());
+				break;
+			}
+		}*/
+		
+		
+		//setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
+			//OPTIONS));
 	}
 
 	/**
@@ -72,19 +128,19 @@ public class OptionsList extends SMSListActivity {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		// When clicked, show a toast with the TextView text
-		Toast.makeText(getApplicationContext(), ((TextView) v).getText(),
-				Toast.LENGTH_SHORT).show();
-	}
+		//Toast.makeText(getApplicationContext(), ((TextView) v).getText(),
+				//Toast.LENGTH_SHORT).show();
+	}*/
 
 	/**
 	 * Method used to turn off headphones
 	 */
 	public void headphones_off() {
 		// TODO add functionality to turn off headphones
+		speak("Headphones off", SpeechType.INFO, true);
 	}
 
 	/**
@@ -92,6 +148,7 @@ public class OptionsList extends SMSListActivity {
 	 */
 	public void headphones_on() {
 		// TODO Add functionality to turn on headphones
+		speak("Headphones on", SpeechType.INFO, true);
 	}
 
 	/**
@@ -110,8 +167,10 @@ public class OptionsList extends SMSListActivity {
 		 * Called when the button is clicked
 		 */
 		public void onClick(View v) {
+			speak("headphones toggled", SpeechType.INFO, false);
 			// Calls the do work function
 			doWork();
+			
 		}
 
 		/**
@@ -121,6 +180,7 @@ public class OptionsList extends SMSListActivity {
 		 * once clicked the headphones option will be set to true.
 		 */
 		public void doWork() {
+			/*
 			// Headphones are turned off
 			if (headphones == false) {
 				// Headphones are turned on
@@ -132,7 +192,7 @@ public class OptionsList extends SMSListActivity {
 				headphones = false;
 				// Calls the headphones_off method
 				headphones_off();
-			}
+			} */
 		}
 
 		/**
@@ -159,7 +219,21 @@ public class OptionsList extends SMSListActivity {
 	 * 
 	 */
 	private class FontSizeListener implements OnClickListener {
-
+		
+		/** Determines if the font will be increased or decreased */
+		private int size = 0;
+		
+		/** 
+		 * Constructor. Negative numbers mean font decrease.
+		 */
+		FontSizeListener(int incDec){
+			size = incDec;
+		}
+		
+		/**
+		 * The onClick method used for the listener.
+		 * Calls the doWork method
+		 */
 		public void onClick(View v) {
 			// Calls the doWork method
 			doWork();
@@ -182,7 +256,7 @@ public class OptionsList extends SMSListActivity {
 	 * @author Team Snakefish
 	 * 
 	 */
-	private class FontColorListener implements OnClickListener {
+	private class ColorListener implements OnClickListener {
 
 		/**
 		 * The onClick method for the FontColorListener
@@ -200,31 +274,5 @@ public class OptionsList extends SMSListActivity {
 			// TODO Same as FontSizeListener
 		}
 
-	}
-
-	/**
-	 * The listener for the back button in the program. Will return listener to
-	 * the previous page they were at.
-	 * 
-	 * @author Team Snakefish
-	 * 
-	 */
-	private class BackListener implements OnClickListener {
-
-		/**
-		 * The onClick method used for the listener
-		 */
-		public void onClick(View v) {
-			// Calls the doWork method
-			doWork();
-		}
-
-		/**
-		 * Returns the user to the original point that they were at in the
-		 * application.
-		 */
-		public void doWork() {
-			// TODO Needs to go back to the previous page, whichever that may be
-		}
 	}
 }

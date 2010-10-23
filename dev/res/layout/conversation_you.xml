@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>   
+<TextView android:id="@+id/convo_you" 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#FFFFFF"
+	android:textColor="#000000"
+	android:textSize="36sp"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="right" >
+</TextView>

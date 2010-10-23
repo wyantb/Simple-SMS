@@ -114,6 +114,7 @@ public class MainChatWindow extends SMSListActivity {
         	        if (threadID != -1) {
     	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
     	    		    startManagingCursor(c);
+    	    		    
     	    		    if (c.moveToFirst()) {
     	    		    	recipient = c.getString(c.getColumnIndex(SmsDbAdapter.KEY_ADDRESS));
     	    		    } else {
@@ -125,14 +126,12 @@ public class MainChatWindow extends SMSListActivity {
     	    		    	textTop.setText(recipient);
     	    		    }
     	    		    
-    	    		    String[] from = new String[] {SmsDbAdapter.KEY_BODY};
-    	    		    int[] to = new int[] {R.id.list_entry }; //TODO Maybe?
-    	    		    SimpleCursorAdapter thread = new SimpleCursorAdapter(this,
-    				R.layout.list_item, c, from, to);
-    	    		    setListAdapter(thread);
+    					setListAdapter(new ConversationAdapter(this, c));
+    					
     	    		    
     	    		    contactChooser.setVisibility(View.GONE);
     	    		    textTop.setVisibility(View.VISIBLE);
+    	    		    compose.setEnabled(true);
     	    		} else {
     	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
     	    			
@@ -216,6 +215,10 @@ public class MainChatWindow extends SMSListActivity {
     	
     	if (text != null && !text.equals("")) {
     		textIntent.putExtra(TextActivity.INITIAL_TEXT, text);
+    	}
+    	
+    	if (recipient != null) {
+    		textIntent.putExtra(TextActivity.FROM_ADDRESS, recipient);
     	}
     	
     	startActivity(textIntent);
@@ -316,9 +319,10 @@ public class MainChatWindow extends SMSListActivity {
 			 */
 			@Override
 			protected void onPostExecute(ContactInfo result) {
-				////////////////////////////////
-				//TODO Code to set recipient
-				////////////////////////////////
+				recipient = result.getPhoneNumber();
+
+				// TODO handle getting the better visible version
+		    	textTop.setText(recipient);
 			}
 		};
 
