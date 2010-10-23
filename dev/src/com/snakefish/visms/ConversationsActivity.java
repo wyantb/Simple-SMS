@@ -83,8 +83,9 @@ public class ConversationsActivity extends SMSListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, COMPOSE_ID, 0, R.string.compose);
-		menu.add(0, SETTINGS_ID, 0, R.string.settings);
+//		menu.add(0, SETTINGS_ID, 0, R.string.settings);
+		Intent i = new Intent(this, OptionsList.class);
+		startActivity(i);
 		return result;
 	}
 
@@ -99,9 +100,6 @@ public class ConversationsActivity extends SMSListActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case COMPOSE_ID:
-			doCompose();
-			return true;
 		case SETTINGS_ID:
 			Log.v("ConversationsActivity", "Starting OptionsList...");
 			Intent options = new Intent(this, OptionsList.class);
@@ -175,7 +173,7 @@ public class ConversationsActivity extends SMSListActivity {
 	/**
 	 * Delete a conversation.
 	 * @param id the thread_id of the conversation to delete
-	 * @return true if deleted, otherwise falses
+	 * @return true if deleted, otherwise false
 	 */
 	private boolean deleteConvo(long id) {
 		boolean deleted = mDbHelper.deleteThread(id);

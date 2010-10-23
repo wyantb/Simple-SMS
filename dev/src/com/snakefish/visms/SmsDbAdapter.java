@@ -77,7 +77,7 @@ public class SmsDbAdapter {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
-			db.execSQL("DROP TABLE IF EXISTS notes");
+			db.execSQL("DROP TABLE IF EXISTS inbox");
 			onCreate(db);
 		}
 	}
@@ -270,8 +270,10 @@ public class SmsDbAdapter {
 		} else {
 			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
 					null, KEY_THREADID, "MAX(" + KEY_THREADID + ")", null);
-			if (c.moveToFirst()) {
-				return c.getInt(0) + 1;
+			if (c.getCount() == 0) {
+				return 0;
+			} else if (c.moveToFirst()) {
+				return c.getInt(c.getColumnIndex(KEY_THREADID)) + 1;
 			} else {
 				Log.e(this.toString(),
 						"Could not find thread id corresponding to given address: "
