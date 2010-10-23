@@ -134,6 +134,8 @@ public class IncomingMessage extends SMSActivity {
 		// Puts the thread id in for MainChatWindow
 		vText.putExtra(MainChatWindow.THREAD_ID, getThreadId());
 		
+		vText.putExtra(MainChatWindow.LAST_MESSAGE, actualMessage);
+		
 		//Starts the activity
 		startActivity(vText);
 	}
@@ -166,12 +168,11 @@ public class IncomingMessage extends SMSActivity {
     
     private void parseMessageData(Intent intent) {
     	String displayName = null;
-    	String message = null;
     	long timeSent = -1;
     	
     	fromAddress = intent.getStringExtra(SMS_FROM_ADDRESS_EXTRA);
     	displayName = intent.getStringExtra(SMS_FROM_DISPLAY_NAME_EXTRA);
-    	message = intent.getStringExtra(SMS_MESSAGE_EXTRA);
+    	actualMessage = intent.getStringExtra(SMS_MESSAGE_EXTRA);
     	timeSent = intent.getLongExtra(SMS_TIME_SENT_EXTRA, -1) / 1000;
     	
     	// Deal with the database
@@ -182,8 +183,8 @@ public class IncomingMessage extends SMSActivity {
     		threadId = dbHelper.getThreadId(fromAddress);
     	}
     	
-    	if (fromAddress != null && message != null) {
-    		dbHelper.addMsg(threadId, fromAddress, 1, timeSent, message);
+    	if (fromAddress != null && actualMessage != null) {
+    		dbHelper.addMsg(threadId, fromAddress, 1, timeSent, actualMessage);
     	}
     	// End database dealing
     	

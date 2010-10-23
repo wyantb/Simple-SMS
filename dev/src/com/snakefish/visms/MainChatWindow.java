@@ -39,12 +39,15 @@ public class MainChatWindow extends SMSListActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
+    public static final String LAST_MESSAGE = "com.snakefish.LAST_MESSAGE";
+    
 	private static final int PICK_CONTACT_REQUEST = 1;
     private TextView textTop;
     private Button compose;
     private Button contactChooser;
     private SmsDbAdapter mDbHelper;
     private String recipient;
+    private String lastMessage;
     private ContactInfo contactResult;
     private int threadId;
 
@@ -104,7 +107,8 @@ public class MainChatWindow extends SMSListActivity {
     protected void populateConversationList(Intent intent) {
         
     		if (intent != null) {
-    	        
+    	        	this.lastMessage = intent.getStringExtra(LAST_MESSAGE);
+    	        	
     	    		int threadID = intent.getIntExtra(THREAD_ID,-1);
     				this.threadId = threadID;
     	    		
@@ -147,6 +151,8 @@ public class MainChatWindow extends SMSListActivity {
 
 	public boolean processVoice(VoiceCommand command) {
     	
+		Log.v("MainChatWindow", "Processing voice in window.");
+		
     	if (command.getType() == CommandAction.READ) {
     		if (threadId != -1) {
 
@@ -167,6 +173,8 @@ public class MainChatWindow extends SMSListActivity {
     	}
     	if (command.getType() == CommandAction.REPLY ||
     			command.getType() == CommandAction.COMPOSE) {
+    		Log.v("MainChatWindow", "Doing reply on voice command.");
+    		
     		doReply(command.getTextGroup());
     		
     		return true;
@@ -183,7 +191,6 @@ public class MainChatWindow extends SMSListActivity {
     private class OnContactListener implements OnClickListener {
 
 		public void onClick(View arg0) {
-			compose.setEnabled(true);
 			startActivityForResult(getContactIntent(), PICK_CONTACT_REQUEST);
 		}
     	
@@ -226,6 +233,10 @@ public class MainChatWindow extends SMSListActivity {
     
     private String[] grabLastData() {
     	// TODO don't be a prick about DB access
+    	if (lastMessage != null) {
+    		return new String[] { "Jason", lastMessage};
+    	}
+    	
     	if (threadId != -1) {
     		Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
     		boolean didLast = c.moveToLast();
@@ -261,6 +272,8 @@ public class MainChatWindow extends SMSListActivity {
 		}else {
 			Log.e("MainChatWindow", "Error choosing contact");
 		}
+		
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	/**
@@ -322,7 +335,16 @@ public class MainChatWindow extends SMSListActivity {
 				recipient = result.getPhoneNumber();
 
 				// TODO handle getting the better visible version
-		    	textTop.setText(recipient);
+				if (recipient != null && !recipient.equals("")) {
+					contactChooser.setVisibility(View.GONE);
+					compose.setEnabled(true);
+					textTop.setVisibility(View.VISIBLE);
+
+					textTop.setText(recipient);
+				}
+				else {
+					speak("That contact has no number", SpeechType.INFO);
+				}
 			}
 		};
 

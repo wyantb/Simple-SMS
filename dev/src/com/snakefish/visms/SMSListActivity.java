@@ -5,6 +5,7 @@ import com.snakefish.feedback.SMSBase;
 import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SMSDelegateCallback;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,22 +20,10 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		
 		this.xmlResId = xmlResId;
 	}
-
-    public void setHidden(Object o) {
-    	if (delegate != null) {
-    		delegate.setHidden(o);
-    	}
-    }
     
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		delegate = new SMSDelegate(this, this, xmlResId);
-		delegate.setHidden(getLastNonConfigurationInstance());
-		delegate.onCreate(savedInstanceState);
-	}
-    
+	/**
+	 * Something of a subversion: if they click search, we accept voice input.
+	 */
     @Override
     public boolean onSearchRequested() {
     	if (delegate != null) {
@@ -50,6 +39,29 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
     		delegate.onActivityResult(requestCode, resultCode, data);
     	}
     }
+    
+    public void finishFromChild(Activity activity) {
+    	if (delegate != null) {
+    		delegate.finishFromChild(activity);
+    	}
+    	
+    	super.finishFromChild(activity);
+    }
+    
+    public void setHidden(Object o) {
+    	if (delegate != null) {
+    		delegate.setHidden(o);
+    	}
+    }
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		delegate = new SMSDelegate(this, this, xmlResId);
+		delegate.setHidden(getLastNonConfigurationInstance());
+		delegate.onCreate(savedInstanceState);
+	}
 	
 	public void onInit(int arg0) {
 		if (delegate != null) {

@@ -39,6 +39,14 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
     	}
     }
     
+    public void finishFromChild(Activity activity) {
+    	if (delegate != null) {
+    		delegate.finishFromChild(activity);
+    	}
+    	
+    	super.finishFromChild(activity);
+    }
+    
     public void setHidden(Object o) {
     	if (delegate != null) {
     		delegate.setHidden(o);

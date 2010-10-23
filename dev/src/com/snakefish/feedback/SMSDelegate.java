@@ -48,6 +48,8 @@ public class SMSDelegate implements SMSBase {
 	}
 	
 	public boolean onSearchRequested() {
+		Log.v("SMSDelegate", "User pressed search.");
+		
 		PackageManager pm = callback.getPackageManager();
 		List<ResolveInfo> activities = pm.queryIntentActivities(
 				new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH), 0);
@@ -102,6 +104,8 @@ public class SMSDelegate implements SMSBase {
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Log.v("SMSDelegate", "onActivityResult(int, int, Intent)");
+		
 		if (requestCode == VOICE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			List<String> matched = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			
@@ -123,6 +127,11 @@ public class SMSDelegate implements SMSBase {
 		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {
 			speak(speechPack.getIntro(), SpeechType.INTRO, true);
 		}
+	}
+	
+	public void finishFromChild(Activity child) {
+		Log.v("SMSDelegate", "Returned from child.");
+		speak(speechPack.getIntro(), SpeechType.INTRO);
 	}
 	
 	public boolean handleCommand(VoiceCommand command) {
