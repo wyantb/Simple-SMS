@@ -2,7 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent" android:layout_marginBottom="5sp">
+	
+	<Button android:id="@+id/btnHeadphones"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:longClickable="false" android:clickable="true" android:text="@string/headphones" />  -->
 
+	<!-- 	
+	<CheckBox android:id="@+id/btnHeadPhones"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft = "80sp"
+        android:text="Headphones            "
+        android:textSize="28sp"
+        android:textColor = "#000000"
+        android:background = "#FFFFFF"
+         /> -->
+        
+	<Button android:id="@+id/btnFontUp"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:longClickable="false" android:clickable="true" android:text="@string/font_up" />
+		
+	<Button android:id="@+id/btnFontDown"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:longClickable="false" android:clickable="true" android:text="@string/font_down" />
+		
+	<Button android:id="@+id/btnColorScheme"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		android:longClickable="false" android:clickable="true" android:text="@string/color_scheme" />
+	
 	<ListView android:id="@android:id/list" android:layout_width="fill_parent"
 		android:layout_height="fill_parent">
 	</ListView>
