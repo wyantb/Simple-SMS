@@ -125,7 +125,7 @@ public class MainChatWindow extends SMSListActivity {
     	    		    	textTop.setText(recipient);
     	    		    }
     	    		    
-    					setListAdapter(new ConversationAdapter(this, c));
+//HAD TO CHANGE TO MERGE    					setListAdapter(new ConversationAdapter(this, c));
     					
     	    		    
     	    		    contactChooser.setVisibility(View.GONE);
