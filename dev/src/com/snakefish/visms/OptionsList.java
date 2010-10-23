@@ -1,6 +1,7 @@
 package com.snakefish.visms;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -73,8 +74,8 @@ public class OptionsList extends SMSListActivity {
 		//Adds listeners to the buttons
 		btnHeadphones.setOnClickListener(new HeadphonesListener());
 		btnFontUp.setOnClickListener(new FontSizeListener(1));
-		btnHeadphones.setOnClickListener(new FontSizeListener(-1));
-		btnHeadphones.setOnClickListener(new ColorListener());
+		btnFontDown.setOnClickListener(new FontSizeListener(-1));
+		btnColorScheme.setOnClickListener(new ColorListener());
 		
 		/*
 		//Sets the CharSequence to a null value without using null
@@ -113,8 +114,8 @@ public class OptionsList extends SMSListActivity {
 		}*/
 		
 		
-		//setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
-			//OPTIONS));
+		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
+			new String[0]));
 	}
 
 	/**
@@ -167,7 +168,9 @@ public class OptionsList extends SMSListActivity {
 		 * Called when the button is clicked
 		 */
 		public void onClick(View v) {
-			speak("headphones toggled", SpeechType.INFO, false);
+			Log.v("OptionsList", "Headphones toggled");
+			
+			speak("Headphones toggled", SpeechType.INFO, false);
 			// Calls the do work function
 			doWork();
 			

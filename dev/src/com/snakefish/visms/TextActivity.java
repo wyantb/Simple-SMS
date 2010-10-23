@@ -115,8 +115,11 @@ public class TextActivity extends SMSActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		Intent i = new Intent(this, OptionsList.class);
+		startActivity(i);
+		
 		boolean result = super.onCreateOptionsMenu(menu);
-		menu.add(0, SETTINGS_ID, 0, R.string.settings);
+		//menu.add(0, SETTINGS_ID, 0, R.string.settings);
 		return result;
 	}
 
