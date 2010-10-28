@@ -269,7 +269,7 @@ public class SmsDbAdapter {
 
 	public int getThreadId(String address) {
 		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID },
-				KEY_ADDRESS + "='" + address + "'", null, null, null, null);
+				KEY_ADDRESS + "=" + address, null, null, null, null);
 
 		boolean hasFirst = c.moveToFirst();
 
@@ -277,7 +277,7 @@ public class SmsDbAdapter {
 			return c.getInt(0);
 		} else {
 			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
-					null, KEY_THREADID, "MAX(" + KEY_THREADID + ")", null);
+					null, null, null, KEY_THREADID + " desc");
 			if (c.getCount() == 0) {
 				return 0;
 			} else if (c.moveToFirst()) {
