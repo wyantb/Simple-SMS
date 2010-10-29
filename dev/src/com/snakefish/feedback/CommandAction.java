@@ -8,12 +8,14 @@ import android.util.Log;
 public enum CommandAction {
 	
 	// OPTIONS
-	HEADPHONES_TOGGLE("headphones", true),
-	HEADPHONES_ON("headphones (required|on|yes)", true),
-	HEADPHONES_OFF("headphones (not required|off|no)", true),
+	HEADPHONES_TOGGLE("headphones|headphone", true),
+	HEADPHONES_ON("headphones|headphone (required|on|yes)", true),
+	HEADPHONES_OFF("headphones|headphone (not required|off|no)", true),
 	TEXT_UP("text (increase|up)", true),
 	TEXT_DOWN("text (decrease|down)", true),
 	OPTIONS("((options( menu)*)|(settings( menu)*))", true),
+	BACK("back", true),
+	EXIT("exit", true),
 	// END OPTIONS
 	
 	// GLOBAL COMMANDS
@@ -38,7 +40,7 @@ public enum CommandAction {
 	READ("(read|speak|say|open|display|repeat|play)\\s?(.*)", true, 2),
 
 	// 'snakefish send hey what's up'
-	SEND("send\\s?(.*)", true, 1),
+	SEND("send|sent\\s?(.*)", true, 1),
 	
 	// 'snakefish ignore'
 	IGNORE("(ignore|discard|delete)\\s?(message)*", true),

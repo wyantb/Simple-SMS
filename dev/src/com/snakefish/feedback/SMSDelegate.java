@@ -167,6 +167,15 @@ public class SMSDelegate implements SMSBase {
 			speak("Textsize decreased", SpeechType.INFO);
 			return true;
 		}
+		if (command.getType() == CommandAction.EXIT) {
+			speak("Application hidden", SpeechType.INFO);
+			callback.moveTaskToBack(true);
+			return true;
+		}
+		if (command.getType() == CommandAction.BACK) {
+			callback.finish();
+			return true;
+		}
 		if (command.getType() == CommandAction.OPTIONS) {
 			Intent optionsIntent = new Intent();
 			optionsIntent.setClassName("com.snakefish.visms", 
