@@ -1,0 +1,245 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\*\generator Msftedit 5.41.21.2509;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\f0\fs22 Team Snakefish\par
+User Tests \par
+User response\par
+\b Test Case: User 1\par
+\b0 TEST 1: Read and reply to message (Voice)\par
+\tab - Replies to receiving a message: "Read"\tab\par
+\tab\tab\tab - Application did not respond.\par
+\tab\tab\tab - User held button and relesased it after talking. ** (when button is \tab\tab\tab\tab\tab held google will automatically do a voice search.) ******\par
+\tab\tab\tab - When user did not hold button the program worked correctly\par
+\tab - User replying to message: "Did not say reply" *MISTAKE ONE*\par
+\tab\tab\tab - Application response: Error Message\par
+\tab\tab\tab - User replied with : "Read, hey man"\par
+\tab\tab\tab - Application went to message screen\par
+\tab\tab\tab - User had message read back to them: "Read"\par
+\tab\tab\tab - Application read message correctly\par
+\tab\tab\tab - User tried to send message : "Send"\par
+\tab\tab\tab - Application throught he said "bend"\par
+\tab\tab\tab - User replied again with: "Send"\par
+\tab\tab\tab - Message was sent\par
+TEST 2: Change headphone option (Voice)\par
+\tab - User toggled correctly: "Command heaphone on"\par
+\tab - Application called error message: thought he said "heaven"\par
+\tab\tab *Note needs to accept headphone on*\par
+\tab - User applied again: "Headphones"\par
+\tab -Application toggled heaphones with correct voice reply\par
+TEST 3: Ignoring a message (Voice)\par
+\tab - User received message: "Ignore"\par
+\tab - Message was properly ignored\par
+TEST 4: Receiving and ignoring (GUI)\par
+\tab - User received the message\par
+\tab - Hit ignore with correct application response\par
+TEST 5: User sends a message\par
+\tab - User correctly opens up program and selects new message\par
+\tab - Correctly adds contact\par
+\tab - Goes to message screen\par
+\tab\tab ** NOTE: Read and send are not correct ** \par
+\tab - User correctly writes message\par
+\tab - User sends message\par
+TEST 6: User toggles headphones (GUI)\par
+\tab - Correctly opens options\par
+\tab - Correctly toggles headphones\par
+\b Test Case:User 2\b0\par
+TEST 1: Read and reply to message (Voice)\par
+\tab - Replies to receiving a message: "Read"\par
+\tab - Application hears "Raid"\par
+\tab - User replies again with "Read"\par
+\tab - Application goes to correct screen\par
+\tab - User replies and sends message \par
+\tab - Messages was sent correctly\par
+TEST 2: Change headphone option (Voice)\par
+\tab - User tries to change headphones: "headphones on"\par
+\tab - Application responds correctly\par
+TEST 3: Ignoring a message (Voice)\par
+\tab - User replies to message : "Ignore"\par
+\tab - Works correctly\par
+TEST 4: Receiving and ignoring (GUI)\par
+\tab - User receives message\par
+\tab - User ignores message (GUI)\par
+\tab - Application works correctly\par
+TEST 5: User sends a message\par
+\tab - User hits compose \par
+\tab - User selects contact\par
+\tab - Hits compose\par
+\tab - Correctly types message\par
+\tab - Sends message \par
+TEST 6: User toggles headphones (GUI)\par
+\tab - User correctly goes to options\par
+\tab - Toggles headphones\par
+\tab\tab ** NOTE: User was unaware if that meant headphones were on or off\par
+\b Test Case:User 3\par
+\b0 TEST 1: Read and reply to message (Voice)\par
+\tab - Replies to receiving a message: "Read"\par
+\tab - Application did not understand command\par
+\tab - Replies again "Read"\par
+\tab - Application works\par
+\tab - Goes to conversation screen through GUI\par
+\tab - User says: Compose\par
+\tab - Goes to message screen: User says "Hey man"\par
+\tab - User reads message over and sends message \par
+TEST 2: Change headphone option (Voice)\par
+\tab - User says "headphone"\par
+\tab - Application works correctly\par
+TEST 3: Ignoring a message (Voice)\par
+\tab - User receives message: "Ignore"\par
+\tab - Message ignored\par
+TEST 4: Receiving and ignoring (GUI)\par
+\tab - User receivese button\par
+\tab - User ignores message\par
+TEST 5: User sends a message\par
+\tab - User moves to conversation screen\par
+\tab - Selects contact\par
+\tab - Clicks compose\par
+\tab - Uses onscreen keyboard\par
+\tab\tab - Types message\par
+\tab - Sends message\par
+TEST 6: User toggles headphones (GUI)\par
+\tab - User brings up options and turns of headphones\par
+\tab - User suggests tutorial with a list of commands to help the user\par
+\b Test Case: User 4\par
+\b0 TEST 1: User receives a message \par
+\tab - User replies with: Read message\par
+\tab - Application works\par
+\tab - User says: Reply\par
+\tab - User repiles to message: "Hey man"\line\tab - User sends message: "Send"\par
+\tab - Application works\par
+TEST 2: Headphones option\par
+\tab - User states command: "Headphones off"\par
+\tab - Application turns off headphones\par
+TEST 3: Ignoring a message\par
+\tab - User says: "Read"\par
+\tab - User says: "Ignore"\par
+\tab - Message is ignored\par
+TEST 4: Headphones option (GUI)\par
+\tab - Completes tasks correctly\par
+TEST 5: Composing a new message(GUI)\par
+\tab - Correctly navigates to conversation screen and selects contact\par
+\tab - Easily sends a message\par
+TEST 6: Ignoring message(GUI)\par
+\tab - User correctly completes tasks\par
+\b Test Case: User 5\par
+\b0 TEST 1: Receive and reply to a message\line\tab - User says: "Read"\par
+\tab - Application gets "Raid"\par
+\tab - User says: "Read" \par
+\tab ***NOTE: Application could otn understand that he said read ***\line\tab - User tries to reply to message: "Compose"\par
+\tab ****NOTE user was unaware of the screen changes required to send message ****\par
+TEST 2: Headphones option\par
+\tab - User says: "Headphones on"\line\tab -Application works correctly\par
+TEST 3: Headphones (GUI)\line\tab - User opens menu\par
+\tab - User hits headphones\par
+TEST 4: Ignoring a message (GUI)\line\tab - User receives message\par
+\tab - User ignores message\par
+TEST 5: User composes a message (GUI)\par
+\tab - User clicks compose\par
+\tab - Selects contact\par
+\tab - Uses physical keyboard\par
+\tab - Sends message\par
+Test Case: User 6\par
+TEST 1:\tab User receives a messages\par
+\tab - User states: "Read"\par
+\tab - Application works correctly\par
+\tab - User states: "Reply"\par
+\tab - Program works correctly\par
+\tab - User states message, then says: "Send"\par
+\tab - Application works correctly\par
+TEST 2:\tab Headphones option\par
+\tab - User states: Headphones\par
+\tab - Application works correctly\par
+TEST 3: Ignore message\par
+\tab - User says: "Ignore, Ignore"\par
+\tab - Application works\par
+TEST 4:\tab Compose a new message (GUI)\par
+\tab - User hits compose\par
+\tab - Chooses contact\par
+\tab - Hits compose\par
+\tab - Types message, using onscreen keyboard\par
+\tab - Sends message\par
+TEST 5: Headphones option (GUI)\par
+\tab - Task completed correctly\par
+\tab - ***Note: User confused by the changes in menu button locations*****\par
+TEST 6:\tab Ignoring a message (GUI)\par
+\tab - User received message\par
+\tab - User responded correctly\par
+\b Test Case: User 7\par
+\b0 TEST 1: Responding to a text message (Voice)\par
+\tab - User receives message\par
+\tab - User states: Read\par
+\tab ** NOTE: Application voice commands will not work on wi-fi **\par
+\tab - Application understood: "Read"\par
+\tab - User says: "Read"\par
+\tab - Application responds correctly\par
+\tab - User states: "Reply"\par
+\tab - Application works correctly\par
+\tab - User states message\par
+\tab\tab - User does not seem to struggle with commands\par
+\tab - User tries to say: "Read"\par
+\tab - Application does not understand read\par
+\tab - User states: "Send"\par
+\tab - Application works correctly\par
+TEST 2: Headphones Option (Voice)\par
+\tab - User states: "Headphones"\par
+\tab - Application responds correctly\par
+\tab **NOTE: Users are having a hard time understanding if settings can be changed from \tab\tab\tab any screen **\par
+\tab **NOTE: There is no exit or back function**\par
+TEST 3: Ignoring a message (Voice)\par
+\tab - User receives message\par
+\tab - User states: "Ignore"\par
+\tab - Background noise gets picked up by application\par
+\tab - User states: "Ignore"\par
+\tab - Application responds correctly\par
+TEST 4: Ignoring a message (GUI)\par
+\tab - User receives message\par
+\tab - User ignores message\par
+TEST 5: Headphones Option (GUI)\par
+\tab - User opens application\par
+\tab - User goes to options screen\par
+\tab - User toggles headphones\par
+\tab - Application works correctly\par
+TEST 6: Responding to a message (GUI)\par
+\tab - User selects compose\par
+\tab - Application works correctly\par
+\tab - User selects contact\par
+\tab - Application works correctly\par
+\tab - User enters message through onscreen keyboard\par
+\tab **NOTE: User was unaware of how to get on screen keyboard to show, or how to exit \tab\tab keyboard ***\par
+\tab **NOTE: User said testing was easiest we have yet to done\par
+\b Test Case: User 8\par
+\b0 TEST 1: Receiving and responding to a message (Voice)\par
+\tab - User receives a message\par
+\tab - User states: "Read message"\par
+\tab - Application works correctly\par
+\tab - User states: "Reply"\par
+\tab - Application works correctly\par
+\tab - User states response messge\par
+\tab - Application works correctly\par
+\tab - User states: "Read message"\par
+\tab - Application responds correctly\par
+\tab - User states: "Send message"\par
+\tab - Application works correctly\par
+TEST 2: Headphones Option (Voice)\par
+\tab - User states: "Headphones on"\par
+\tab -Application responds correctly\par
+TEST 3: Ignoring a message (Voice)\par
+\tab - User receives message\par
+\tab - User states: "Ignore"\par
+\tab -Application responds correctly\par
+TEST 4: Ignoring a message (GUI)\par
+\tab -  User receives message\par
+\tab - User clicks ignore\par
+\tab - Application works correctly\par
+TEST 5: Headphones option (GUI)\par
+\tab - User hits menu button\par
+\tab - Use clicks headphones button\par
+\tab - Application responds correctly\par
+TEST 6: Receiving and responding to a message (GUI)\par
+\tab - User opens application\par
+\tab - User clicks compose\par
+\tab - User selects contact\par
+\tab - All processes work correctly with application\par
+\tab - User moves to message screen \par
+\tab - User types message (Onscreen keyboard)\par
+\tab - User sends message\par
+\tab - All processes work correctly with the application\par
+}
+ 
