@@ -19,6 +19,7 @@ import android.util.Log;
 public class SMSDelegate implements SMSBase {
 
 	public static String SNAKEFISH_KEYWORD = "snakefish";
+	public static boolean headphoneOption = false;
 	
 	private static final int VOICE_REQUEST_CODE = 1234112;
 	
@@ -148,15 +149,25 @@ public class SMSDelegate implements SMSBase {
 			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_TOGGLE) {
-			speak("Headphones toggled", SpeechType.INFO);
+			headphoneOption = !headphoneOption;
+			
+			if (headphoneOption) {
+				speak("Headphones on", SpeechType.INFO);
+			}
+			else {
+				speak("Headphones off", SpeechType.INFO);
+			}
+			
 			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_OFF) {
 			speak("Headphones off", SpeechType.INFO);
+			headphoneOption = false;
 			return true;
 		}
 		if (command.getType() == CommandAction.HEADPHONES_ON) {
 			speak("Headphones on", SpeechType.INFO);
+			headphoneOption = true;
 			return true;
 		}
 		if (command.getType() == CommandAction.TEXT_DOWN) {
