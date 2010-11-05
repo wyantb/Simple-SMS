@@ -190,8 +190,8 @@ public class TextActivity extends SMSActivity {
     	try {
     		for (String message : messages) {
     			dbHelper.addMsg(threadId, toAddress, -1, System.currentTimeMillis() / 1000, message);
-    			//sms.sendTextMessage(recipient, null, message, 
-    			//		PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
+    			sms.sendTextMessage(recipient, null, message, 
+    					PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
     		}
     	}
     	catch (Exception e) {
