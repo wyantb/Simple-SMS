@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.snakefish.feedback.CommandAction;
+import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
 
@@ -168,9 +169,17 @@ public class OptionsList extends SMSListActivity {
 		 * Called when the button is clicked
 		 */
 		public void onClick(View v) {
+			SMSDelegate.headphoneOption = !SMSDelegate.headphoneOption;
+			
+			if (SMSDelegate.headphoneOption) {
+				speak("Headphones on", SpeechType.INFO, false);
+			}
+			else {
+				speak("Headphones off", SpeechType.INFO, false);
+			}
+			
 			Log.v("OptionsList", "Headphones toggled");
 			
-			speak("Headphones toggled", SpeechType.INFO, false);
 			// Calls the do work function
 			doWork();
 			
