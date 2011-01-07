@@ -118,7 +118,7 @@ public class OptionsList extends SMSListActivity {
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
 			new String[0]));
 	}
-
+	
 	/**
 	 * Method used to process voice commands for the current screen. Voice
 	 * commands will consist allow users to edit each option and can be found in

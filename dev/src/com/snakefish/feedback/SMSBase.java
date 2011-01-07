@@ -27,12 +27,11 @@ public interface SMSBase extends TextToSpeech.OnInitListener {
 	public boolean onSearchRequested();
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
+	public void startActivity(Intent intent);
 	
 	public void setHidden(Object o);
 	
 	public Object onRetainNonConfigurationInstance();
-	
-	public void finishFromChild(Activity child);
 	
 	public void onCreate(Bundle savedInstanceState);
 	public void onStart();

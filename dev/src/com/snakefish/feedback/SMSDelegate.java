@@ -22,6 +22,7 @@ public class SMSDelegate implements SMSBase {
 	public static boolean headphoneOption = false;
 	
 	private static final int VOICE_REQUEST_CODE = 1234112;
+	private static final int ACTIVITY_START_CODE = 1251;
 	
 	@Deprecated
 	public static boolean HEADPHONES_REQUIRED = false;
@@ -33,10 +34,14 @@ public class SMSDelegate implements SMSBase {
 	private List<String> queuedMessages;
 	private boolean isHidden;
 	
+	/** Need a number to tell screens apart.  Why not speech id? */
+	private int screenModifier;
+	
 	public SMSDelegate(SMSDelegateCallback callback, Activity context, int xmlResId) {
 		this.tts = new TextToSpeech(context, this);
 		this.smsCallback = callback;
 		this.callback = context;
+		this.screenModifier = xmlResId;
 		
 		speechPack = new SpeechPack(context, xmlResId);
 		
@@ -125,14 +130,13 @@ public class SMSDelegate implements SMSBase {
 				speak("Unrecognized string was: " + spokenWords, SpeechType.INFO, false);
 			}
 		}
-		else if (requestCode == Activity.RESULT_OK || requestCode == Activity.RESULT_FIRST_USER) {
+		else if (requestCode == (ACTIVITY_START_CODE + screenModifier)){
 			speak(speechPack.getIntro(), SpeechType.INTRO, true);
 		}
 	}
 	
-	public void finishFromChild(Activity child) {
-		Log.v("SMSDelegate", "Returned from child.");
-		speak(speechPack.getIntro(), SpeechType.INTRO);
+	public void startActivity(Intent intent) {
+		callback.startActivityForResult(intent, ACTIVITY_START_CODE + screenModifier);
 	}
 	
 	public boolean handleCommand(VoiceCommand command) {

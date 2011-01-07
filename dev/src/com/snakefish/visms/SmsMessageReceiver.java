@@ -13,31 +13,31 @@ import android.util.Log;
 public class SmsMessageReceiver extends BroadcastReceiver {
 
 	private static final String LOG = "SmsMessageReceiver";
-	
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		Bundle extras = intent.getExtras();
-		
+
 		// If there's no messages...
 		if (extras == null) {
 			return;
 		}
-		
+
 		// Sanity check, what we get better be an Object[]
 		if (!(extras.get("pdus") instanceof Object[])) {
 			Log.w(LOG, "Received extras not text messages?");
 			return;
 		}
-		
+
 		Object[] pdus = (Object[]) extras.get("pdus");
-		
+
 		for (int i = 0; i < pdus.length; i++) {
 			SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
 			String fromAddress = message.getOriginatingAddress();
 			long timeSent = message.getTimestampMillis();
-			
+
 			String displayName = getDisplayName(context, fromAddress);
-			
+
 			if (i == 0) {
 				Intent newMessageIntent = new Intent();
 				newMessageIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.IncomingMessage");
@@ -50,7 +50,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 				newMessageIntent.putExtra(IncomingMessage.SMS_MESSAGE_EXTRA, message.getMessageBody().toString());
 
 				context.startActivity(newMessageIntent);
-				
+
 				break;
 			}
 			else {
@@ -58,7 +58,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 			}
 		}
 	}
-	
+
 	/**
 	 * Talk to contacts db, etc, in order to try to find out who
 	 *  sent us this message, instead of just displaying phone number.
@@ -66,7 +66,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 	 */
 	public String getDisplayName(Context context, String fromAddress) {
 		String fromDisplayName = fromAddress;
-		
+
 		Uri uri;
 		String[] projection;
 
@@ -87,7 +87,7 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 
 			cursor.close();
 		}
-		
+
 		return fromDisplayName;
 	}
 

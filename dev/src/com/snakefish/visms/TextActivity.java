@@ -117,25 +117,7 @@ public class TextActivity extends SMSActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Intent i = new Intent(this, OptionsList.class);
 		startActivity(i);
-		
-		boolean result = super.onCreateOptionsMenu(menu);
-		//menu.add(0, SETTINGS_ID, 0, R.string.settings);
-		return result;
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		
-		case SETTINGS_ID:
-			Intent options = new Intent(this, OptionsList.class);
-			options.setClassName("com.snakefish.visms",
-					"com.snakefish.visms.OptionsList");
-			startActivity(options);
-			return true;
-		}
-		
-		return super.onMenuItemSelected(featureId, item);
+		return false;
 	}
     
     @Override

@@ -82,11 +82,9 @@ public class ConversationsActivity extends SMSListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-//		menu.add(0, SETTINGS_ID, 0, R.string.settings);
 		Intent i = new Intent(this, OptionsList.class);
 		startActivity(i);
-		return result;
+		return false;
 	}
 
 	@Override
@@ -95,18 +93,6 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, OPEN_ID, 0, R.string.open);
 		menu.add(0, DELETE_ID, 0, R.string.delete);
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case SETTINGS_ID:
-			Log.v("ConversationsActivity", "Starting OptionsList...");
-			Intent options = new Intent(this, OptionsList.class);
-			startActivity(options);
-			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	@Override
