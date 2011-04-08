@@ -63,8 +63,8 @@ public class IncomingMessage extends SMSActivity {
     }
     
     /**
-     * This method will process the voice command and turn it into 
-     * a command for the application
+     * This method will process a voice command and turn it into 
+     *  a command for this specific screen.
      */
 	public boolean processVoice(VoiceCommand command) {
     	/** These commands may be updated at a later time */
@@ -197,36 +197,6 @@ public class IncomingMessage extends SMSActivity {
     	}
     	
     }
-    
-    /**
-     * The pop up menu that allows the user to adjust
-     * the setting of the application
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		Intent i = new Intent(this, OptionsList.class);
-		startActivity(i);
-		
-        boolean result = super.onCreateOptionsMenu(menu);
-        //menu.add(0, Menu.FIRST, 0, R.string.settings);
-        return result;
-    }
-    
-    /**
-     * Sets up the options button
-     */
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case SETTINGS_POSITION:
-			Intent options = new Intent();
-			options.setClassName("com.snakefish.visms",
-					"com.snakefish.visms.OptionsList");
-			startActivity(options);
-			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
-	}
 
     /**
      * Pauses incoming message

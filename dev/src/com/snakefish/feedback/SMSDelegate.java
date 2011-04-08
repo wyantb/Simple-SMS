@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+import com.snakefish.visms.OptionsList;
+
 
 import android.app.Activity;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.view.Menu;
 
 public class SMSDelegate implements SMSBase {
 
@@ -102,6 +105,13 @@ public class SMSDelegate implements SMSBase {
 	
 	public void speak(String text) {
 		speak(text, SpeechType.PERSONAL, false);
+	}
+	
+	public boolean onCreateOptionsMenu(Menu menu) {
+		Intent i = new Intent(callback, OptionsList.class);
+		callback.startActivity(i);
+		
+		return false;
 	}
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {

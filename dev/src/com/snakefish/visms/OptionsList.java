@@ -2,16 +2,11 @@ package com.snakefish.visms;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
@@ -56,6 +51,11 @@ public class OptionsList extends SMSListActivity {
 	static final String[] OPTIONS = { "Headphones", "Text Size +",
 			"Text Size -", "Color Scheme" };
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return false;
+	}
+	
 	/**
 	 * Creates the options screen. The Android on create method used for all
 	 * screen changes
@@ -179,46 +179,6 @@ public class OptionsList extends SMSListActivity {
 			}
 			
 			Log.v("OptionsList", "Headphones toggled");
-			
-			// Calls the do work function
-			doWork();
-			
-		}
-
-		/**
-		 * The doWork method for the headphones listener. Determines if the
-		 * headphones option was set to true or false. If set to true once the
-		 * button is clicked headphones will be set to false. If set to false
-		 * once clicked the headphones option will be set to true.
-		 */
-		public void doWork() {
-			/*
-			// Headphones are turned off
-			if (headphones == false) {
-				// Headphones are turned on
-				headphones = true;
-				// Calls the headphones_on method
-				headphones_on();
-			} else {
-				// Turns headphones off
-				headphones = false;
-				// Calls the headphones_off method
-				headphones_off();
-			} */
-		}
-
-		/**
-		 * Method used to turn off headphones
-		 */
-		public void headphones_off() {
-			// TODO add functionality to turn off headphones
-		}
-
-		/**
-		 * Method used to turn on headphones
-		 */
-		public void headphones_on() {
-			// TODO Add functionality to turn on headphones
 		}
 	}
 
@@ -244,19 +204,9 @@ public class OptionsList extends SMSListActivity {
 		
 		/**
 		 * The onClick method used for the listener.
-		 * Calls the doWork method
 		 */
 		public void onClick(View v) {
-			// Calls the doWork method
-			doWork();
-		}
-
-		/**
-		 * The doWork method for the font size listener.
-		 * 
-		 */
-		public void doWork() {
-			// TODO Should there be a pop up screen here or another option
+			
 		}
 	}
 

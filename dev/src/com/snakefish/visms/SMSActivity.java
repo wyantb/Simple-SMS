@@ -8,6 +8,7 @@ import com.snakefish.feedback.SMSDelegateCallback;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 
 public abstract class SMSActivity extends Activity implements SMSBase, SMSDelegateCallback {
 
@@ -33,12 +34,18 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
     }
     
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	return delegate.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (delegate != null) {
     		delegate.onActivityResult(requestCode, resultCode, data);
     	}
     }
     
+    @Override
     public void finishFromChild(Activity activity) {
     	if (delegate != null) {
     		delegate.finishFromChild(activity);
@@ -138,5 +145,4 @@ public abstract class SMSActivity extends Activity implements SMSBase, SMSDelega
 		
 		super.onDestroy();
 	}
-
 }

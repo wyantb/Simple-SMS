@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 
 public abstract class SMSListActivity extends ListActivity implements SMSBase, SMSDelegateCallback  {
 
@@ -34,12 +35,18 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
     }
     
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+    	return delegate.onCreateOptionsMenu(menu);
+    }
+    
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     	if (delegate != null) {
     		delegate.onActivityResult(requestCode, resultCode, data);
     	}
     }
     
+    @Override
     public void finishFromChild(Activity activity) {
     	if (delegate != null) {
     		delegate.finishFromChild(activity);
@@ -139,5 +146,4 @@ public abstract class SMSListActivity extends ListActivity implements SMSBase, S
 		
 		super.onDestroy();
 	}
-
 }

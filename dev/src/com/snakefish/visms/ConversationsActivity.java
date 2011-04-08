@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -18,21 +19,32 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.VoiceCommand;
 
+/**
+ * The default entry point into the SMS application.
+ * 
+ * Contains a list of all threads that the user can choose,
+ *   in order to converse with the person in that thread.
+ *   
+ * Alternately, can compose a new message from this screen.
+ * 
+ */
 public class ConversationsActivity extends SMSListActivity {
-	/** The user who you are communicating with */
-	public static final String CONVERSATION_CONTACT = "com.snakefish.CONTACT";
 
 	public static final int COMPOSE_ID = Menu.FIRST;
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
 	private SmsDbAdapter mDbHelper;
-	private TextView btnCompose;
+	private Button btnCompose;
 
 	public ConversationsActivity() {
 		super(R.xml.conv_speech);
 	}
 
+    /**
+     * This method will process a voice command and turn it into 
+     *  a command for this specific screen.
+     */
 	public boolean processVoice(VoiceCommand command) {
 
 		if (command.getType() == CommandAction.COMPOSE) {
@@ -40,9 +52,6 @@ public class ConversationsActivity extends SMSListActivity {
 			
 			return true;
 		}
-		// TODO view/read
-		// In these cases, view *some* thread,
-		//  and read the last in *some* thread
 
 		return false;
 	}
@@ -53,40 +62,15 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.convo_list);
 
-		btnCompose = (TextView) findViewById(R.id.btnCompose);
+		btnCompose = (Button)findViewById(R.id.btnCompose);
 
 		btnCompose.setOnClickListener(new ComposeClickListener());
 
 		mDbHelper = new SmsDbAdapter(this);
 		mDbHelper.open();
 
-		// TODO remove this shit
-		// **TESTING DATABASE, REMOVE WHEN DONE
-		// Adding dummy conversations to db
-		// mDbHelper.deleteInbox();
-		// mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456244,
-		// "Yo what's up?");
-		// mDbHelper.addMsg(1, "1-570-400-0104", 1, 1286456844, "R u thar?");
-		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551147,
-		// "Are you done yet?");
-		// mDbHelper.addMsg(2, "1-555-867-5309", 0, 1286551207,
-		// "I'm workin' on it.");
-		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551230, "Hurry up!");
-		// mDbHelper.addMsg(2, "1-203-733-8028", 2, 1286551288,
-		// "Dammit Jim, send me the right fucking thread id.");
-		// ** TESTING DATABASE, REMOVE WHEN DONE
-
 		fillInbox();
 		registerForContextMenu(getListView());
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		boolean result = super.onCreateOptionsMenu(menu);
-//		menu.add(0, SETTINGS_ID, 0, R.string.settings);
-		Intent i = new Intent(this, OptionsList.class);
-		startActivity(i);
-		return result;
 	}
 
 	@Override
@@ -95,18 +79,6 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, OPEN_ID, 0, R.string.open);
 		menu.add(0, DELETE_ID, 0, R.string.delete);
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		case SETTINGS_ID:
-			Log.v("ConversationsActivity", "Starting OptionsList...");
-			Intent options = new Intent(this, OptionsList.class);
-			startActivity(options);
-			return true;
-		}
-		return super.onMenuItemSelected(featureId, item);
 	}
 
 	@Override

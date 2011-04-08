@@ -1,16 +1,11 @@
 package com.snakefish.visms;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -20,19 +15,10 @@ import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-
-import com.snakefish.feedback.CommandAction;
-import com.snakefish.feedback.SpeechType;
-import com.snakefish.feedback.VoiceCommand;
 
 
 public class MainChatWindow extends SMSListActivity {
@@ -48,7 +34,6 @@ public class MainChatWindow extends SMSListActivity {
     private SmsDbAdapter mDbHelper;
     private String recipient;
     private String lastMessage;
-    private ContactInfo contactResult;
     private int threadId;
 
     
@@ -77,31 +62,6 @@ public class MainChatWindow extends SMSListActivity {
         
         populateConversationList(getIntent());
     }
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		Intent i = new Intent(this, OptionsList.class);
-		startActivity(i);
-		
-		boolean result = super.onCreateOptionsMenu(menu);
-		//menu.add(0, SETTINGS_ID, 0, R.string.settings);
-		return result;
-	}
-
-	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (item.getItemId()) {
-		
-		case SETTINGS_ID:
-			Intent options = new Intent(this, OptionsList.class);
-			options.setClassName("com.snakefish.visms",
-					"com.snakefish.visms.OptionsList");
-			startActivity(options);
-			return true;
-		}
-		
-		return super.onMenuItemSelected(featureId, item);
-	}
     
     /**
      * Pull the conversation id from the intent and populate the conversation list.
@@ -127,11 +87,14 @@ public class MainChatWindow extends SMSListActivity {
     	    		    } else {
     	    		    	Log.e(this.toString(), "Cursor is empty.");
     	    		    }
-    	    		    if (false) { // If the address is in our contacts...
-    	    		    	// Set recipient to contact name
-    	    		    } else { // Just use phone number
-    	    		    	textTop.setText(recipient);
-    	    		    }
+    	    		    
+    	    		    // If the address is in our contacts...
+    	    		    // Set recipient to contact name
+    	    		    // TODO
+    	    		    
+    	    		    // Otherwise, just use phone number
+    	    		    textTop.setText(recipient);
+    	    		    
     	    		    setListAdapter(new ConversationAdapter(this, c));
     					
     	    		    
@@ -241,7 +204,7 @@ public class MainChatWindow extends SMSListActivity {
     	
     	if (threadId != -1) {
     		Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
-    		boolean didLast = c.moveToLast();
+    		c.moveToLast();
     		
     		int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
     		String bodyValue = c.getString(bodyColumn);
