@@ -55,6 +55,10 @@ public class ConversationsActivity extends SMSListActivity {
 
 		return false;
 	}
+	
+	private void doCompose() {
+		openConvo(-1);
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -73,6 +77,9 @@ public class ConversationsActivity extends SMSListActivity {
 		registerForContextMenu(getListView());
 	}
 
+	/**
+	 * Occurs when long clicking on any thread in this window.
+	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -81,6 +88,9 @@ public class ConversationsActivity extends SMSListActivity {
 		menu.add(0, DELETE_ID, 0, R.string.delete);
 	}
 
+	/**
+	 * Occurs an item is selected after long clicking a thread.
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
@@ -102,18 +112,21 @@ public class ConversationsActivity extends SMSListActivity {
 		return super.onContextItemSelected(item);
 	}
 
+	/**
+	 * Occurs on a long click for clicking a thread.
+	 */
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		TextView tv = (TextView) v;
-		String address = String.valueOf(tv.getText());
+		TextView clickedThread = (TextView) v;
+		String address = String.valueOf(clickedThread.getText());
 		long thread_id = mDbHelper.getThreadId(address);
 		Log.v(this.toString(), "Opening conversation, thread id: " + thread_id);
 		openConvo(thread_id);
-
 	}
 
-	public void fillInbox() {
+	private void fillInbox() {
 		Log.v(this.toString(), "Filling inbox from database...");
+		
 		Cursor c = mDbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
@@ -124,7 +137,6 @@ public class ConversationsActivity extends SMSListActivity {
 		SimpleCursorAdapter convos = new SimpleCursorAdapter(this,
 				R.layout.list_item, c, from, to);
 		setListAdapter(convos);
-
 	}
 
 	/**
@@ -133,7 +145,6 @@ public class ConversationsActivity extends SMSListActivity {
 	 * @param id
 	 *            the thread_id of the conversation being opened
 	 */
-
 	private void openConvo(long id) {
 		Intent thread = new Intent();
 		thread.setClassName("com.snakefish.visms",
@@ -159,11 +170,6 @@ public class ConversationsActivity extends SMSListActivity {
 			doCompose();
 		}
 
-	}
-
-	public void doCompose() {
-		// TODO do we want to compose with some other id?
-		openConvo(-1);
 	}
 
 }
