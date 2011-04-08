@@ -21,20 +21,12 @@ import com.snakefish.feedback.VoiceCommand;
  */
 public class OptionsList extends SMSListActivity {
 
-	/** Determines if the headphones are set or not */
 	protected boolean headphones = false;
-
-	/** The button used to determine headphone options */
-	//protected CheckBox btnHeadphones;
+	
+	// TODO convert to checkbox
 	protected Button btnHeadphones;
-
-	/** Button used to determine font size */
 	protected Button btnFontUp;
-
-	/** The button used to determine font color */
 	protected Button btnFontDown;
-
-	/** The back button */
 	protected Button btnColorScheme;
 	
 	/** The button array for the list item */
@@ -65,8 +57,6 @@ public class OptionsList extends SMSListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.options_screen);
 
-		//Creates the new buttons for the list
-		//btnHeadphones = (CheckBox) findViewById(R.id.btnHeadPhones);
 		btnHeadphones = (Button) findViewById(R.id.btnHeadphones);
 		btnFontUp = (Button) findViewById(R.id.btnFontUp);
 		btnFontDown = (Button) findViewById(R.id.btnFontDown);
@@ -74,81 +64,30 @@ public class OptionsList extends SMSListActivity {
 		
 		//Adds listeners to the buttons
 		btnHeadphones.setOnClickListener(new HeadphonesListener());
-		btnFontUp.setOnClickListener(new FontSizeListener(1));
-		btnFontDown.setOnClickListener(new FontSizeListener(-1));
+		btnFontUp.setOnClickListener(new FontSizeListener(true));
+		btnFontDown.setOnClickListener(new FontSizeListener(false));
 		btnColorScheme.setOnClickListener(new ColorListener());
-		
-		/*
-		//Sets the CharSequence to a null value without using null
-		CharSequence tempC = "";
-		
-		//Loops through and makes buttons with the same names as OPTIONS
-		for(int x = 0; x < 4; x++){
-			//Sets char sequence to buttonList[x]
-			tempC.equals(buttonList[x]);
-			//Sets the button name to the name of the text
-			buttonList[x].setText(tempC);
-			
-			//The case statements assign each button to the right listener
-			switch(x){
-			//Headphones button
-			case(0): 
-				buttonList[x] = (Button) findViewById(R.id.btnHeadphones);
-				buttonList[x].setOnClickListener(new HeadphonesListener());
-				break;
-			//Font size up
-			case(1):
-				buttonList[x] = (Button) findViewById(R.id.btnFontUp);
-				buttonList[x].setOnClickListener(new FontSizeListener(1));
-				break;
-			//Font size down
-			case(2):
-				buttonList[x] = (Button) findViewById(R.id.btnFontDown);
-				buttonList[x].setOnClickListener(new FontSizeListener(-1));
-				break;
-			//Color scheme
-			case(3):
-				buttonList[x] = (Button) findViewById(R.id.btnColorScheme);
-				buttonList[x].setOnClickListener(new ColorListener());
-				break;
-			}
-		}*/
-		
 		
 		setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item,
 			new String[0]));
 	}
-	
-	/**
-	 * Method used to process voice commands for the current screen. Voice
-	 * commands will consist allow users to edit each option and can be found in
-	 * CommandAction.java.
-	 */
+
+    /**
+     * This method will process a voice command and turn it into 
+     *  a command for this specific screen.
+     */
 	public boolean processVoice(VoiceCommand command) {
-		// Already handled elsewhere
+		// All commands handled in base class
 		
 		return false;
 	}
-
-	/*@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		//Toast.makeText(getApplicationContext(), ((TextView) v).getText(),
-				//Toast.LENGTH_SHORT).show();
-	}*/
-
-	/**
-	 * Method used to turn off headphones
-	 */
-	public void headphones_off() {
+	
+	private void headphones_off() {
 		// TODO add functionality to turn off headphones
 		speak("Headphones off", SpeechType.INFO, true);
 	}
-
-	/**
-	 * Method used to turn on headphones
-	 */
-	public void headphones_on() {
+	
+	private void headphones_on() {
 		// TODO Add functionality to turn on headphones
 		speak("Headphones on", SpeechType.INFO, true);
 	}
@@ -172,10 +111,10 @@ public class OptionsList extends SMSListActivity {
 			SMSDelegate.headphoneOption = !SMSDelegate.headphoneOption;
 			
 			if (SMSDelegate.headphoneOption) {
-				speak("Headphones on", SpeechType.INFO, false);
+				headphones_on();
 			}
 			else {
-				speak("Headphones off", SpeechType.INFO, false);
+				headphones_off();
 			}
 			
 			Log.v("OptionsList", "Headphones toggled");
@@ -193,47 +132,25 @@ public class OptionsList extends SMSListActivity {
 	private class FontSizeListener implements OnClickListener {
 		
 		/** Determines if the font will be increased or decreased */
-		private int size = 0;
+		private boolean willIncrement;
 		
-		/** 
-		 * Constructor. Negative numbers mean font decrease.
-		 */
-		FontSizeListener(int incDec){
-			size = incDec;
+		FontSizeListener(boolean doIncrement){
+			willIncrement = doIncrement;
 		}
 		
-		/**
-		 * The onClick method used for the listener.
-		 */
 		public void onClick(View v) {
-			
+			if (willIncrement) {
+				// TODO raise fontsize
+			}
+			else {
+				// TODO lower fontsize
+			}
 		}
 	}
-
-	/**
-	 * The listener for the font size. This listener will be used to determine
-	 * if the font size button has been clicked and make the changes according
-	 * to what the users desires.
-	 * 
-	 * @author Team Snakefish
-	 * 
-	 */
+	
 	private class ColorListener implements OnClickListener {
 
-		/**
-		 * The onClick method for the FontColorListener
-		 */
 		public void onClick(View v) {
-			// Calls doWork method
-			doWork();
-		}
-
-		/**
-		 * The doWork method for the listener. Will determine what font color
-		 * the user wishes to use
-		 */
-		public void doWork() {
-			// TODO Same as FontSizeListener
 		}
 
 	}

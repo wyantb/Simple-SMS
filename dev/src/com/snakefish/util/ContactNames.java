@@ -44,9 +44,6 @@ public class ContactNames {
 		Uri uri;
 		String[] projection;
 
-		// If targeting Donut or below, use
-		// Contacts.Phones.CONTENT_FILTER_URL and
-		// Contacts.Phones.DISPLAY_NAME
 		uri = Uri.withAppendedPath(
 				ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
 				Uri.encode(fromAddress));

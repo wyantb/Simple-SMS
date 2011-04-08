@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,9 +22,18 @@ import com.snakefish.feedback.VoiceCommand;
  */
 public class IncomingMessage extends SMSActivity {
 	
+	public static final String SMS_ERROR = "IncomingMessage";
+	
+	/** The raw number of the message sent to us */
 	public static final String SMS_FROM_ADDRESS_EXTRA = "com.snakefish.FROM_EXTRA";
+
+	/** The display name for who sent a message to us */
 	public static final String SMS_FROM_DISPLAY_NAME_EXTRA = "com.snakefish.DISPLAY_EXTRA";
+
+	/** The actual content of the message sent to us */
 	public static final String SMS_MESSAGE_EXTRA = "com.snakefish.MESSAGE_EXTRA";
+
+	/** Time, in ms, of the message sent */
 	public static final String SMS_TIME_SENT_EXTRA = "com.snakefish.TIME_SENT";
 	
 	/**Used to position buttons */
@@ -38,12 +46,11 @@ public class IncomingMessage extends SMSActivity {
     protected TextView messageFrom = null; 
     
     /** The thread this message is going into */
-    protected int threadId = -1;
+    protected int threadId;
     /** The message data that we received */
-    protected String actualMessage = "";
+    protected String actualMessage;
     /** The contact retrieved name that we got earlier */
-    // TODO example data
-    protected String actualFrom = "Jason Buoni";
+    protected String actualFrom;
     
     protected String fromAddress = null;
     
@@ -57,22 +64,16 @@ public class IncomingMessage extends SMSActivity {
     	super (R.xml.newtext_speech);
     }
     
-    /** Gets the partner of this conversation */
-    public int getThreadId() {
-    	return threadId;
-    }
-    
     /**
      * This method will process a voice command and turn it into 
      *  a command for this specific screen.
      */
 	public boolean processVoice(VoiceCommand command) {
-    	/** These commands may be updated at a later time */
-    	
+		
 		if (command.getType() == CommandAction.SEND ||
 				command.getType() == CommandAction.REPLY) {
-			String text = command.getTextGroup();
 			
+			String text = command.getTextGroup();
 			skipToReply(text);
 			
 			return true;
@@ -87,8 +88,6 @@ public class IncomingMessage extends SMSActivity {
 			
 			return true;
 		}
-		
-    	//If the command mimics the ignore button
 		if (command.getType() == CommandAction.IGNORE) {
 			onIgnored();
 			
@@ -99,21 +98,22 @@ public class IncomingMessage extends SMSActivity {
     		
     }
 	
-	private void skipToReply() {
-		skipToReply("");
-	}
-	
+	/**
+	 * Skip the step where we view the given conversation,
+	 *   and instead skip straight to the screen where we will
+	 *   send a message to the conversation partner, inserting
+	 *   the given text in the message to send.
+	 *   
+	 * @param text initial text for message to send
+	 */
 	private void skipToReply(String text) {
 		Intent replyIntent = new Intent();
 		replyIntent.setClass(this, TextActivity.class);
 		
 		replyIntent.putExtra(TextActivity.INITIAL_TEXT, text);
-		
-		String[] fromData = new String[2];
-		fromData[0] = actualFrom;
-		fromData[1] = actualMessage;
-		
-		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, fromData);
+
+		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_FROM, actualFrom);
+		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_DATA, actualMessage);
 		
 		replyIntent.putExtra(TextActivity.FROM_ADDRESS, fromAddress);
 		
@@ -124,23 +124,14 @@ public class IncomingMessage extends SMSActivity {
 	 * Switches to the next screen
 	 */
 	public void openConversationWindow(){
-		
-		//Makes a new TextActivity
 		Intent vText = new Intent();
-		
-		//Sets the intent to class activity
-		vText.setClassName("com.snakefish.visms", "com.snakefish.visms.MainChatWindow");
-		
-		// Puts the thread id in for MainChatWindow
-		vText.putExtra(MainChatWindow.THREAD_ID, getThreadId());
-		
+		vText.setClass(this, MainChatWindow.class);
+		vText.putExtra(MainChatWindow.THREAD_ID, threadId);
 		vText.putExtra(MainChatWindow.LAST_MESSAGE, actualMessage);
 		
-		//Starts the activity
 		startActivity(vText);
 	}
     
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) 
     {
@@ -197,14 +188,6 @@ public class IncomingMessage extends SMSActivity {
     	}
     	
     }
-
-    /**
-     * Pauses incoming message
-     */
-    @Override
-    public void onPause(){
-    	super.onPause();
-    }
     
     /**
      * This class will be used if the incoming message
@@ -220,27 +203,10 @@ public class IncomingMessage extends SMSActivity {
     		Thread.sleep(400);
     	}
     	catch (Exception e) {
-    		// same as above
+    		Log.e(SMS_ERROR, "Interruption while ignoring.");
     	}
     	
     	finish();
-    }
-    
-    /**
-     * The stopping method used for the program. 
-     * I really don't know if we need to use this or 
-     * not.
-     */
-    public void onStop(){
-    	super.onStop();
-    }
-    
-    /**
-     * The destroy method for the 
-     * class.
-     */
-    public void onDestroy(){
-    	super.onDestroy();
     }
     
     /**
@@ -265,21 +231,7 @@ public class IncomingMessage extends SMSActivity {
      */
     private class IgnoreListener implements OnClickListener {
 
-    	/**
-    	 * Use to call the work method. Similar to the 
-    	 * implementation in TextActivity.java
-    	 */
 		public void onClick(View arg0) {
-			// Calls the work method
-			doWork();
-		}
-    	
-		/**
-		 * Calls the onFinish method to end
-		 * the application.
-		 */
-		public void doWork(){
-			//Calls onFinish
 			onIgnored();
 		}
     }

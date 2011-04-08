@@ -5,7 +5,6 @@ import com.snakefish.feedback.SMSBase;
 import com.snakefish.feedback.SMSDelegate;
 import com.snakefish.feedback.SMSDelegateCallback;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;

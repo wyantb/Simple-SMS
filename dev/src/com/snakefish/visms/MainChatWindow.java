@@ -20,7 +20,11 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-
+/**
+ * The view of a conversation thread with another partner.
+ *   Loads up the messages in that thread, then displays them
+ *   in a list.
+ */
 public class MainChatWindow extends SMSListActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
@@ -31,7 +35,7 @@ public class MainChatWindow extends SMSListActivity {
     private TextView textTop;
     private Button compose;
     private Button contactChooser;
-    private SmsDbAdapter mDbHelper;
+    private SmsDbAdapter dbHelper;
     private String recipient;
     private String lastMessage;
     private int threadId;
@@ -49,16 +53,12 @@ public class MainChatWindow extends SMSListActivity {
         textTop = (TextView)findViewById(R.id.mcw_text_top);
         compose = (Button)findViewById(R.id.mcw_compose);
         contactChooser = (Button)findViewById(R.id.mcw_contact_chooser);
-
-        assert(textTop != null);
-        assert(compose != null);
-        assert(contactChooser != null);
         
         contactChooser.setOnClickListener(new OnContactListener());
         compose.setOnClickListener(new ComposeClickListener());
         
-        mDbHelper = new SmsDbAdapter(this);
-        mDbHelper.open();
+        dbHelper = new SmsDbAdapter(this);
+        dbHelper.open();
         
         populateConversationList(getIntent());
     }
@@ -79,7 +79,7 @@ public class MainChatWindow extends SMSListActivity {
         	        Log.v("MainChatWindow, populateConversationList", "Thread ID: "+threadID);
     	    		
         	        if (threadID != -1) {
-    	    		    Cursor c = mDbHelper.fetchThreadByThreadId(threadID);
+    	    		    Cursor c = dbHelper.fetchThreadByThreadId(threadID);
     	    		    startManagingCursor(c);
     	    		    
     	    		    if (c.moveToFirst()) {
@@ -107,13 +107,12 @@ public class MainChatWindow extends SMSListActivity {
     	    			compose.setEnabled(false);
     	    		}
     	    	}
-
-    	//Start dummy data:
-//    	String[] messages = {"hey whus up", "want to get fud?", "lol u there???", "txt me back pls", "Ok fine ignore me"};
-//    	setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item, messages));
-    	//End dummy data.
     }
 
+    /**
+     * This method will process a voice command and turn it into 
+     *  a command for this specific screen.
+     */
 	public boolean processVoice(VoiceCommand command) {
     	
 		Log.v("MainChatWindow", "Processing voice in window.");
@@ -122,7 +121,7 @@ public class MainChatWindow extends SMSListActivity {
     		if (threadId != -1) {
 
         		// TODO don't assume the last message in convo
-    			Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
+    			Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     			c.moveToLast();
     			
     			int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
@@ -149,10 +148,6 @@ public class MainChatWindow extends SMSListActivity {
     	
     }
     
-    public void doReply() {    	
-    	doReply(null);
-    }
-    
     private class OnContactListener implements OnClickListener {
 
 		public void onClick(View arg0) {
@@ -163,26 +158,23 @@ public class MainChatWindow extends SMSListActivity {
     
     private class ComposeClickListener implements OnClickListener {
 
-    	/**
-    	 * Do not fill in this method any more!
-    	 * Refer to seperate reusable methods instead
-    	 */
 		public void onClick(View arg0) {
-			doReply();
+			doReply(null);
 		}
     	
     }
     
     public void doReply(String text) {
     	Intent textIntent = new Intent();
-    	textIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.TextActivity");
+    	textIntent.setClass(this, TextActivity.class);
     	
     	String[] messageData = new String[2];
     	
     	messageData = grabLastData();
     	
     	if (messageData != null) {
-    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG, messageData);
+    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_FROM, messageData[0]);
+    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_DATA, messageData[1]);
     	}
     	
     	if (text != null && !text.equals("")) {
@@ -203,7 +195,7 @@ public class MainChatWindow extends SMSListActivity {
     	}
     	
     	if (threadId != -1) {
-    		Cursor c = mDbHelper.fetchThreadByThreadId(threadId);
+    		Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     		c.moveToLast();
     		
     		int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
@@ -218,14 +210,6 @@ public class MainChatWindow extends SMSListActivity {
     		return null;
     	}
     }
-
-    /////////////////////////////////////////
-    //Code for picking contacts
-    /////////////////////////////////////////
-    
-    //TODO Use this to start the contact picker:
-    //			startActivityForResult(getContactIntent(), PICK_CONTACT_REQUEST);
-
     
     /**
      * Invoked when the contact picker is completed.

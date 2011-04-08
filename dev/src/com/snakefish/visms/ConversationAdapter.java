@@ -1,10 +1,7 @@
 package com.snakefish.visms;
 
-import org.xmlpull.v1.XmlPullParser;
-
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

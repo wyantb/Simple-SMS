@@ -5,14 +5,11 @@ import com.snakefish.util.ContactNames;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-public class SmsMessageReceiver extends BroadcastReceiver {
+public class SMSMessageReceiver extends BroadcastReceiver {
 
 	private static final String LOG = "SmsMessageReceiver";
 
@@ -52,8 +49,6 @@ public class SmsMessageReceiver extends BroadcastReceiver {
 				newMessageIntent.putExtra(IncomingMessage.SMS_MESSAGE_EXTRA, message.getMessageBody().toString());
 
 				context.startActivity(newMessageIntent);
-
-				break;
 			}
 			else {
 				// TODO handle extra messages

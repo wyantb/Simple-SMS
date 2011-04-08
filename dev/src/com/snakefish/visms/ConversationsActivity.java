@@ -34,7 +34,7 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
-	private SmsDbAdapter mDbHelper;
+	private SmsDbAdapter dbHelper;
 	private Button btnCompose;
 
 	public ConversationsActivity() {
@@ -48,16 +48,12 @@ public class ConversationsActivity extends SMSListActivity {
 	public boolean processVoice(VoiceCommand command) {
 
 		if (command.getType() == CommandAction.COMPOSE) {
-			doCompose();
+			openConvo(-1);
 			
 			return true;
 		}
 
 		return false;
-	}
-	
-	private void doCompose() {
-		openConvo(-1);
 	}
 
 	/** Called when the activity is first created. */
@@ -70,8 +66,8 @@ public class ConversationsActivity extends SMSListActivity {
 
 		btnCompose.setOnClickListener(new ComposeClickListener());
 
-		mDbHelper = new SmsDbAdapter(this);
-		mDbHelper.open();
+		dbHelper = new SmsDbAdapter(this);
+		dbHelper.open();
 
 		fillInbox();
 		registerForContextMenu(getListView());
@@ -97,7 +93,7 @@ public class ConversationsActivity extends SMSListActivity {
 				.getMenuInfo();
 		TextView v = (TextView) info.targetView;
 		String address = String.valueOf(v.getText());
-		long id = mDbHelper.getThreadId(address);
+		long id = dbHelper.getThreadId(address);
 		
 		switch (item.getItemId()) {
 		case OPEN_ID:
@@ -119,7 +115,7 @@ public class ConversationsActivity extends SMSListActivity {
 		super.onListItemClick(l, v, position, id);
 		TextView clickedThread = (TextView) v;
 		String address = String.valueOf(clickedThread.getText());
-		long thread_id = mDbHelper.getThreadId(address);
+		long thread_id = dbHelper.getThreadId(address);
 		Log.v(this.toString(), "Opening conversation, thread id: " + thread_id);
 		openConvo(thread_id);
 	}
@@ -127,7 +123,7 @@ public class ConversationsActivity extends SMSListActivity {
 	private void fillInbox() {
 		Log.v(this.toString(), "Filling inbox from database...");
 		
-		Cursor c = mDbHelper.fetchAllThreads();
+		Cursor c = dbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
 		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
@@ -146,11 +142,10 @@ public class ConversationsActivity extends SMSListActivity {
 	 *            the thread_id of the conversation being opened
 	 */
 	private void openConvo(long id) {
-		Intent thread = new Intent();
-		thread.setClassName("com.snakefish.visms",
-				"com.snakefish.visms.MainChatWindow");
-		thread.putExtra(MainChatWindow.THREAD_ID, (int) id);
-		startActivity(thread);
+		Intent threadIntent = new Intent();
+		threadIntent.setClass(this, MainChatWindow.class);
+		threadIntent.putExtra(MainChatWindow.THREAD_ID, (int) id);
+		startActivity(threadIntent);
 	}
 	
 	/**
@@ -159,7 +154,7 @@ public class ConversationsActivity extends SMSListActivity {
 	 * @return true if deleted, otherwise false
 	 */
 	private boolean deleteConvo(long id) {
-		boolean deleted = mDbHelper.deleteThread(id);
+		boolean deleted = dbHelper.deleteThread(id);
 		fillInbox();
 		return deleted;
 	}
@@ -167,7 +162,7 @@ public class ConversationsActivity extends SMSListActivity {
 	private class ComposeClickListener implements OnClickListener {
 
 		public void onClick(View arg0) {
-			doCompose();
+			openConvo(-1);
 		}
 
 	}

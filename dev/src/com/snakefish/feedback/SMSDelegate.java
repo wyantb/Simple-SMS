@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Scanner;
 
 import com.snakefish.visms.OptionsList;
 
@@ -203,8 +202,7 @@ public class SMSDelegate implements SMSBase {
 		}
 		if (command.getType() == CommandAction.OPTIONS) {
 			Intent optionsIntent = new Intent();
-			optionsIntent.setClassName("com.snakefish.visms", 
-					"com.snakefish.visms.OptionsList");
+			optionsIntent.setClass(callback, OptionsList.class);
 			callback.startActivity(optionsIntent);
 			
 			return true;
