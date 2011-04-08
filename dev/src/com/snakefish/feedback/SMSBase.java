@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.view.Menu;
 
 /**
  * All the work that can be delegated to SMSDelegate.
@@ -26,6 +27,7 @@ public interface SMSBase extends TextToSpeech.OnInitListener {
 
 	public boolean onSearchRequested();
 
+	public boolean onCreateOptionsMenu(Menu menu);
 	public void onActivityResult(int requestCode, int resultCode, Intent data);
 	public void startActivity(Intent intent);
 	

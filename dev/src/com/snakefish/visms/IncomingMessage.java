@@ -63,8 +63,8 @@ public class IncomingMessage extends SMSActivity {
     }
     
     /**
-     * This method will process the voice command and turn it into 
-     * a command for the application
+     * This method will process a voice command and turn it into 
+     *  a command for this specific screen.
      */
 	public boolean processVoice(VoiceCommand command) {
     	/** These commands may be updated at a later time */
@@ -196,17 +196,6 @@ public class IncomingMessage extends SMSActivity {
     		messageFrom.setText(fromAddress);
     	}
     	
-    }
-    
-    /**
-     * The pop up menu that allows the user to adjust
-     * the setting of the application
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-		Intent i = new Intent(this, OptionsList.class);
-		startActivity(i);
-		return false;
     }
 
     /**

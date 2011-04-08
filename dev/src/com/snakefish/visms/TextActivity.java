@@ -112,13 +112,6 @@ public class TextActivity extends SMSActivity {
     		toAddress = intent.getStringExtra(FROM_ADDRESS);
     	}
     }
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		Intent i = new Intent(this, OptionsList.class);
-		startActivity(i);
-		return false;
-	}
     
     @Override
     public void onDestroy() {
