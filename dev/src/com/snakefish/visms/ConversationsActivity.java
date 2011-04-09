@@ -34,7 +34,7 @@ public class ConversationsActivity extends SMSListActivity {
 	public static final int SETTINGS_ID = Menu.FIRST + 1;
 	public static final int OPEN_ID = Menu.FIRST + 2;
 	public static final int DELETE_ID = Menu.FIRST + 3;
-	private SmsDbAdapter dbHelper;
+	private SMSDbAdapter dbHelper;
 	private Button btnCompose;
 
 	public ConversationsActivity() {
@@ -66,7 +66,7 @@ public class ConversationsActivity extends SMSListActivity {
 
 		btnCompose.setOnClickListener(new ComposeClickListener());
 
-		dbHelper = new SmsDbAdapter(this);
+		dbHelper = new SMSDbAdapter(this);
 		dbHelper.open();
 
 		fillInbox();
@@ -126,7 +126,7 @@ public class ConversationsActivity extends SMSListActivity {
 		Cursor c = dbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
-		String[] from = new String[] { SmsDbAdapter.KEY_ADDRESS };
+		String[] from = new String[] { SMSDbAdapter.KEY_ADDRESS };
 
 		int[] to = new int[] { R.id.list_entry };
 

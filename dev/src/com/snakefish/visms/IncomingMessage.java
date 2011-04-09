@@ -55,7 +55,7 @@ public class IncomingMessage extends SMSActivity {
     protected String fromAddress = null;
     
     /** Our helper for messages, options, etc in the database */
-    protected SmsDbAdapter dbHelper;
+    protected SMSDbAdapter dbHelper;
     
     /**
      * Creates a new incoming message
@@ -151,7 +151,7 @@ public class IncomingMessage extends SMSActivity {
         btnRead.setOnClickListener(new ReadListener());
         btnIgnore.setOnClickListener(new IgnoreListener());
         
-        dbHelper = new SmsDbAdapter(this);
+        dbHelper = new SMSDbAdapter(this);
         dbHelper.open();
         
         parseMessageData(getIntent());

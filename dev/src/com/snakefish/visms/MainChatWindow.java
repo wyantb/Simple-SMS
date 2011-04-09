@@ -35,7 +35,7 @@ public class MainChatWindow extends SMSListActivity {
     private TextView textTop;
     private Button compose;
     private Button contactChooser;
-    private SmsDbAdapter dbHelper;
+    private SMSDbAdapter dbHelper;
     private String recipient;
     private String lastMessage;
     private int threadId;
@@ -57,7 +57,7 @@ public class MainChatWindow extends SMSListActivity {
         contactChooser.setOnClickListener(new OnContactListener());
         compose.setOnClickListener(new ComposeClickListener());
         
-        dbHelper = new SmsDbAdapter(this);
+        dbHelper = new SMSDbAdapter(this);
         dbHelper.open();
         
         populateConversationList(getIntent());
@@ -83,7 +83,7 @@ public class MainChatWindow extends SMSListActivity {
     	    		    startManagingCursor(c);
     	    		    
     	    		    if (c.moveToFirst()) {
-    	    		    	recipient = c.getString(c.getColumnIndex(SmsDbAdapter.KEY_ADDRESS));
+    	    		    	recipient = c.getString(c.getColumnIndex(SMSDbAdapter.KEY_ADDRESS));
     	    		    } else {
     	    		    	Log.e(this.toString(), "Cursor is empty.");
     	    		    }
@@ -124,7 +124,7 @@ public class MainChatWindow extends SMSListActivity {
     			Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     			c.moveToLast();
     			
-    			int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
+    			int bodyColumn = c.getColumnIndex(SMSDbAdapter.KEY_BODY);
     			String bodyValue = c.getString(bodyColumn);
     			
     			speak(bodyValue, SpeechType.PERSONAL);
@@ -198,7 +198,7 @@ public class MainChatWindow extends SMSListActivity {
     		Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     		c.moveToLast();
     		
-    		int bodyColumn = c.getColumnIndex(SmsDbAdapter.KEY_BODY);
+    		int bodyColumn = c.getColumnIndex(SMSDbAdapter.KEY_BODY);
     		String bodyValue = c.getString(bodyColumn);
     		
     		// TODO pull person from cursor and contacts api

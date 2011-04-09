@@ -22,7 +22,7 @@ public class ConversationAdapter extends CursorAdapter {
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		int bodyColumn = cursor.getColumnIndex(SmsDbAdapter.KEY_BODY);
+		int bodyColumn = cursor.getColumnIndex(SMSDbAdapter.KEY_BODY);
 		String bodyValue = cursor.getString(bodyColumn);
 		
 		((TextView)view).setText(bodyValue);
@@ -30,10 +30,10 @@ public class ConversationAdapter extends CursorAdapter {
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup vg) {
-		int fromColumn = cursor.getColumnIndex(SmsDbAdapter.KEY_PERSON);
+		int fromColumn = cursor.getColumnIndex(SMSDbAdapter.KEY_PERSON);
 		int fromValue = cursor.getInt(fromColumn);
 		
-		int bodyColumn = cursor.getColumnIndex(SmsDbAdapter.KEY_BODY);
+		int bodyColumn = cursor.getColumnIndex(SMSDbAdapter.KEY_BODY);
 		String bodyValue = cursor.getString(bodyColumn);
 		
 		// If sent by me...

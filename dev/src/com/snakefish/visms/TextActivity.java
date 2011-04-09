@@ -61,7 +61,7 @@ public class TextActivity extends SMSActivity {
 	private Button btnSend = null;
 	private SMSBroadcastReceiver smsReceiver;
 	private String toAddress = null;
-	private SmsDbAdapter dbHelper;
+	private SMSDbAdapter dbHelper;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -78,7 +78,7 @@ public class TextActivity extends SMSActivity {
 		btnRead.setOnClickListener(new ReadButtonClickListener());
 		btnSend.setOnClickListener(new SendButtonClickListener());
 
-		dbHelper = new SmsDbAdapter(this);
+		dbHelper = new SMSDbAdapter(this);
 
 		smsReceiver = new SMSBroadcastReceiver();
 		registerReceiver(smsReceiver, new IntentFilter(ACTION_SMS_SENT));
