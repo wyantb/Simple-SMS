@@ -20,4 +20,5 @@
 	<string name="open">Open</string>
 	<string name ="delete">Delete</string>
 	<string name="enter_msg">Enter your message here</string>
+	<string name="wipe_db">Wipe the DB</string>
 </resources>

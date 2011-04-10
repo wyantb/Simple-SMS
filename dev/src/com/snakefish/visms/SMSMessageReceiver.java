@@ -29,14 +29,15 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 		}
 
 		Object[] pdus = (Object[]) extras.get("pdus");
-
+		Log.v(LOG, "Received actual messages.");
+		
 		for (int i = 0; i < pdus.length; i++) {
 			SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
 			String fromAddress = message.getOriginatingAddress();
 			long timeSent = message.getTimestampMillis();
 
 			String displayName = ContactNames.get().getDisplayName(context, fromAddress);
-
+			
 			if (i == 0) {
 				Intent newMessageIntent = new Intent();
 				newMessageIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.IncomingMessage");
@@ -49,6 +50,8 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 				newMessageIntent.putExtra(IncomingMessage.SMS_MESSAGE_EXTRA, message.getMessageBody().toString());
 
 				context.startActivity(newMessageIntent);
+				
+				break;
 			}
 			else {
 				// TODO handle extra messages

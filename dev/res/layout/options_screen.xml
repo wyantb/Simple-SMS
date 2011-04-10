@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical" android:layout_width="fill_parent"
-	android:layout_height="fill_parent" android:layout_marginBottom="5sp">
+	android:orientation="vertical" 
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" 
+	android:layout_marginBottom="5sp"
+	>
 	
 	<Button android:id="@+id/btnHeadphones"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:longClickable="false" android:clickable="true" android:text="@string/headphones" />  -->
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:longClickable="false" 
+		android:clickable="true" 
+		android:text="@string/headphones" 
+		/>
 
 	<!-- 	
 	<CheckBox android:id="@+id/btnHeadPhones"
@@ -20,19 +27,42 @@
          -->
         
 	<Button android:id="@+id/btnFontUp"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:longClickable="false" android:clickable="true" android:text="@string/font_up" />
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:longClickable="false" 
+		android:clickable="true" 
+		android:text="@string/font_up" 
+		/>
 		
 	<Button android:id="@+id/btnFontDown"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:longClickable="false" android:clickable="true" android:text="@string/font_down" />
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:longClickable="false" 
+		android:clickable="true" 
+		android:text="@string/font_down" 
+		/>
 		
 	<Button android:id="@+id/btnColorScheme"
-		android:layout_width="fill_parent" android:layout_height="wrap_content"
-		android:longClickable="false" android:clickable="true" android:text="@string/color_scheme" />
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:longClickable="false" 
+		android:clickable="true" 
+		android:text="@string/color_scheme" />
 	
-	<ListView android:id="@android:id/list" android:layout_width="fill_parent"
-		android:layout_height="fill_parent">
+	<Button android:id="@+id/btnWipe"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:longClickable="false"
+		android:text="@string/wipe_db"
+		/>
+	
+	<ListView android:id="@android:id/list" 
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		>
+		
+		<!-- Nothing yet -->
+		
 	</ListView>
 
 </LinearLayout>

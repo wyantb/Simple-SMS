@@ -1,20 +1,4 @@
-/*
- * Copyright (C) 2008 Google Inc.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-
-package com.snakefish.visms;
+package com.snakefish.db;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -36,13 +20,16 @@ import android.util.Log;
 public class SMSDbAdapter {
 
 	/* The columns found in the built-in sms database */
-	public static final String KEY_ROWID = "_id";
-	public static final String KEY_THREADID = "thread_id";
-	public static final String KEY_ADDRESS = "address";
-	public static final String KEY_PERSON = "person";
-	public static final String KEY_DATE = "date";
-	public static final String KEY_BODY = "body";
+	public static final String THREAD_KEY_ROWID = "_id";
+	public static final String THREAD_KEY_THREADID = "thread_id";
+	public static final String THREAD_KEY_ADDRESS = "address";
+	public static final String THREAD_KEY_PERSON = "person";
+	public static final String THREAD_KEY_DATE = "date";
+	public static final String THREAD_KEY_BODY = "body";
 	public static final String ORDER_CHRON = "date DESC";
+	
+	public static final String DISP_KEY_THREAD = "thread_id";
+	public static final String DISP_KEY_PERSON = "disp_name";
 
 	private static final String TAG = "SmsDbAdapter";
 	private DatabaseHelper mDbHelper;
@@ -51,12 +38,24 @@ public class SMSDbAdapter {
 	/**
 	 * Database creation sql statement
 	 */
-	private static final String DATABASE_CREATE = "create table inbox (_id integer primary key autoincrement, "
-			+ "thread_id integer not null, address text not null, person integer not null, "
-			+ "date integer not null, body text not null);";
+	private static final String THREAD_DATABASE_CREATE =
+		"create table inbox " +
+			"(_id integer primary key autoincrement," +
+			" thread_id integer not null," +
+			" address text not null," +
+			" person integer not null," +
+			" date integer not null," +
+			" body text not null);";
+	
+	private static final String NAME_DATABASE_CREATE =
+		"create table display " +
+			"(thread_id integer not null," +
+			" disp_name text not null, " +
+			" foreign key(thread_id) references inbox(thread_id));";
 
 	private static final String DATABASE_NAME = "snakefish_sms";
-	private static final String DATABASE_TABLE = "inbox";
+	private static final String MSG_DATABASE_TABLE = "inbox";
+	private static final String DISP_DATABASE_TABLE = "display";
 	private static final int DATABASE_VERSION = 2;
 
 	private final Context mCtx;
@@ -70,14 +69,19 @@ public class SMSDbAdapter {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 
-			db.execSQL(DATABASE_CREATE);
+			db.execSQL(THREAD_DATABASE_CREATE);
+			db.execSQL(NAME_DATABASE_CREATE);
+			
 		}
 
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
 					+ newVersion + ", which will destroy all old data");
+			
 			db.execSQL("DROP TABLE IF EXISTS inbox");
+			db.execSQL("DROP TABLE IF EXISTS display");
+			
 			onCreate(db);
 		}
 	}
@@ -135,19 +139,34 @@ public class SMSDbAdapter {
 		Log.v("SmsDbAdapter", "Entering value with threadId = " + thread_id);
 		
 		ContentValues initialValues = new ContentValues();
-		initialValues.put(KEY_THREADID, thread_id);
-		initialValues.put(KEY_ADDRESS, address);
-		initialValues.put(KEY_PERSON, person);
-		initialValues.put(KEY_DATE, dateTime);
-		initialValues.put(KEY_BODY, body);
+		initialValues.put(THREAD_KEY_THREADID, thread_id);
+		initialValues.put(THREAD_KEY_ADDRESS, address);
+		initialValues.put(THREAD_KEY_PERSON, person);
+		initialValues.put(THREAD_KEY_DATE, dateTime);
+		initialValues.put(THREAD_KEY_BODY, body);
 
-		return mDb.insert(DATABASE_TABLE, null, initialValues);
+		return mDb.insert(MSG_DATABASE_TABLE, null, initialValues);
 	}
 	
 	public long addMsg(String address, int person, long dateTime, String body) {
 		int threadId = getThreadId(address);
 		
 		return addMsg(threadId, address, person, dateTime, body);
+	}
+	
+	public long addMsg(SMSRecord record) {
+		int threadId = record.getThread();
+		
+		if (threadId == SMSRecord.INVALID_ID) {
+			threadId = getThreadId(record.getAddress());
+		}
+		
+		String address = record.getAddress();
+		int person = record.getPerson();
+		long time = record.getDate();
+		String body = record.getText();
+		
+		return addMsg(threadId, address, person, time, body);
 	}
 
 	/**
@@ -159,7 +178,14 @@ public class SMSDbAdapter {
 	 */
 	public boolean deleteMsg(long rowId) {
 
-		return mDb.delete(DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+		return mDb.delete(MSG_DATABASE_TABLE, THREAD_KEY_ROWID + "=" + rowId, null) > 0;
+	
+	}
+	
+	public boolean deleteMsg(SMSRecord record) {
+		
+		return deleteMsg(record.getThread());
+		
 	}
 
 	/**
@@ -171,7 +197,14 @@ public class SMSDbAdapter {
 	 */
 	public boolean deleteThread(long threadId) {
 
-		return mDb.delete(DATABASE_TABLE, KEY_THREADID + "=" + threadId, null) > 0;
+		return mDb.delete(MSG_DATABASE_TABLE, THREAD_KEY_THREADID + "=" + threadId, null) > 0;
+	
+	}
+	
+	public boolean deleteThread(SMSThread thread) {
+		
+		return deleteThread(thread.getThreadId());
+		
 	}
 
 	/**
@@ -181,8 +214,8 @@ public class SMSDbAdapter {
 	 */
 	public Cursor fetchAllMsgs() {
 
-		return mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY },
+		return mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID,
+				THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE, THREAD_KEY_BODY },
 				null, null, null, null, null);
 	}
 
@@ -194,9 +227,9 @@ public class SMSDbAdapter {
 	 */
 	public Cursor fetchAllThreads() {
 
-		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE }, null, null,
-				KEY_THREADID, "MAX(" + KEY_DATE + ")", KEY_DATE + " DESC");
+		Cursor c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID,
+				THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE }, null, null,
+				THREAD_KEY_THREADID, "MAX(" + THREAD_KEY_DATE + ")", THREAD_KEY_DATE + " DESC");
 
 		return c;
 	}
@@ -212,15 +245,21 @@ public class SMSDbAdapter {
 	 */
 	public Cursor fetchMsg(long rowId) throws SQLException {
 
-		Cursor mCursor = mDb.query(true, DATABASE_TABLE, new String[] {
-				KEY_ROWID, KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE,
-				KEY_BODY }, KEY_ROWID + "=" + rowId, null, null, null, null,
+		Cursor mCursor = mDb.query(true, MSG_DATABASE_TABLE, new String[] {
+				THREAD_KEY_ROWID, THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE,
+				THREAD_KEY_BODY }, THREAD_KEY_ROWID + "=" + rowId, null, null, null, null,
 				null);
 		if (mCursor != null) {
 			mCursor.moveToFirst();
 		}
 		return mCursor;
 
+	}
+	
+	public SMSRecord fetchRecord(long rowId) throws SQLException {
+		
+		return new SMSRecord(fetchMsg(rowId));
+		
 	}
 
 	/**
@@ -233,9 +272,9 @@ public class SMSDbAdapter {
 	 */
 	public Cursor fetchThreadByThreadId(int threadId) {
 		System.out.println(mDb);
-		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID,
-				KEY_THREADID, KEY_ADDRESS, KEY_PERSON, KEY_DATE, KEY_BODY },
-				KEY_THREADID + "=" + String.valueOf(threadId), null, null,
+		Cursor c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID,
+				THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE, THREAD_KEY_BODY },
+				THREAD_KEY_THREADID + "=" + String.valueOf(threadId), null, null,
 				null, ORDER_CHRON);
 		return c;
 	}
@@ -252,8 +291,8 @@ public class SMSDbAdapter {
 
 	public long getThreadId(long rowId) {
 		long threadId = -1;
-		mDb.query(DATABASE_TABLE, new String[] { KEY_ROWID, KEY_THREADID },
-				KEY_ROWID + "=" + rowId, null, null, null, null, null);
+		mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID, THREAD_KEY_THREADID },
+				THREAD_KEY_ROWID + "=" + rowId, null, null, null, null, null);
 		return threadId;
 	}
 
@@ -268,20 +307,20 @@ public class SMSDbAdapter {
 	 */
 
 	public int getThreadId(String address) {
-		Cursor c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID },
-				KEY_ADDRESS + "=" + address, null, null, null, null);
+		Cursor c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_THREADID },
+				THREAD_KEY_ADDRESS + "=" + address, null, null, null, null);
 
 		boolean hasFirst = c.moveToFirst();
 
 		if (hasFirst) {
 			return c.getInt(0);
 		} else {
-			c = mDb.query(DATABASE_TABLE, new String[] { KEY_THREADID }, null,
-					null, null, null, KEY_THREADID + " desc");
+			c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_THREADID }, null,
+					null, null, null, THREAD_KEY_THREADID + " desc");
 			if (c.getCount() == 0) {
 				return 0;
 			} else if (c.moveToFirst()) {
-				return c.getInt(c.getColumnIndex(KEY_THREADID)) + 1;
+				return c.getInt(c.getColumnIndex(THREAD_KEY_THREADID)) + 1;
 			} else {
 				Log.e(this.toString(),
 						"Could not find thread id corresponding to given address: "
@@ -298,8 +337,20 @@ public class SMSDbAdapter {
 	 * @return the number of rows deleted; zero means unsuccessful
 	 */
 	public int deleteInbox() {
-		return mDb.delete(DATABASE_TABLE, null, null);
+		
+		mDb.delete(DISP_DATABASE_TABLE, null, null);
+		return mDb.delete(MSG_DATABASE_TABLE, null, null);
 
+	}
+	
+	/**
+	 * Wipes and recreases the databases.  Use with caution, cannot be
+	 *   undone.
+	 */
+	public void recreateDatabase() {
+		
+		mDbHelper.onUpgrade(mDb, 0, 1);
+		
 	}
 
 }

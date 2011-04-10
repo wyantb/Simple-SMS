@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.snakefish.db.SMSDbAdapter;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;

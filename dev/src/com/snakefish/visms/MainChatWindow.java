@@ -1,5 +1,6 @@
 package com.snakefish.visms;
 
+import com.snakefish.db.SMSDbAdapter;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
@@ -83,7 +84,7 @@ public class MainChatWindow extends SMSListActivity {
     	    		    startManagingCursor(c);
     	    		    
     	    		    if (c.moveToFirst()) {
-    	    		    	recipient = c.getString(c.getColumnIndex(SMSDbAdapter.KEY_ADDRESS));
+    	    		    	recipient = c.getString(c.getColumnIndex(SMSDbAdapter.THREAD_KEY_ADDRESS));
     	    		    } else {
     	    		    	Log.e(this.toString(), "Cursor is empty.");
     	    		    }
@@ -124,7 +125,7 @@ public class MainChatWindow extends SMSListActivity {
     			Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     			c.moveToLast();
     			
-    			int bodyColumn = c.getColumnIndex(SMSDbAdapter.KEY_BODY);
+    			int bodyColumn = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_BODY);
     			String bodyValue = c.getString(bodyColumn);
     			
     			speak(bodyValue, SpeechType.PERSONAL);
@@ -198,7 +199,7 @@ public class MainChatWindow extends SMSListActivity {
     		Cursor c = dbHelper.fetchThreadByThreadId(threadId);
     		c.moveToLast();
     		
-    		int bodyColumn = c.getColumnIndex(SMSDbAdapter.KEY_BODY);
+    		int bodyColumn = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_BODY);
     		String bodyValue = c.getString(bodyColumn);
     		
     		// TODO pull person from cursor and contacts api

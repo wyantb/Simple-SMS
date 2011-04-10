@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.snakefish.db.SMSDbAdapter;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
@@ -138,16 +139,12 @@ public class IncomingMessage extends SMSActivity {
         super.onCreate(savedInstanceState);
         
         // Both landscape and portrait view
-        setContentView(R.layout.incoming_message);      
+        setContentView(R.layout.incoming_message);
     	
-        //Sets btnRead and btnIgnore to the button on the android xml
         btnRead = (Button) findViewById(R.id.btnRead);
-        btnIgnore = (Button) findViewById(R.id.btnIgnore);   
-        
-        //Sets the messageFrom text view
+        btnIgnore = (Button) findViewById(R.id.btnIgnore);
         messageFrom = (TextView) findViewById(R.id.messageFrom);
         
-        //Sets listeners to each button
         btnRead.setOnClickListener(new ReadListener());
         btnIgnore.setOnClickListener(new IgnoreListener());
         

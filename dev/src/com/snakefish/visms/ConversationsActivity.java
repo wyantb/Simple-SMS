@@ -16,6 +16,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+import com.snakefish.db.SMSDbAdapter;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.VoiceCommand;
 
@@ -126,7 +127,7 @@ public class ConversationsActivity extends SMSListActivity {
 		Cursor c = dbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
-		String[] from = new String[] { SMSDbAdapter.KEY_ADDRESS };
+		String[] from = new String[] { SMSDbAdapter.THREAD_KEY_ADDRESS };
 
 		int[] to = new int[] { R.id.list_entry };
 
