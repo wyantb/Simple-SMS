@@ -75,9 +75,9 @@ public class MainChatWindow extends SMSListActivity {
 
     	if (intent != null) {
     		this.threadId = intent.getIntExtra(THREAD_ID, -1);
-    		
-    		repopulateConversation();
     	}
+		
+		repopulateConversation();
     }
     
     private void repopulateConversation() {
