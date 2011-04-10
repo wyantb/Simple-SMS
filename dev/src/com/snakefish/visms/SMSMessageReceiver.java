@@ -79,6 +79,7 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 			}
 		}
 		
+		dbHelper.close();
 		context.startActivity(newMessageIntent);
 	}
 }

@@ -37,16 +37,9 @@ public class IncomingMessage extends SMSActivity {
 	/** The button used to ignore messages */
 	protected Button btnIgnore = null;
     /** The text view that is the contact information */
-    protected TextView messageFrom = null; 
+    protected TextView messageFrom = null;
     
-    protected long msgId;
-    
-    /** The thread this message is going into */
-    protected int threadId;
-    /** The message data that we received */
-    protected String actualMessage;
-    /** The contact retrieved name that we got earlier */
-    protected String actualFrom;
+    private SMSRecord smsRecord;
     
     protected String fromAddress = null;
     
@@ -75,7 +68,7 @@ public class IncomingMessage extends SMSActivity {
 			return true;
 		}
 		if (command.getType() == CommandAction.READ) {
-			 speak(actualMessage, SpeechType.PERSONAL);
+			 speak(smsRecord.getText(), SpeechType.PERSONAL);
 			 
 			 return true;
 		}
@@ -107,11 +100,7 @@ public class IncomingMessage extends SMSActivity {
 		replyIntent.setClass(this, TextActivity.class);
 		
 		replyIntent.putExtra(TextActivity.INITIAL_TEXT, text);
-
-		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_FROM, actualFrom);
-		replyIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_DATA, actualMessage);
-		
-		replyIntent.putExtra(TextActivity.FROM_ADDRESS, fromAddress);
+		replyIntent.putExtra(TextActivity.THREAD_ID, smsRecord.getThread());
 		
 		startActivity(replyIntent);
 	}
@@ -122,8 +111,7 @@ public class IncomingMessage extends SMSActivity {
 	public void openConversationWindow(){
 		Intent vText = new Intent();
 		vText.setClass(this, MainChatWindow.class);
-		vText.putExtra(MainChatWindow.THREAD_ID, threadId);
-		vText.putExtra(MainChatWindow.LAST_MESSAGE, actualMessage);
+		vText.putExtra(MainChatWindow.THREAD_ID, smsRecord.getThread());
 		
 		startActivity(vText);
 	}
@@ -150,11 +138,11 @@ public class IncomingMessage extends SMSActivity {
     }
     
     private void parseMessageData(Intent intent) {
-    	msgId = intent.getLongExtra(SMS_MSG_ID, -1);
+    	long msgId = intent.getLongExtra(SMS_MSG_ID, -1);
     	
-    	SMSRecord record = dbHelper.getMsg(msgId);
+    	smsRecord = dbHelper.getMsg(msgId);
     	
-    	messageFrom.setText(ContactNames.get().getDisplayName(this, record.getAddress()));
+    	messageFrom.setText(ContactNames.get().getDisplayName(this, smsRecord.getAddress()));
     }
     
     /**

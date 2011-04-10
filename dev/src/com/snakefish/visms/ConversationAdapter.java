@@ -39,7 +39,7 @@ public class ConversationAdapter extends CursorAdapter {
 		String bodyValue = cursor.getString(bodyColumn);
 		
 		// If sent by me...
-		if (fromValue == -1) {
+		if (fromValue == -2) {
 			TextView newView = (TextView)layoutInflater.inflate(R.layout.conversation_me, null);
 			newView.setText(bodyValue);
 			return newView;

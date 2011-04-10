@@ -1,9 +1,11 @@
 package com.snakefish.visms;
 
 import com.snakefish.db.SMSDbAdapter;
+import com.snakefish.db.SMSRecordHelper;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
+import com.snakefish.util.ContactNames;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -30,17 +32,16 @@ public class MainChatWindow extends SMSListActivity {
 
 	public static final int SETTINGS_ID = Menu.FIRST;
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
-    public static final String LAST_MESSAGE = "com.snakefish.LAST_MESSAGE";
     
 	private static final int PICK_CONTACT_REQUEST = 1;
     private TextView textTop;
     private Button compose;
     private Button contactChooser;
     private SMSDbAdapter dbHelper;
-    private String recipient;
-    private String lastMessage;
     private int threadId;
 
+    /** Needed to pass to IncomingMessage in event of no existing thread */
+    private String addressTo;
     
     public MainChatWindow() {
     	super(R.xml.mcw_speech);
@@ -69,45 +70,39 @@ public class MainChatWindow extends SMSListActivity {
      * @param intent
      */
     protected void populateConversationList(Intent intent) {
-        
-    		if (intent != null) {
-    	        	this.lastMessage = intent.getStringExtra(LAST_MESSAGE);
-    	        	
-    	    		int threadID = intent.getIntExtra(THREAD_ID,-1);
-    				this.threadId = threadID;
-    	    		
-    	    		//TODO Debug
-        	        Log.v("MainChatWindow, populateConversationList", "Thread ID: "+threadID);
-    	    		
-        	        if (threadID != -1) {
-    	    		    Cursor c = dbHelper.fetchThreadByThreadId(threadID);
-    	    		    startManagingCursor(c);
-    	    		    
-    	    		    if (c.moveToFirst()) {
-    	    		    	recipient = c.getString(c.getColumnIndex(SMSDbAdapter.THREAD_KEY_ADDRESS));
-    	    		    } else {
-    	    		    	Log.e(this.toString(), "Cursor is empty.");
-    	    		    }
-    	    		    
-    	    		    // If the address is in our contacts...
-    	    		    // Set recipient to contact name
-    	    		    // TODO
-    	    		    
-    	    		    // Otherwise, just use phone number
-    	    		    textTop.setText(recipient);
-    	    		    
-    	    		    setListAdapter(new ConversationAdapter(this, c));
-    					
-    	    		    
-    	    		    contactChooser.setVisibility(View.GONE);
-    	    		    textTop.setVisibility(View.VISIBLE);
-    	    		    compose.setEnabled(true);
-    	    		} else {
-    	    			Log.e("MainChatWindow, populateConversationList", "Intent missing thread id.");
-    	    			
-    	    			compose.setEnabled(false);
-    	    		}
-    	    	}
+
+    	if (intent != null) {
+    		this.threadId = intent.getIntExtra(THREAD_ID, -1);
+    		
+    		repopulateConversation();
+    	}
+    }
+    
+    private void repopulateConversation() {
+    	
+		if (threadId != -1) {
+			Cursor c = dbHelper.fetchThreadByThreadId(threadId);
+			startManagingCursor(c);
+
+			if (c.moveToFirst()) {
+				addressTo = SMSRecordHelper.getAddress(c);
+			} 
+			else {
+				Log.e(this.toString(), "Cursor is empty.");
+			}
+
+			textTop.setText(ContactNames.get().getDisplayName(this, addressTo));
+
+			setListAdapter(new ConversationAdapter(this, c));
+
+			contactChooser.setVisibility(View.GONE);
+			textTop.setVisibility(View.VISIBLE);
+			compose.setEnabled(true);
+		} 
+		else {
+			compose.setEnabled(false);
+		}
+		
     }
 
     /**
@@ -169,47 +164,16 @@ public class MainChatWindow extends SMSListActivity {
     	Intent textIntent = new Intent();
     	textIntent.setClass(this, TextActivity.class);
     	
-    	String[] messageData = new String[2];
-    	
-    	messageData = grabLastData();
-    	
-    	if (messageData != null) {
-    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_FROM, messageData[0]);
-    		textIntent.putExtra(TextActivity.CONVERSATION_LAST_MSG_DATA, messageData[1]);
-    	}
-    	
     	if (text != null && !text.equals("")) {
     		textIntent.putExtra(TextActivity.INITIAL_TEXT, text);
     	}
     	
-    	if (recipient != null) {
-    		textIntent.putExtra(TextActivity.FROM_ADDRESS, recipient);
-    	}
+    	textIntent.putExtra(TextActivity.THREAD_ID, threadId);
+    	
+    	// Address happens to always be valid, so send it along for case of new thread
+    	textIntent.putExtra(TextActivity.THREAD_ADDRESS, addressTo);
     	
     	startActivity(textIntent);
-    }
-    
-    private String[] grabLastData() {
-    	// TODO don't be a prick about DB access
-    	if (lastMessage != null) {
-    		return new String[] { "Jason", lastMessage};
-    	}
-    	
-    	if (threadId != -1) {
-    		Cursor c = dbHelper.fetchThreadByThreadId(threadId);
-    		c.moveToLast();
-    		
-    		int bodyColumn = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_BODY);
-    		String bodyValue = c.getString(bodyColumn);
-    		
-    		// TODO pull person from cursor and contacts api
-    		
-    		return new String[] {"Jason", bodyValue};
-    	}
-    	else {
-    		// TODO make sure this case doesn't happen
-    		return null;
-    	}
     }
     
     /**
@@ -219,8 +183,9 @@ public class MainChatWindow extends SMSListActivity {
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == PICK_CONTACT_REQUEST && resultCode == RESULT_OK) {
 			processContactInfo(data.getData());
-		}else {
-			Log.e("MainChatWindow", "Error choosing contact");
+		}
+		else {
+			repopulateConversation();
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
@@ -282,9 +247,9 @@ public class MainChatWindow extends SMSListActivity {
 			 */
 			@Override
 			protected void onPostExecute(ContactInfo result) {
-				recipient = result.getDisplayName();
-
-				// TODO handle getting the better visible version
+				String recipient = result.getDisplayName();
+				addressTo = result.getPhoneNumber();
+				
 				if (recipient != null && !recipient.equals("")) {
 					contactChooser.setVisibility(View.GONE);
 					compose.setEnabled(true);

@@ -19,9 +19,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.snakefish.db.SMSDbAdapter;
+import com.snakefish.db.SMSRecord;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
+import com.snakefish.util.ContactNames;
 
 /**
  * Represents the view with which users will send messages in a conversation.
@@ -39,18 +41,12 @@ public class TextActivity extends SMSActivity {
 	public static final int SETTINGS_ID = Menu.FIRST;
 	private static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
 	private static final String SMS_ERROR = "TextActivity";
-
-	/** The number of the person who sent this message to us. */
-	public static final String FROM_ADDRESS = "com.snakefish.FROM_ADDRESS";
-
+	
+	public static final String THREAD_ID = "com.snakefish.THREAD_ID";
+	public static final String THREAD_ADDRESS = "com.snakefish.ADDRESS_TO";
+	
 	/** The initial text to send, if any. */
 	public static final String INITIAL_TEXT = "com.snakefish.INITIAL_TEXT";
-
-	/** The name of who sent the last message to us. */
-	public static final String CONVERSATION_LAST_MSG_FROM = "com.snakefish.LAST_MESSAGE_FROM";
-
-	/** The message last sent to us in the conversation. */
-	public static final String CONVERSATION_LAST_MSG_DATA = "com.snakefish.LAST_MESSAGE_DATA";
 
 	public TextActivity() {
 		super(R.xml.text_speech);
@@ -80,6 +76,7 @@ public class TextActivity extends SMSActivity {
 		btnSend.setOnClickListener(new SendButtonClickListener());
 
 		dbHelper = new SMSDbAdapter(this);
+		dbHelper.open();
 
 		smsReceiver = new SMSBroadcastReceiver();
 		registerReceiver(smsReceiver, new IntentFilter(ACTION_SMS_SENT));
@@ -88,35 +85,34 @@ public class TextActivity extends SMSActivity {
 	}
 
 	private void populateWithIntent(Intent intent) {
-		if (intent != null) {
-			String fromText = intent.getStringExtra(CONVERSATION_LAST_MSG_FROM);
-			String dataText = intent.getStringExtra(CONVERSATION_LAST_MSG_DATA);
+		int threadId = intent.getIntExtra(THREAD_ID, -1);
 
-			if (dataText != null) {
-				String setText = fromText;
-				setText += ": ";
-				setText += dataText;
+		if (threadId != -1) {
+			SMSRecord record = dbHelper.fetchLastInThread(threadId);
+			
+			String setText = ContactNames.get().getDisplayName(this, record.getAddress());
+			setText += ": ";
+			setText += record.getText();
 
-				historyDisplay.setText(setText);
-			}
-			else {
-				// No conversation history
-				historyDisplay.setText(R.string.new_convo);
-			}
-
-			String initialMessage = intent.getStringExtra(INITIAL_TEXT);
-
-			if (initialMessage != null && !initialMessage.equals("")) {
-				outgoingDisplay.setText(initialMessage);
-			}
-
-			toAddress = intent.getStringExtra(FROM_ADDRESS);
+			historyDisplay.setText(setText);
 		}
+		else {
+			// No conversation history
+			historyDisplay.setText(R.string.new_convo);
+		}
+
+		String initialMessage = intent.getStringExtra(INITIAL_TEXT);
+		if (initialMessage != null && !initialMessage.equals("")) {
+			outgoingDisplay.setText(initialMessage);
+		}
+
+		toAddress = intent.getStringExtra(THREAD_ADDRESS);
 	}
 
 	@Override
 	public void onDestroy() {
 		this.unregisterReceiver(smsReceiver);
+		dbHelper.close();
 		super.onDestroy();
 	}
 
@@ -155,16 +151,13 @@ public class TextActivity extends SMSActivity {
 	}
 
 	private void sendMessage() {
-		dbHelper.open();
-
 		SmsManager sms = SmsManager.getDefault();
 
 		List<String> messages = sms.divideMessage(outgoingDisplay.getText().toString());
-		int threadId = dbHelper.getThreadId(toAddress);
 
 		try {
 			for (String message : messages) {
-				dbHelper.addMsg(threadId, toAddress, -1, System.currentTimeMillis() / 1000, message);
+				dbHelper.addMsg(toAddress, -2, System.currentTimeMillis(), message);
 				sms.sendTextMessage(toAddress, null, message, 
 						PendingIntent.getBroadcast(this, 0, new Intent(ACTION_SMS_SENT), 0), null);
 			}

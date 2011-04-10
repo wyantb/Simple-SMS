@@ -27,6 +27,7 @@ public class SMSDbAdapter {
 	public static final String THREAD_KEY_DATE = "date";
 	public static final String THREAD_KEY_BODY = "body";
 	public static final String ORDER_CHRON = "date DESC";
+	public static final String REVERSE_CHRON = "date ASC";
 
 	public static final String[] ALL_FIELDS = new String[]
 	{
@@ -290,12 +291,23 @@ public class SMSDbAdapter {
 	 *         thread
 	 */
 	public Cursor fetchThreadByThreadId(int threadId) {
-		System.out.println(mDb);
 		Cursor c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID,
 				THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE, THREAD_KEY_BODY },
 				THREAD_KEY_THREADID + "=" + String.valueOf(threadId), null, null,
 				null, ORDER_CHRON);
+		
 		return c;
+	}
+	
+	public SMSRecord fetchLastInThread(int threadId) {
+		Cursor c = mDb.query(MSG_DATABASE_TABLE, new String[] { THREAD_KEY_ROWID,
+				THREAD_KEY_THREADID, THREAD_KEY_ADDRESS, THREAD_KEY_PERSON, THREAD_KEY_DATE, THREAD_KEY_BODY },
+				THREAD_KEY_THREADID + "=" + String.valueOf(threadId), null, null,
+				null, ORDER_CHRON, "1");
+		
+		c.moveToFirst();
+		
+		return new SMSRecord(c);
 	}
 
 	/**
