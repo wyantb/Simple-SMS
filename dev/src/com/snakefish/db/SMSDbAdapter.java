@@ -19,7 +19,7 @@ import android.util.Log;
  */
 public class SMSDbAdapter {
 
-	/* The columns found in the built-in sms database */
+	/* The columns found in the built-in sms database */	
 	public static final String THREAD_KEY_ROWID = "_id";
 	public static final String THREAD_KEY_THREADID = "thread_id";
 	public static final String THREAD_KEY_ADDRESS = "address";
@@ -27,6 +27,16 @@ public class SMSDbAdapter {
 	public static final String THREAD_KEY_DATE = "date";
 	public static final String THREAD_KEY_BODY = "body";
 	public static final String ORDER_CHRON = "date DESC";
+
+	public static final String[] ALL_FIELDS = new String[]
+	{
+		THREAD_KEY_ROWID,
+		THREAD_KEY_THREADID,
+		THREAD_KEY_ADDRESS,
+		THREAD_KEY_PERSON,
+		THREAD_KEY_DATE,
+		THREAD_KEY_BODY
+	};
 	
 	public static final String DISP_KEY_THREAD = "thread_id";
 	public static final String DISP_KEY_PERSON = "disp_name";
@@ -167,6 +177,15 @@ public class SMSDbAdapter {
 		String body = record.getText();
 		
 		return addMsg(threadId, address, person, time, body);
+	}
+	
+	public SMSRecord getMsg(long msgId) {
+		Cursor c = mDb.query(MSG_DATABASE_TABLE, null,
+				THREAD_KEY_ROWID + "=" + msgId, null, null, null, null);
+		
+		c.moveToFirst();
+		
+		return new SMSRecord(c);
 	}
 
 	/**

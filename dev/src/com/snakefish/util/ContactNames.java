@@ -35,7 +35,7 @@ public class ContactNames {
 		}
 	}
 	
-	public long getPerson(Context context, String fromAddress) {
+	public int getPerson(Context context, String fromAddress) {
 		if (names.containsKey(fromAddress)) {
 			return names.get(fromAddress).getId();
 		}
@@ -68,7 +68,7 @@ public class ContactNames {
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
 				contact.setDisplayName(cursor.getString(0));
-				contact.setId(cursor.getLong(0));
+				contact.setId(cursor.getInt(1));
 			}
 
 			cursor.close();

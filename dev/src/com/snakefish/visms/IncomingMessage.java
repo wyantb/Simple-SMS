@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.snakefish.db.SMSDbAdapter;
+import com.snakefish.db.SMSRecord;
 import com.snakefish.feedback.CommandAction;
 import com.snakefish.feedback.SpeechType;
 import com.snakefish.feedback.VoiceCommand;
+import com.snakefish.util.ContactNames;
 
 /**
  * This class deals with the GUI used for an 
@@ -28,22 +30,6 @@ public class IncomingMessage extends SMSActivity {
 	/** The message in our database that was received */
 	public static final String SMS_MSG_ID = "com.snakefish.MSG_ID";
 	
-	/** The raw number of the message sent to us */
-	@Deprecated
-	public static final String SMS_FROM_ADDRESS_EXTRA = "com.snakefish.FROM_EXTRA";
-
-	/** The display name for who sent a message to us */
-	@Deprecated
-	public static final String SMS_FROM_DISPLAY_NAME_EXTRA = "com.snakefish.DISPLAY_EXTRA";
-
-	/** The actual content of the message sent to us */
-	@Deprecated
-	public static final String SMS_MESSAGE_EXTRA = "com.snakefish.MESSAGE_EXTRA";
-
-	/** Time, in ms, of the message sent */
-	@Deprecated
-	public static final String SMS_TIME_SENT_EXTRA = "com.snakefish.TIME_SENT";
-	
 	/**Used to position buttons */
 	public static final int SETTINGS_POSITION = Menu.FIRST;
 	/** The button used for viewing the message */
@@ -52,6 +38,8 @@ public class IncomingMessage extends SMSActivity {
 	protected Button btnIgnore = null;
     /** The text view that is the contact information */
     protected TextView messageFrom = null; 
+    
+    protected long msgId;
     
     /** The thread this message is going into */
     protected int threadId;
@@ -147,7 +135,7 @@ public class IncomingMessage extends SMSActivity {
         
         // Both landscape and portrait view
         setContentView(R.layout.incoming_message);
-    	
+        
         btnRead = (Button) findViewById(R.id.btnRead);
         btnIgnore = (Button) findViewById(R.id.btnIgnore);
         messageFrom = (TextView) findViewById(R.id.messageFrom);
@@ -158,39 +146,15 @@ public class IncomingMessage extends SMSActivity {
         dbHelper = new SMSDbAdapter(this);
         dbHelper.open();
         
-        //parseMessageData(getIntent());
+        parseMessageData(getIntent());
     }
     
     private void parseMessageData(Intent intent) {
-    	String displayName = null;
-    	long timeSent = -1;
+    	msgId = intent.getLongExtra(SMS_MSG_ID, -1);
     	
-    	fromAddress = intent.getStringExtra(SMS_FROM_ADDRESS_EXTRA);
-    	displayName = intent.getStringExtra(SMS_FROM_DISPLAY_NAME_EXTRA);
-    	actualMessage = intent.getStringExtra(SMS_MESSAGE_EXTRA);
-    	timeSent = intent.getLongExtra(SMS_TIME_SENT_EXTRA, -1) / 1000;
+    	SMSRecord record = dbHelper.getMsg(msgId);
     	
-    	// Deal with the database
-    	//  We need the thread from this person, and to put the text into the db
-    	if (fromAddress != null) {
-    		// TODO get the correct thread id or store it right
-    		// Right now we're getting extra msgs in one convo
-    		threadId = dbHelper.getThreadId(fromAddress);
-    	}
-    	
-    	if (fromAddress != null && actualMessage != null) {
-    		dbHelper.addMsg(threadId, fromAddress, 1, timeSent, actualMessage);
-    	}
-    	// End database dealing
-    	
-    	
-    	if (displayName != null) {
-    		messageFrom.setText(displayName);
-    	}
-    	else if (fromAddress != null) {
-    		messageFrom.setText(fromAddress);
-    	}
-    	
+    	messageFrom.setText(ContactNames.get().getDisplayName(this, record.getAddress()));
     }
     
     /**

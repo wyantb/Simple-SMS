@@ -7,7 +7,7 @@ public class ContactInfo {
 
     private String mDisplayName;
     private String mPhoneNumber;
-    private long id;
+    private int id;
     
     public void setDisplayName(String displayName) {
         this.mDisplayName = displayName;
@@ -25,11 +25,11 @@ public class ContactInfo {
         return mPhoneNumber;
     }
     
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
     
-    public long getId() {
+    public int getId() {
         return id;
     }
 }

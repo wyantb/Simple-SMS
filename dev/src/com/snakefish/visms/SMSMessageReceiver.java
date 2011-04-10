@@ -41,6 +41,7 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 		Map<String, String> messages = new HashMap<String, String>();
 		Map<String, Long> times = new HashMap<String, Long>();
 		
+		// Obtain info from all incoming pdus and aggregate
 		for (int i = 0; i < pdus.length; i++) {
 			SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
 			String messageBody = message.getMessageBody().toString();
@@ -59,12 +60,25 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 			}
 		}
 		
+		// Prepare intent
 		Intent newMessageIntent = new Intent();
+		newMessageIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.IncomingMessage");
+		newMessageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		
+		// Insert messages into DB, and store the useful msgId to pass to IncomingMessage
 		for (String address : messages.keySet()) {
+			String message = messages.get(address);
+			long dateTime = times.get(address);
 			
+			int person = ContactNames.get().getPerson(context, address);
 			
-			long msgId = dbHelper.addMsg(address, person, dateTime, body);
+			long msgId = dbHelper.addMsg(address, person, dateTime, message);
+			
+			if (address == addressTo) {
+				newMessageIntent.putExtra(IncomingMessage.SMS_MSG_ID, msgId);
+			}
 		}
+		
+		context.startActivity(newMessageIntent);
 	}
 }
