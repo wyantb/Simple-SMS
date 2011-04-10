@@ -30,6 +30,8 @@ import android.widget.TextView;
  */
 public class MainChatWindow extends SMSListActivity {
 
+	public static final int MESSAGE_SENT = -594;
+
 	public static final int SETTINGS_ID = Menu.FIRST;
     public static final String THREAD_ID = "com.snakefish.THREAD_ID";
     
@@ -184,8 +186,11 @@ public class MainChatWindow extends SMSListActivity {
 		if (requestCode == PICK_CONTACT_REQUEST && resultCode == RESULT_OK) {
 			processContactInfo(data.getData());
 		}
-		else {
+		else if (resultCode == MESSAGE_SENT) {
 			repopulateConversation();
+		}
+		else {
+			Log.v("MainChatWindow", "Unknown return result for this window.");
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);

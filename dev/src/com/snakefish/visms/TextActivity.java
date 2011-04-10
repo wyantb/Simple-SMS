@@ -37,7 +37,7 @@ import com.snakefish.util.ContactNames;
  *
  */
 public class TextActivity extends SMSActivity {
-
+	
 	public static final int SETTINGS_ID = Menu.FIRST;
 	private static final String ACTION_SMS_SENT = "com.snakefish.SMS_SENT_ACTION";
 	private static final String SMS_ERROR = "TextActivity";
@@ -178,6 +178,7 @@ public class TextActivity extends SMSActivity {
 			Log.e(SMS_ERROR, "Problem sleeping to back out after sending msg.");
 		}
 
+		setResult(MainChatWindow.MESSAGE_SENT);
 		finish();
 	}
 
