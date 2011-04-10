@@ -30,6 +30,8 @@ public class ContactNames {
 		}
 		else {
 			ContactInfo contact = getContact(context, fromAddress);
+			updateContactDisplay(contact, fromAddress);
+			
 			names.put(fromAddress, contact);
 			return contact.getDisplayName();
 		}
@@ -41,8 +43,21 @@ public class ContactNames {
 		}
 		else {
 			ContactInfo contact = getContact(context, fromAddress);
+			updateContactDisplay(contact, fromAddress);
+			
 			names.put(fromAddress, contact);
 			return contact.getId();
+		}
+	}
+	
+	/**
+	 * If the person isn't in our contacts, will want to display just the #.
+	 */
+	private void updateContactDisplay(ContactInfo contact, String fromAddress) {
+		String displayName = contact.getDisplayName();
+		
+		if (displayName == null || displayName.equals("")) {
+			contact.setDisplayName(fromAddress);
 		}
 	}
 	

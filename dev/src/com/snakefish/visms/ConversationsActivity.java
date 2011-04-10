@@ -131,7 +131,7 @@ public class ConversationsActivity extends SMSListActivity {
 
 		int[] to = new int[] { R.id.list_entry };
 
-		SimpleCursorAdapter convos = new SimpleCursorAdapter(this,
+		SimpleCursorAdapter convos = new MainCursorAdapter(this,
 				R.layout.list_item, c, from, to);
 		setListAdapter(convos);
 	}
