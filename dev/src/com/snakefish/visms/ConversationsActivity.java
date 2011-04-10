@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
 import com.snakefish.db.SMSDbAdapter;
@@ -90,21 +89,19 @@ public class ConversationsActivity extends SMSListActivity {
 	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-				.getMenuInfo();
-		TextView v = (TextView) info.targetView;
-		String address = String.valueOf(v.getText());
-		long id = dbHelper.getThreadId(address);
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
+		ThreadTextView threadView = (ThreadTextView) info.targetView;
+		int threadId = threadView.getThreadId();
 		
 		switch (item.getItemId()) {
 		case OPEN_ID:
 			Log.v("ConversationsActivity",
-					"Opening conversation from context menu, thread id: " + id);
-			openConvo(id);
+					"Opening conversation from context menu, thread id: " + threadId);
+			openConvo(threadId);
 			return true;
 		case DELETE_ID:
-			Log.v("ConversationsActivity", "Deleting conversation from context menu, thread id: " + id);
-			return deleteConvo(id);
+			Log.v("ConversationsActivity", "Deleting conversation from context menu, thread id: " + threadId);
+			return deleteConvo(threadId);
 		}
 		return super.onContextItemSelected(item);
 	}
@@ -114,11 +111,12 @@ public class ConversationsActivity extends SMSListActivity {
 	 */
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
-		TextView clickedThread = (TextView) v;
-		String address = String.valueOf(clickedThread.getText());
-		long thread_id = dbHelper.getThreadId(address);
-		Log.v(this.toString(), "Opening conversation, thread id: " + thread_id);
-		openConvo(thread_id);
+		ThreadTextView clickedThread = (ThreadTextView) v;
+		
+		int threadId = clickedThread.getThreadId();
+		
+		Log.v(this.toString(), "Opening conversation, thread id: " + threadId);
+		openConvo(threadId);
 	}
 
 	private void fillInbox() {
@@ -127,7 +125,7 @@ public class ConversationsActivity extends SMSListActivity {
 		Cursor c = dbHelper.fetchAllThreads();
 		startManagingCursor(c);
 
-		String[] from = new String[] { SMSDbAdapter.THREAD_KEY_ADDRESS };
+		String[] from = new String[] { SMSDbAdapter.THREAD_KEY_ADDRESS, SMSDbAdapter.THREAD_KEY_THREADID };
 
 		int[] to = new int[] { R.id.list_entry };
 
