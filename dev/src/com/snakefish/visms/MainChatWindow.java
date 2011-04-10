@@ -282,7 +282,7 @@ public class MainChatWindow extends SMSListActivity {
 			 */
 			@Override
 			protected void onPostExecute(ContactInfo result) {
-				recipient = result.getPhoneNumber();
+				recipient = result.getDisplayName();
 
 				// TODO handle getting the better visible version
 				if (recipient != null && !recipient.equals("")) {

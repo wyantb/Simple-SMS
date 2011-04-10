@@ -142,6 +142,9 @@ public class SMSDelegate implements SMSBase {
 		else if (requestCode == (ACTIVITY_START_CODE + screenModifier)){
 			speak(speechPack.getIntro(), SpeechType.INTRO, true);
 		}
+		else {
+			Log.v("SMSDelegate", "Untracked activity result.");
+		}
 	}
 	
 	public void startActivity(Intent intent) {

@@ -3,6 +3,8 @@ package com.snakefish.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.snakefish.visms.ContactInfo;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,23 +15,34 @@ public class ContactNames {
 	private static final ContactNames INSTANCE = new ContactNames();
 	
 	private ContactNames() {
-		names = new HashMap<String, String>();
+		names = new HashMap<String, ContactInfo>();
 	}
 	
 	public static ContactNames get() {
 		return INSTANCE;
 	}
 	
-	private Map<String, String> names;
+	private Map<String, ContactInfo> names;
 	
 	public String getDisplayName(Context context, String fromAddress) {
 		if (names.containsKey(fromAddress)) {
-			return names.get(fromAddress);
+			return names.get(fromAddress).getDisplayName();
 		}
 		else {
-			String dispName = getName(context, fromAddress);
-			names.put(fromAddress, dispName);
-			return dispName;
+			ContactInfo contact = getContact(context, fromAddress);
+			names.put(fromAddress, contact);
+			return contact.getDisplayName();
+		}
+	}
+	
+	public long getPerson(Context context, String fromAddress) {
+		if (names.containsKey(fromAddress)) {
+			return names.get(fromAddress).getId();
+		}
+		else {
+			ContactInfo contact = getContact(context, fromAddress);
+			names.put(fromAddress, contact);
+			return contact.getId();
 		}
 	}
 	
@@ -38,8 +51,8 @@ public class ContactNames {
 	 *  sent us this message, instead of just displaying phone number.
 	 * @return
 	 */
-	private String getName(Context context, String fromAddress) {
-		String fromDisplayName = fromAddress;
+	private ContactInfo getContact(Context context, String fromAddress) {
+		ContactInfo contact = new ContactInfo();
 		
 		Uri uri;
 		String[] projection;
@@ -47,18 +60,20 @@ public class ContactNames {
 		uri = Uri.withAppendedPath(
 				ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
 				Uri.encode(fromAddress));
-		projection = new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME };
+		projection = new String[] { ContactsContract.PhoneLookup.DISPLAY_NAME,
+				ContactsContract.PhoneLookup._ID};
 
 		// Query the filter URI
 		Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null);
 		if (cursor != null) {
 			if (cursor.moveToFirst()) {
-				fromDisplayName = cursor.getString(0);
+				contact.setDisplayName(cursor.getString(0));
+				contact.setId(cursor.getLong(0));
 			}
 
 			cursor.close();
 		}
 		
-		return fromDisplayName;
+		return contact;
 	}
 }

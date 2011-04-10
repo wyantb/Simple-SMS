@@ -1,5 +1,9 @@
 package com.snakefish.visms;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.snakefish.db.SMSDbAdapter;
 import com.snakefish.util.ContactNames;
 
 import android.content.BroadcastReceiver;
@@ -15,6 +19,8 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		SMSDbAdapter dbHelper = new SMSDbAdapter(context).open();
+		
 		Bundle extras = intent.getExtras();
 
 		// If there's no messages...
@@ -30,33 +36,35 @@ public class SMSMessageReceiver extends BroadcastReceiver {
 
 		Object[] pdus = (Object[]) extras.get("pdus");
 		Log.v(LOG, "Received actual messages.");
+
+		String addressTo = null;
+		Map<String, String> messages = new HashMap<String, String>();
+		Map<String, Long> times = new HashMap<String, Long>();
 		
 		for (int i = 0; i < pdus.length; i++) {
 			SmsMessage message = SmsMessage.createFromPdu((byte[]) pdus[i]);
+			String messageBody = message.getMessageBody().toString();
 			String fromAddress = message.getOriginatingAddress();
 			long timeSent = message.getTimestampMillis();
 
-			String displayName = ContactNames.get().getDisplayName(context, fromAddress);
+			times.put(fromAddress, timeSent);
+			
+			String oldMsg = messages.put(fromAddress, messageBody);
+			if (oldMsg != null) {
+				messages.put(fromAddress, oldMsg + messageBody);
+			}
 			
 			if (i == 0) {
-				Intent newMessageIntent = new Intent();
-				newMessageIntent.setClassName("com.snakefish.visms", "com.snakefish.visms.IncomingMessage");
-
-				newMessageIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-				newMessageIntent.putExtra(IncomingMessage.SMS_FROM_ADDRESS_EXTRA, fromAddress);
-				newMessageIntent.putExtra(IncomingMessage.SMS_FROM_DISPLAY_NAME_EXTRA, displayName);
-				newMessageIntent.putExtra(IncomingMessage.SMS_TIME_SENT_EXTRA, timeSent);
-				newMessageIntent.putExtra(IncomingMessage.SMS_MESSAGE_EXTRA, message.getMessageBody().toString());
-
-				context.startActivity(newMessageIntent);
-				
-				break;
-			}
-			else {
-				// TODO handle extra messages
+				addressTo = fromAddress;
 			}
 		}
+		
+		Intent newMessageIntent = new Intent();
+		
+		for (String address : messages.keySet()) {
+			
+			
+			long msgId = dbHelper.addMsg(address, person, dateTime, body);
+		}
 	}
-
 }

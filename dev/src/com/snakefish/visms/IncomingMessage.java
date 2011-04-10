@@ -25,16 +25,23 @@ public class IncomingMessage extends SMSActivity {
 	
 	public static final String SMS_ERROR = "IncomingMessage";
 	
+	/** The message in our database that was received */
+	public static final String SMS_MSG_ID = "com.snakefish.MSG_ID";
+	
 	/** The raw number of the message sent to us */
+	@Deprecated
 	public static final String SMS_FROM_ADDRESS_EXTRA = "com.snakefish.FROM_EXTRA";
 
 	/** The display name for who sent a message to us */
+	@Deprecated
 	public static final String SMS_FROM_DISPLAY_NAME_EXTRA = "com.snakefish.DISPLAY_EXTRA";
 
 	/** The actual content of the message sent to us */
+	@Deprecated
 	public static final String SMS_MESSAGE_EXTRA = "com.snakefish.MESSAGE_EXTRA";
 
 	/** Time, in ms, of the message sent */
+	@Deprecated
 	public static final String SMS_TIME_SENT_EXTRA = "com.snakefish.TIME_SENT";
 	
 	/**Used to position buttons */
@@ -151,7 +158,7 @@ public class IncomingMessage extends SMSActivity {
         dbHelper = new SMSDbAdapter(this);
         dbHelper.open();
         
-        parseMessageData(getIntent());
+        //parseMessageData(getIntent());
     }
     
     private void parseMessageData(Intent intent) {

@@ -8,28 +8,20 @@ public class SMSRecord {
 	
 	private int threadId;
 	private String address;
-	
-	/** I think this field is useless TODO */
 	private int person;
-	
 	private long timestamp;
 	private String text;
 	
 	public SMSRecord(Cursor c) {
-		int threadIdLoc = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_THREADID);
-		threadId = c.getInt(threadIdLoc);
+		threadId = SMSRecordHelper.getThreadId(c);
 		
-		int addressLoc = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_ADDRESS);
-		address = c.getString(addressLoc);
+		address = SMSRecordHelper.getAddress(c);
 
-		int personLoc = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_PERSON);
-		person = c.getInt(personLoc);
+		person = SMSRecordHelper.getPerson(c);
 		
-		int timestampLoc = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_DATE);
-		timestamp = c.getLong(timestampLoc);
+		timestamp = SMSRecordHelper.getTime(c);
 
-		int textLoc = c.getColumnIndex(SMSDbAdapter.THREAD_KEY_BODY);
-		text = c.getString(textLoc);
+		text = SMSRecordHelper.getText(c);
 	}
 	
 	public int getThread() {
