@@ -1,6 +1,0 @@
-
-glob:dev/bin**
-glob:dev/gen**
-glob:test/bin/**
-glob:test/gen/**
-glob:diff.txt
